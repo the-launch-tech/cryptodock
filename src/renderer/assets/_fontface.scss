@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'Centauri';
+  src: url('fonts/centauri/Centauri.woff') format('woff'),
+    url('fonts/centauri/Centauri.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cabin';
+  src: url('fonts/cabin/Cabin-Bold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cabin';
+  src: url('fonts/cabin/Cabin-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cabin';
+  src: url('fonts/cabin/Cabin-Medium.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cabin';
+  src: url('fonts/cabin/Cabin-Regular.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Black.eot');
+  src: url('fonts/nord/Nord-Black.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Black.woff') format('woff'),
+    url('fonts/nord/Nord-Black.ttf') format('truetype'),
+    url('fonts/nord/Nord-Black.svg#Nord-Black') format('svg');
+  font-style: normal;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Bold.eot');
+  src: url('fonts/nord/Nord-Bold.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Bold.woff') format('woff'),
+    url('fonts/nord/Nord-Bold.ttf') format('truetype'),
+    url('fonts/nord/Nord-Bold.svg#Nord-Bold') format('svg');
+  font-style: normal;
+  font-weight: 600;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Book.eot');
+  src: url('fonts/nord/Nord-Book.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Book.woff') format('woff'),
+    url('fonts/nord/Nord-Book.ttf') format('truetype'),
+    url('fonts/nord/Nord-Book.svg#Nord-Book') format('svg');
+  font-style: normal;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Light.eot');
+  src: url('fonts/nord/Nord-Light.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Light.woff') format('woff'),
+    url('fonts/nord/Nord-Light.ttf') format('truetype'),
+    url('fonts/nord/Nord-Light.svg#Nord-Light') format('svg');
+  font-style: normal;
+  font-weight: 200;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Medium.eot');
+  src: url('fonts/nord/Nord-Medium.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Medium.woff') format('woff'),
+    url('fonts/nord/Nord-Medium.ttf') format('truetype'),
+    url('fonts/nord/Nord-Medium.svg#Nord-Medium') format('svg');
+  font-style: normal;
+  font-weight: 500;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Regular.eot');
+  src: url('fonts/nord/Nord-Regular.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Regular.woff') format('woff'),
+    url('fonts/nord/Nord-Regular.ttf') format('truetype'),
+    url('fonts/nord/Nord-Regular.svg#Nord-Regular') format('svg');
+  font-style: normal;
+  font-weight: 300;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Nord';
+  src: url('fonts/nord/Nord-Thin.eot');
+  src: url('fonts/nord/Nord-Thin.eot?#iefix') format('embedded-opentype'),
+    url('fonts/nord/Nord-Thin.woff') format('woff'),
+    url('fonts/nord/Nord-Thin.ttf') format('truetype'),
+    url('fonts/nord/Nord-Thin.svg#Nord-Thin') format('svg');
+  font-style: normal;
+  font-weight: 100;
+  text-rendering: optimizeLegibility;
+}
