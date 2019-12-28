@@ -1,51 +1,86 @@
 import React from 'react'
+import { ipcRenderer } from 'electron'
+import notifier from 'node-notifier'
 
 class DBManager extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      dbName: 'cryptodock',
-      tables: [
-        'exchanges',
-        'products',
-        'product_exchange',
-        'strategies',
-        'strategymetas',
-        'klines',
-        'trades',
-        'transations',
-        'logs',
-      ],
+      dbName: '',
+      tables: [],
+      tableDetails: null,
     }
   }
 
   componentDidMount() {
-    // this.props.pool.asyncQuery('SELECT DATABASE()')
-    //   .then(dbName => this.setState({ dbName }))
-    //   .catch(console.error)
-    // this.props.DBPool.asyncQuery('SHOW TABLES')
-    //   .then(tables => this.setState({ tables }))
-    //   .catch(console.error)
+    ipcRenderer.send('get-db', 'ping')
+    ipcRenderer.send('get-tables', 'ping')
   }
 
-  getTableDetails(e) {
-    e.preventDefault()
-    // this.props.pool.asyncQuery('DESCRIBE ' + tableName)
-    //   .then(tableData => this.setState({ tableData }))
-    //   .catch(console.error)
+  ipcListeners() {
+    ipcRenderer.on('get-db-res', this.onGetDb)
+    ipcRenderer.on('get-tables-res', this.onGetTables)
+    ipcRenderer.on('get-table-details-res', this.onGetTableDetails)
+    ipcRenderer.on('refresh-migration-res', this.onRefreshMigration)
+    ipcRenderer.on('rollback-migration-res', this.onRollbackMigration)
+    ipcRenderer.on('stepforward-migration-res', this.onStepforwardMigration)
+  }
+
+  getTableDetails(e, tableName) {
+    ipcRenderer.send('get-table-details', tableName)
   }
 
   refresh(e) {
-    e.preventDefault()
+    notifier.notify(
+      {
+        title: 'My awesome title',
+        message: 'Hello from electron, Mr. User!',
+        sound: true,
+        wait: true,
+      },
+      (err, response) => {}
+    )
+    notifier.on('click', (notifierObject, options) => {
+      console.log('You clicked on the notification')
+    })
+    notifier.on('timeout', (notifierObject, options) => {
+      console.log('Notification timed out!')
+    })
+
+    ipcRenderer.send('migration', 'refresh')
   }
 
   rollback(e) {
-    e.preventDefault()
+    ipcRenderer.send('migration', 'rollback')
   }
 
   stepforward(e) {
-    e.preventDefault()
+    ipcRenderer.send('migration', 'stepforward')
+  }
+
+  onGetDb(event, dbName) {
+    this.setState({ dbName })
+  }
+
+  onGetTables(event, tables) {
+    this.setState({ tables })
+  }
+
+  onGetTableDetails(event, tableDetails) {
+    this.setState({ tableDetails })
+  }
+
+  onRefreshMigration(event, message) {
+    this.setState({ message })
+  }
+
+  onRollbackMigration(event, message) {
+    this.setState({ message })
+  }
+
+  onStepforwardMigration(event, message) {
+    this.setState({ message })
   }
 
   render() {
@@ -102,8 +137,8 @@ class DBManager extends React.Component {
         <div className="p-3 border border-solid border-white rounded-lg">
           <h5 className="text-center font-thin mb-3 font-head">
             Table Details For{' '}
-            {this.state.tableData ? (
-              <pre className="inline-block">{this.state.tableData.name}</pre>
+            {this.state.tableDetails ? (
+              <pre className="inline-block">{this.state.tableDetails.name}</pre>
             ) : (
               <span className="text-tiny font-head">(None Selected)</span>
             )}
