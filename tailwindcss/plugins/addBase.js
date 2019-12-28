@@ -16,25 +16,25 @@ module.exports = function({ addBase, config }) {
       color: config('theme.colors.white'),
     },
     h3: {
-      fontSize: config('theme.fontSize.2xl'),
-      fontWeight: 700,
-      fontFamily: config('theme.fontFamily.head'),
-      color: config('theme.colors.white'),
-    },
-    h4: {
       fontSize: config('theme.fontSize.xl'),
       fontWeight: 700,
       fontFamily: config('theme.fontFamily.head'),
       color: config('theme.colors.white'),
     },
-    h5: {
+    h4: {
       fontSize: config('theme.fontSize.lg'),
       fontWeight: 700,
       fontFamily: config('theme.fontFamily.head'),
       color: config('theme.colors.white'),
     },
-    h6: {
+    h5: {
       fontSize: config('theme.fontSize.base'),
+      fontWeight: 700,
+      fontFamily: config('theme.fontFamily.head'),
+      color: config('theme.colors.white'),
+    },
+    h6: {
+      fontSize: config('theme.fontSize.sm'),
       fontWeight: 700,
       fontFamily: config('theme.fontFamily.head'),
       color: config('theme.colors.white'),

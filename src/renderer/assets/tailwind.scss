@@ -624,14 +624,6 @@ h2 {
 }
 
 h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  font-family: Nord;
-  font-family: sans-serif;
-  color: #fff;
-}
-
-h4 {
   font-size: 1.25rem;
   font-weight: 700;
   font-family: Nord;
@@ -639,7 +631,7 @@ h4 {
   color: #fff;
 }
 
-h5 {
+h4 {
   font-size: 1.125rem;
   font-weight: 700;
   font-family: Nord;
@@ -647,8 +639,16 @@ h5 {
   color: #fff;
 }
 
-h6 {
+h5 {
   font-size: 1rem;
+  font-weight: 700;
+  font-family: Nord;
+  font-family: sans-serif;
+  color: #fff;
+}
+
+h6 {
+  font-size: .875rem;
   font-weight: 700;
   font-family: Nord;
   font-family: sans-serif;
