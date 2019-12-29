@@ -1,8 +1,5 @@
 module.exports = function({ addBase, config }) {
   addBase({
-    body: {
-      backgroundColor: config('theme.colors.gray.10'),
-    },
     h1: {
       fontSize: config('theme.fontSize.5xl'),
       fontWeight: 700,

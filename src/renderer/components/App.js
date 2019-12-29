@@ -19,8 +19,8 @@ const routes = [
 class App extends React.Component {
   render() {
     return (
-      <main className="h-screen w-screen flex flex-wrap justify-start items-start">
-        <header className="w-1/4 h-full bg-gray-7 pt-5 pb-5">
+      <main className="h-screen w-screen flex flex-wrap justify-start items-start bg-black-850">
+        <header className="w-1/4 h-full bg-gray-3-400 pt-10 pb-0">
           <Header routes={routes} {...this.props} />
         </header>
         <article className="w-3/4 h-full p-5 overflow-y-scroll">

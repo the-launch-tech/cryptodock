@@ -3,6 +3,7 @@ import * as path from 'path'
 import { Pool } from 'mysql-layer'
 import IpcRoutes from './ipc/IpcRoutes'
 import WindowManager from './windows/WindowManager'
+import NotificationManager from './NotificationManager'
 
 if (module.hot) {
   module.hot.accept()
@@ -28,11 +29,13 @@ Object.defineProperty(global, 'DBPool', {
 
 CryptoDock.on('window-all-closed', () => {
   console.log('All Closed, Start Notification Squad')
+  NotificationManager.show('closed-mode')
 })
 
 CryptoDock.on('activate', () => {
   if (!Windows.isActive('mainWindow')) {
     Windows.activate('mainWindow')
+    NotificationManager.show('reactivating-window')
   }
 })
 
@@ -52,4 +55,6 @@ CryptoDock.on('ready', () => {
       }
     })
   })
+
+  NotificationManager.show('app-ready')
 })

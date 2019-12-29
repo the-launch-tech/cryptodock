@@ -1,6 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
-import notifier from 'node-notifier'
+import { ipcRenderer as ipc } from 'electron'
 
 class DBManager extends React.Component {
   constructor(props) {
@@ -11,52 +10,35 @@ class DBManager extends React.Component {
       tables: [],
       tableDetails: null,
     }
+
+    this.onGetDb = this.onGetDb.bind(this)
+    this.onGetTables = this.onGetTables.bind(this)
+    this.onGetTableDetails = this.onGetTableDetails.bind(this)
   }
 
   componentDidMount() {
-    ipcRenderer.send('get-db', 'ping')
-    ipcRenderer.send('get-tables', 'ping')
-  }
+    this.ipcListeners()
 
-  ipcListeners() {
-    ipcRenderer.on('get-db-res', this.onGetDb)
-    ipcRenderer.on('get-tables-res', this.onGetTables)
-    ipcRenderer.on('get-table-details-res', this.onGetTableDetails)
-    ipcRenderer.on('refresh-migration-res', this.onRefreshMigration)
-    ipcRenderer.on('rollback-migration-res', this.onRollbackMigration)
-    ipcRenderer.on('stepforward-migration-res', this.onStepforwardMigration)
+    ipc.send('db', { id: 'database' })
+    ipc.send('db', { id: 'tables' })
   }
 
   getTableDetails(e, tableName) {
-    ipcRenderer.send('get-table-details', tableName)
+    ipc.send('db', { id: 'table-details', data: tableName })
   }
 
   refresh(e) {
-    notifier.notify(
-      {
-        title: 'My awesome title',
-        message: 'Hello from electron, Mr. User!',
-        sound: true,
-        wait: true,
-      },
-      (err, response) => {}
-    )
-    notifier.on('click', (notifierObject, options) => {
-      console.log('You clicked on the notification')
-    })
-    notifier.on('timeout', (notifierObject, options) => {
-      console.log('Notification timed out!')
-    })
-
-    ipcRenderer.send('migration', 'refresh')
+    ipc.send('migration', { id: 'refresh' })
   }
 
   rollback(e) {
-    ipcRenderer.send('migration', 'rollback')
+    ipc.send('migration', { id: 'rollback' })
   }
 
-  stepforward(e) {
-    ipcRenderer.send('migration', 'stepforward')
+  ipcListeners() {
+    ipc.on('res_db-database', this.onGetDb)
+    ipc.on('res_db-tables', this.onGetTables)
+    ipc.on('res_db-table-details', this.onGetTableDetails)
   }
 
   onGetDb(event, dbName) {
@@ -71,50 +53,37 @@ class DBManager extends React.Component {
     this.setState({ tableDetails })
   }
 
-  onRefreshMigration(event, message) {
-    this.setState({ message })
-  }
-
-  onRollbackMigration(event, message) {
-    this.setState({ message })
-  }
-
-  onStepforwardMigration(event, message) {
-    this.setState({ message })
-  }
-
   render() {
     return (
       <div>
-        <div className="p-3 mb-5 border border-solid border-white rounded-lg">
+        <div className="p-3 mb-5 border-1 border-solid border-white-200 rounded">
           <h5 className="text-center font-thin mb-3 font-head">
-            Manage Migrations For {this.state.dbName}
+            Manage Migrations For{' '}
+            {this.state.dbName ? this.state.dbName : <small>(None Selected)</small>}
           </h5>
           <div className="flex justify-center items-center">
             <button
               type="button"
               onClick={this.refresh}
-              className="pt-1 pb-1 pl-3 pr-3 bg-tran border border-solid border-red-3 text-white rounded-lg transition transition-100 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8"
+              disabled={!this.state.dbName}
+              className="pt-1 pb-1 pl-3 pr-3 w-1/3 bg-tran border-1 border-solid border-red-2 text-white rounded-lg transition transition-200 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
             >
               Refresh
             </button>
             <button
               type="button"
               onClick={this.rollback}
-              className="pt-1 pb-1 pl-3 pr-3 bg-tran border border-solid border-red-3 text-white rounded-lg transition transition-100 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8"
+              disabled={!this.state.dbName}
+              className="pt-1 pb-1 pl-3 pr-3 w-1/3 bg-tran border-1 border-solid border-red-2 text-white rounded-lg transition transition-200 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
             >
               Rollback
             </button>
-            <button
-              type="button"
-              onClick={this.stepforward}
-              className="pt-1 pb-1 pl-3 pr-3 bg-tran border border-solid border-red-3 text-white rounded-lg transition transition-100 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8"
-            >
-              Stepforward
-            </button>
           </div>
         </div>
-        <div className="p-3 mb-5 border border-solid border-white rounded-lg">
+        <div
+          className="p-3 mb-5 border-1 border-solid border-white-200 rounded"
+          style={{ minHeight: '35vh' }}
+        >
           <h5 className="text-center font-thin mb-3 font-head">List Tables</h5>
           <ul>
             {this.state.tables.map((table, i) => (
@@ -134,7 +103,10 @@ class DBManager extends React.Component {
             ))}
           </ul>
         </div>
-        <div className="p-3 border border-solid border-white rounded-lg">
+        <div
+          className="p-3 border-1 border-solid border-white-200 rounded"
+          style={{ minHeight: '35vh' }}
+        >
           <h5 className="text-center font-thin mb-3 font-head">
             Table Details For{' '}
             {this.state.tableDetails ? (
@@ -143,7 +115,7 @@ class DBManager extends React.Component {
               <span className="text-tiny font-head">(None Selected)</span>
             )}
           </h5>
-          <div className="w-full border border-solid border-white rounded-lg p-10"></div>
+          <div className="w-full h-full border border-solid border-white-400 bg-white-100 p-10"></div>
         </div>
       </div>
     )

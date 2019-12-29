@@ -1,2 +1,6 @@
 @import 'fontface';
 @import 'tailwind.scss';
+
+body {
+  -webkit-app-region: drag !important;
+}

@@ -11,5 +11,6 @@ export default {
     height: 600,
     resizable: false,
     webPreferences: { nodeIntegration: true },
+    titleBarStyle: 'hidden',
   },
 }
