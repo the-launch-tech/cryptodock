@@ -22,6 +22,8 @@ class DBManager extends React.Component {
   }
 
   componentDidMount() {
+    this.on = true
+
     this.ipcListeners()
 
     ipc.send('db', { id: 'database' })
@@ -33,16 +35,17 @@ class DBManager extends React.Component {
   }
 
   refresh(e) {
-    console.log('trigger refresh')
-    this.setState({ migrating: true }, () => {
-      ipc.send('migration', { id: 'refresh' })
-    })
+    this.on &&
+      this.setState({ migrating: true }, () => {
+        ipc.send('migration', { id: 'refresh' })
+      })
   }
 
   rollback(e) {
-    this.setState({ migrating: true }, () => {
-      ipc.send('migration', { id: 'rollback' })
-    })
+    this.on &&
+      this.setState({ migrating: true }, () => {
+        ipc.send('migration', { id: 'rollback' })
+      })
   }
 
   ipcListeners() {
@@ -54,27 +57,26 @@ class DBManager extends React.Component {
   }
 
   onGetDb(event, dbName) {
-    this.setState({ dbName })
+    this.on && this.setState({ dbName })
   }
 
   onGetTables(event, tables) {
-    this.setState({ tables })
+    this.on && this.setState({ tables })
   }
 
   onGetTableDetails(event, tableDetails) {
-    this.setState({ tableDetails })
+    this.on && this.setState({ tableDetails })
   }
 
   onRollback(event, message) {
     setTimeout(() => {
-      this.setState({ migrating: false })
+      this.on && this.setState({ migrating: false })
     }, 1000)
   }
 
   onRefresh(event, message) {
-    console.log('onRefresh')
     setTimeout(() => {
-      this.setState({ migrating: false })
+      this.on && this.setState({ migrating: false })
     }, 1000)
   }
 

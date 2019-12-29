@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 import { app as CryptoDock } from 'electron'
 import * as path from 'path'
 import { Pool } from 'mysql-layer'
@@ -11,20 +13,11 @@ if (module.hot) {
 
 const Windows = new WindowManager()
 
-const _DBPool = new Pool({
-  hostname: 'localhost',
-  user: 'criptbot',
-  password: 'criptbot',
-  name: 'criptbot',
-})
-
-Object.defineProperty(global, 'DBPool', {
-  get() {
-    return _DBPool
-  },
-  set(value) {
-    _DBPool = value
-  },
+global.DBPool = new Pool({
+  hostname: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  name: process.env.DB_NAME,
 })
 
 CryptoDock.on('window-all-closed', () => {
