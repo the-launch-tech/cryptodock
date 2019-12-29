@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { HashRouter } from 'react-router-dom'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer as ipc } from 'electron'
 import App from './components/App'
 import './assets/app.scss'
 
@@ -9,11 +9,9 @@ if (module.hot) {
   module.hot.accept()
 }
 
-console.log(global)
+ipc.send('renderer-PING', 'ping')
 
-ipcRenderer.send('renderer-ping', 'ping')
-
-ipcRenderer.on('renderer-pong', (event, arg) => {
+ipc.on('res--renderer-PING', (event, arg) => {
   console.log('Renderer IPC Ponged')
 })
 

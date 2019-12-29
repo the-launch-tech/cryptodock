@@ -1,56 +1,56 @@
 import { Notification } from 'electron'
 
 const reducer = {
-  'app-ready': {
+  'app-READY': {
     title: 'Ready!',
     body: 'App Is Successfully Booted!',
     silent: true,
     click: item => item.close(),
   },
-  'reactivating-window': {
+  'mainWindow-ACTIVATING': {
     title: 'Reactivating Window Mode',
     body: 'Main Window Re-Opened.',
     silent: true,
     click: item => item.close(),
   },
-  'closed-mode': {
+  'app-CLOSED': {
     title: 'Hidden Mode',
     body: 'App Running While Window Is Closed',
     silent: true,
     click: item => item.close(),
   },
-  'migration-refreshed': {
+  'migration-REFRESH': {
     title: 'Migration Refreshed',
     body: 'Success Refreshing Migration',
     log: console.log,
     click: item => item.close(),
   },
-  'migration-refresh-failed': {
+  'migration-REFRESH_FAILED': {
     title: 'Failed Migration Refresh',
     body: 'Failure Refreshing Migration',
     log: console.log,
     click: item => item.close(),
   },
-  'migration-refresh-nulled': {
+  'migration-REFRESH_NULLED': {
     title: 'No Refresh',
     body: 'No Refreshing',
     silent: true,
     log: console.log,
     click: item => item.close(),
   },
-  'migration-rolledback': {
+  'migration-ROLLBACK': {
     title: 'Migration Refreshed',
     body: 'Success Rolling Back Migration',
     log: console.log,
     click: item => item.close(),
   },
-  'migration-rollback-failed': {
+  'migration-ROLLBACK_FAILED': {
     title: 'Failed Migration Rollback',
     body: 'Failure Rolling Back Migration',
     log: console.log,
     click: item => item.close(),
   },
-  'migration-rollback-nulled': {
+  'migration-ROLLBACK_NULLED': {
     title: 'No Rollback',
     body: 'No Rolling Back',
     silent: true,

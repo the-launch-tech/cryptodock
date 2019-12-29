@@ -22,13 +22,13 @@ global.DBPool = new Pool({
 
 CryptoDock.on('window-all-closed', () => {
   console.log('All Closed, Start Notification Squad')
-  NotificationManager.show('closed-mode')
+  NotificationManager.show('app-CLOSED')
 })
 
 CryptoDock.on('activate', () => {
   if (!Windows.isActive('mainWindow')) {
     Windows.activate('mainWindow')
-    NotificationManager.show('reactivating-window')
+    NotificationManager.show('mainWindow-ACTIVATING')
   }
 })
 
@@ -38,7 +38,7 @@ CryptoDock.on('ready', () => {
   }
 
   IpcRoutes.onRendererPing((event, arg) => {
-    event.reply('renderer-pong', 'pong')
+    event.reply('res--renderer-PING', 'pong')
     console.log('Main IPC Pinged')
 
     Object.keys(IpcRoutes.onRendererIPC).map((key, i) => {
@@ -49,5 +49,5 @@ CryptoDock.on('ready', () => {
     })
   })
 
-  NotificationManager.show('app-ready')
+  NotificationManager.show('app-READY')
 })

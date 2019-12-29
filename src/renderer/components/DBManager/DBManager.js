@@ -26,34 +26,34 @@ class DBManager extends React.Component {
 
     this.ipcListeners()
 
-    ipc.send('db', { id: 'database' })
-    ipc.send('db', { id: 'tables' })
+    ipc.send('db', { id: 'DATABASE' })
+    ipc.send('db', { id: 'TABLES' })
   }
 
   getTableDetails(e, tableName) {
-    ipc.send('db', { id: 'table-details', data: tableName })
+    ipc.send('db', { id: 'TABLE_DETAILS', data: tableName })
   }
 
   refresh(e) {
     this.on &&
       this.setState({ migrating: true }, () => {
-        ipc.send('migration', { id: 'refresh' })
+        ipc.send('migration', { id: 'REFRESH' })
       })
   }
 
   rollback(e) {
     this.on &&
       this.setState({ migrating: true }, () => {
-        ipc.send('migration', { id: 'rollback' })
+        ipc.send('migration', { id: 'ROLLBACK' })
       })
   }
 
   ipcListeners() {
-    ipc.on('res_db-database', this.onGetDb)
-    ipc.on('res_db-tables', this.onGetTables)
-    ipc.on('res_db-table-details', this.onGetTableDetails)
-    ipc.on('res_migration-rollback', this.onRollback)
-    ipc.on('res_migration-refresh', this.onRefresh)
+    ipc.on('res--db-DATABASE', this.onGetDb)
+    ipc.on('res--db-TABLES', this.onGetTables)
+    ipc.on('res--db-TABLE_DETAILS', this.onGetTableDetails)
+    ipc.on('res--migration-ROLLBACK', this.onRollback)
+    ipc.on('res--migration-REFRESH', this.onRefresh)
   }
 
   onGetDb(event, dbName) {
