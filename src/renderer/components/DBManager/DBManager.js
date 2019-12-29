@@ -5,15 +5,20 @@ class DBManager extends React.Component {
   constructor(props) {
     super(props)
 
+    this.onGetDb = this.onGetDb.bind(this)
+    this.onGetTables = this.onGetTables.bind(this)
+    this.onGetTableDetails = this.onGetTableDetails.bind(this)
+    this.refresh = this.refresh.bind(this)
+    this.rollback = this.rollback.bind(this)
+    this.onRollback = this.onRollback.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
+
     this.state = {
       dbName: '',
       tables: [],
       tableDetails: null,
+      migrating: false,
     }
-
-    this.onGetDb = this.onGetDb.bind(this)
-    this.onGetTables = this.onGetTables.bind(this)
-    this.onGetTableDetails = this.onGetTableDetails.bind(this)
   }
 
   componentDidMount() {
@@ -28,17 +33,23 @@ class DBManager extends React.Component {
   }
 
   refresh(e) {
-    ipc.send('migration', { id: 'refresh' })
+    this.setState({ migrating: true }, () => {
+      ipc.send('migration', { id: 'refresh' })
+    })
   }
 
   rollback(e) {
-    ipc.send('migration', { id: 'rollback' })
+    this.setState({ migrating: true }, () => {
+      ipc.send('migration', { id: 'rollback' })
+    })
   }
 
   ipcListeners() {
     ipc.on('res_db-database', this.onGetDb)
     ipc.on('res_db-tables', this.onGetTables)
     ipc.on('res_db-table-details', this.onGetTableDetails)
+    ipc.on('res_migration-rollback', this.onRollback)
+    ipc.on('res_migration-refresh', this.onRefresh)
   }
 
   onGetDb(event, dbName) {
@@ -53,19 +64,32 @@ class DBManager extends React.Component {
     this.setState({ tableDetails })
   }
 
+  onRollback(event, message) {
+    setTimeout(() => {
+      this.setState({ migrating: false })
+    }, 1000)
+  }
+
+  onRefresh(event, message) {
+    setTimeout(() => {
+      this.setState({ migrating: false })
+    }, 1000)
+  }
+
   render() {
+    const { dbName, migrating, tables, tableDetails } = this.state
+
     return (
       <div>
         <div className="p-3 mb-5 border-1 border-solid border-white-200 rounded">
           <h5 className="text-center font-thin mb-3 font-head">
-            Manage Migrations For{' '}
-            {this.state.dbName ? this.state.dbName : <small>(None Selected)</small>}
+            Manage Migrations For {dbName ? dbName : <small>(None Selected)</small>}
           </h5>
           <div className="flex justify-center items-center">
             <button
               type="button"
               onClick={this.refresh}
-              disabled={!this.state.dbName}
+              disabled={!dbName || migrating}
               className="pt-1 pb-1 pl-3 pr-3 w-1/3 bg-tran border-1 border-solid border-red-2 text-white rounded-lg transition transition-200 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
             >
               Refresh
@@ -73,7 +97,7 @@ class DBManager extends React.Component {
             <button
               type="button"
               onClick={this.rollback}
-              disabled={!this.state.dbName}
+              disabled={!dbName || migrating}
               className="pt-1 pb-1 pl-3 pr-3 w-1/3 bg-tran border-1 border-solid border-red-2 text-white rounded-lg transition transition-200 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
             >
               Rollback
@@ -86,7 +110,7 @@ class DBManager extends React.Component {
         >
           <h5 className="text-center font-thin mb-3 font-head">List Tables</h5>
           <ul>
-            {this.state.tables.map((table, i) => (
+            {tables.map((table, i) => (
               <li
                 key={i}
                 className="mt-2 mb-2 pb-2 border-b border-solid border-white flex justify-between items-center"
@@ -109,8 +133,8 @@ class DBManager extends React.Component {
         >
           <h5 className="text-center font-thin mb-3 font-head">
             Table Details For{' '}
-            {this.state.tableDetails ? (
-              <pre className="inline-block">{this.state.tableDetails.name}</pre>
+            {tableDetails ? (
+              <pre className="inline-block">{tableDetails.name}</pre>
             ) : (
               <span className="text-tiny font-head">(None Selected)</span>
             )}

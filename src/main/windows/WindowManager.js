@@ -11,6 +11,10 @@ export default class WindowManager {
     }
   }
 
+  get(key) {
+    return this.windows[key].window
+  }
+
   isActive(key) {
     return this.windows[key].active
   }

@@ -6,8 +6,8 @@ const { onDb, onMigration } = MainIpcController
 export default {
   onRendererPing: cb => ipc.on('renderer-ping', cb),
   onRendererIPC: {
-    db: () => ipc.on('db', onDb),
-    migration: () => ipc.on('migration', onMigration),
+    db: win => ipc.on('db', (event, arg) => onDb(event, arg, win)),
+    migration: win => ipc.on('migration', (event, arg) => onMigration(event, arg, win)),
   },
   onPythonIPC: {},
 }

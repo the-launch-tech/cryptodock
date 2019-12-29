@@ -51,7 +51,7 @@ CryptoDock.on('ready', () => {
     Object.keys(IpcRoutes.onRendererIPC).map((key, i) => {
       const listener = IpcRoutes.onRendererIPC[key]
       if (typeof listener === 'function') {
-        listener()
+        listener(Windows.get('mainWindow'))
       }
     })
   })

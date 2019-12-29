@@ -31,6 +31,13 @@ const reducer = {
     log: console.log,
     click: item => item.close(),
   },
+  'migration-refresh-nulled': {
+    title: 'No Refresh',
+    body: 'No Refreshing',
+    silent: true,
+    log: console.log,
+    click: item => item.close(),
+  },
   'migration-rolledback': {
     title: 'Migration Refreshed',
     body: 'Success Rolling Back Migration',
@@ -40,6 +47,13 @@ const reducer = {
   'migration-rollback-failed': {
     title: 'Failed Migration Rollback',
     body: 'Failure Rolling Back Migration',
+    log: console.log,
+    click: item => item.close(),
+  },
+  'migration-rollback-nulled': {
+    title: 'No Rollback',
+    body: 'No Rolling Back',
+    silent: true,
     log: console.log,
     click: item => item.close(),
   },
