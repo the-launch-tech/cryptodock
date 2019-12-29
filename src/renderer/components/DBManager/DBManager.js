@@ -33,6 +33,7 @@ class DBManager extends React.Component {
   }
 
   refresh(e) {
+    console.log('trigger refresh')
     this.setState({ migrating: true }, () => {
       ipc.send('migration', { id: 'refresh' })
     })
@@ -71,6 +72,7 @@ class DBManager extends React.Component {
   }
 
   onRefresh(event, message) {
+    console.log('onRefresh')
     setTimeout(() => {
       this.setState({ migrating: false })
     }, 1000)
@@ -115,10 +117,10 @@ class DBManager extends React.Component {
                 key={i}
                 className="mt-2 mb-2 pb-2 border-b border-solid border-white flex justify-between items-center"
               >
-                <pre className="inline-block">{table}</pre>{' '}
+                <pre className="inline-block text-tiny m-0">{table}</pre>{' '}
                 <button
                   type="button"
-                  onClick={this.getTableDetails}
+                  onClick={e => this.getTableDetails(e, table)}
                   className="p-0 bg-tran text-white transition transition-100 font-body ml-5 text-tiny outline-none hover:text-red-3 active:text-white"
                 >
                   Details
@@ -139,7 +141,49 @@ class DBManager extends React.Component {
               <span className="text-tiny font-head">(None Selected)</span>
             )}
           </h5>
-          <div className="w-full h-full border border-solid border-white-400 bg-white-100 p-10"></div>
+          {tableDetails && (
+            <table className="w-full h-full border border-solid border-white-400 bg-white-100">
+              <thead>
+                <tr className="bg-white-100 p-2 border-b-2 border-solid border-blue-2 mb-5">
+                  <th className="text-tiny w-1/6">Field</th>
+                  <th className="text-tiny w-1/6">Type</th>
+                  <th className="text-tiny w-1/6">Null</th>
+                  <th className="text-tiny w-1/6">Key</th>
+                  <th className="text-tiny w-1/6">Default</th>
+                  <th className="text-tiny w-1/6">Extra</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableDetails.columns.map((col, i) => (
+                  <tr
+                    key={i}
+                    className={`border-b border-solid border-white-400 ${
+                      i % 2 === 0 ? 'bg-tran' : 'bg-white-100'
+                    }`}
+                  >
+                    <td className="w-1/6">
+                      <pre className="text-tiny">{col.field}</pre>
+                    </td>
+                    <td className="w-1/6">
+                      <pre className="text-tiny">{col.type}</pre>
+                    </td>
+                    <td className="w-1/6">
+                      <pre className="text-tiny">{col.null}</pre>
+                    </td>
+                    <td className="w-1/6">
+                      <pre className="text-tiny">{col.key}</pre>
+                    </td>
+                    <td className="w-1/6">
+                      <pre className="text-tiny">{col.default}</pre>
+                    </td>
+                    <td className="w-1/6">
+                      <pre className="text-tiny">{col.extra}</pre>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     )

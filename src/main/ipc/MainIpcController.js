@@ -11,7 +11,26 @@ export default {
         event.reply('res_db-tables', ['exchanges', 'products'])
       },
       'table-details': () => {
-        event.reply('res_db-table-details', null)
+        const details = {
+          exchanges: {
+            name: 'exchanges',
+            columns: [
+              { field: 'id', type: 'PRIMARY KEY ID', null: 'NO', default: 'Auto Increment' },
+              { field: 'name', type: 'varchar(20)', null: 'NO', default: 'NULL' },
+              { field: 'label', type: 'varchar(20)', null: 'NO', default: 'NULL' },
+            ],
+          },
+          products: {
+            name: 'products',
+            columns: [
+              { field: 'id', type: 'PRIMARY KEY ID', null: 'NO', default: 'Auto Increment' },
+              { field: 'name', type: 'varchar(20)', null: 'NO', default: 'NULL' },
+              { field: 'base', type: 'varchar(20)', null: 'NO', default: 'NULL' },
+              { field: 'quote', type: 'varchar(20)', null: 'NO', default: 'NULL' },
+            ],
+          },
+        }
+        event.reply('res_db-table-details', details[arg.data])
       },
     }
 
@@ -23,6 +42,7 @@ export default {
     }
   },
   onMigration: async (event, arg, win) => {
+    console.log('onMigration')
     const reducer = {
       rollback: res => {
         if (res === 0) {
@@ -34,6 +54,7 @@ export default {
         }
       },
       refresh: res => {
+        console.log('onMigration refresh')
         if (res === 0) {
           event.reply('res_migration-refresh', true)
           NotificationManager.show('migration-refreshed')
