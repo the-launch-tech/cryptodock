@@ -1,6 +1,6 @@
 import NotificationManager from '../NotificationManager'
 import DialogManager from '../dialogs/DialogManager'
-import Migrator from '../../common/mysql/Migrator'
+import MysqlProvider from '../../common/mysql/MysqlProvider'
 
 const log = console.log
 const error = console.error
@@ -10,7 +10,7 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          Migrator('/static/migration-ROLLBACK.sql', () => {
+          MysqlProvider.static('/static/migration-ROLLBACK.sql', () => {
             event.reply('res--migration-ROLLBACK', true)
             NotificationManager.show('migration-ROLLBACK')
           })
@@ -25,7 +25,7 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          Migrator('/static/migration-REFRESH.sql', () => {
+          MysqlProvider.static('/static/migration-REFRESH.sql', () => {
             event.reply('res--migration-REFRESH', true)
             NotificationManager.show('migration-REFRESH')
           })
