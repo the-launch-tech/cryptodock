@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS exchanges;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS product_exchange;
+DROP TABLE IF EXISTS strategies;
+DROP TABLE IF EXISTS strategymetas;
+DROP TABLE IF EXISTS klines;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS logs;
+DROP TABLE IF EXISTS settings;

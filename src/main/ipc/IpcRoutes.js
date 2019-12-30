@@ -27,8 +27,6 @@ export default {
           {
             ROLLBACK: MigrationsController.ROLLBACK,
             REFRESH: MigrationsController.REFRESH,
-            CREATE: MigrationsController.CREATE,
-            DROP: MigrationsController.DROP,
           },
           win
         )

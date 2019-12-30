@@ -6,7 +6,6 @@ import Overview from './Overview/Overview'
 import DBManager from './DBManager/DBManager'
 import StrategyLoader from './StrategyLoader/StrategyLoader'
 import StrategyManager from './StrategyManager/StrategyManager'
-import Settings from './Settings/Settings'
 import Logs from './Logs/Logs'
 
 const routes = [
@@ -15,7 +14,6 @@ const routes = [
   { link: '/strategy-loader', label: 'Strategy Loader', Component: StrategyLoader },
   { link: '/strategy-manager', label: 'Strategy Manager', Component: StrategyManager },
   { link: '/logs', label: 'Logs', Component: Logs },
-  { link: '/settings', label: 'Settings', Component: Settings },
 ]
 
 class App extends React.Component {
