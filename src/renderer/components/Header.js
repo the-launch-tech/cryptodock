@@ -5,7 +5,7 @@ export default props => {
   return (
     <nav className="h-full border-r-1 border-solid border-white-400 pl-3 pr-3 flex flex-col justify-start items-start">
       <div className="text-center w-full mb-5">
-        <h4 className="text-red-1 font-display font-thin text-tiny">CryptoDock</h4>
+        <h4 className="text-red-2 font-display font-thin text-tiny cursor-default">CryptoDock</h4>
       </div>
       <ul className="w-full flex flex-wrap justify-start items-start">
         {props.routes.map((item, i) => (

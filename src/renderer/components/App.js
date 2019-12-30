@@ -12,8 +12,6 @@ const routes = [
   { link: '/', label: 'Overview', Component: Overview, exact: true },
   { link: '/db-manager', label: 'DB Manager', Component: DBManager },
   { link: '/strategy-loader', label: 'Strategy Loader', Component: StrategyLoader },
-  { link: '/strategy-manager', label: 'Strategy Manager', Component: StrategyManager },
-  { link: '/logs', label: 'Logs', Component: Logs },
 ]
 
 class App extends React.Component {
