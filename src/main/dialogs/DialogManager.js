@@ -11,7 +11,17 @@ export default {
       try {
         return await dialog.showMessageBox(win, config(arg))
       } catch (e) {
-        error(r)
+        error(e)
+      }
+    }
+  },
+  showOpen: async function(arg, win, name) {
+    const config = dialogConfig[name]
+    if (config) {
+      try {
+        return await dialog.showOpenDialog(win, config(arg))
+      } catch (e) {
+        error(e)
       }
     }
   },

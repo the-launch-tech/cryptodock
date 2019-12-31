@@ -57,6 +57,19 @@ const reducer = {
     log: console.log,
     click: item => item.close(),
   },
+  'setting-SET_DIR_LINK': {
+    title: 'Sucess Setting Strategy Directory',
+    body: 'The directory link for strategies has been set to the provided directory!',
+    log: console.log,
+    click: item => item.close(),
+  },
+  'setting-SET_DIR_LINK_NULLED': {
+    title: 'No Directory Link Set Or Updated',
+    body: 'Setting or updating the directory link failed for some reason!',
+    silent: true,
+    log: console.log,
+    click: item => item.close(),
+  },
 }
 
 export default {

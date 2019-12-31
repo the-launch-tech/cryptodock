@@ -9,4 +9,14 @@ export default {
       buttons: ['Yes', 'No'],
     }
   },
+  getStrategyDirectory: arg => {
+    return {
+      title: 'Set Strategy Dock Directory For Python Strategies',
+      defaultPath: '',
+      buttonLabel: 'Choose Directory',
+      properties: ['openDirectory'],
+      message: 'This is the directory which all your strategies will reside',
+      securityScopedBookmarks: false,
+    }
+  },
 }

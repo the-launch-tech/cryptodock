@@ -116,7 +116,7 @@ class Database extends React.Component {
             {tables.map((table, i) => (
               <li
                 key={i}
-                className="mt-2 mb-2 pb-2 border-b border-solid border-white flex justify-between items-center"
+                className="mt-2 mb-2 pb-2 border-b border-solid border-white-200 flex justify-between items-center"
               >
                 <pre className="inline-block text-tiny m-0">{table}</pre>{' '}
                 <Link

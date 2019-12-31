@@ -1,4 +1,4 @@
-CREATE TABLE exchanges
+CREATE TABLE IF NOT EXISTS exchanges
   (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
@@ -7,7 +7,7 @@ CREATE TABLE exchanges
     PRIMARY KEY (id)
   );
 
-CREATE TABLE products
+CREATE TABLE IF NOT EXISTS products
   (
     id INT NOT NULL AUTO_INCREMENT,
     pair VARCHAR(10) NOT NULL UNIQUE,
@@ -17,7 +17,7 @@ CREATE TABLE products
     PRIMARY KEY (id)
   );
 
-CREATE TABLE product_exchange
+CREATE TABLE IF NOT EXISTS product_exchange
   (
     id INT NOT NULL AUTO_INCREMENT,
     trading BOOLEAN NOT NULL DEFAULT true,
@@ -37,7 +37,7 @@ CREATE TABLE product_exchange
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
 
-CREATE TABLE strategies
+CREATE TABLE IF NOT EXISTS strategies
   (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(40) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE strategies
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
 
-CREATE TABLE strategymetas
+CREATE TABLE IF NOT EXISTS strategymetas
   (
     id INT NOT NULL AUTO_INCREMENT,
     key_ VARCHAR(20),
@@ -63,7 +63,7 @@ CREATE TABLE strategymetas
     FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE
   );
 
-CREATE TABLE klines
+CREATE TABLE IF NOT EXISTS klines
   (
     id INT NOT NULL AUTO_INCREMENT,
     server_time INT(11),
@@ -84,7 +84,7 @@ CREATE TABLE klines
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
 
-CREATE TABLE trades
+CREATE TABLE IF NOT EXISTS trades
   (
     id INT NOT NULL AUTO_INCREMENT,
     sequenceID INT(11),
@@ -102,7 +102,7 @@ CREATE TABLE trades
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
 
-CREATE TABLE orderbooks
+CREATE TABLE IF NOT EXISTS orderbooks
   (
     id INT NOT NULL AUTO_INCREMENT,
     sequenceID INT(11),
@@ -119,7 +119,7 @@ CREATE TABLE orderbooks
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
 
-CREATE TABLE transactions
+CREATE TABLE IF NOT EXISTS transactions
   (
     id INT NOT NULL AUTO_INCREMENT,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -128,7 +128,7 @@ CREATE TABLE transactions
     FOREIGN KEY (strategy_id) REFERENCES strategies (id)
   );
 
-CREATE TABLE logs
+CREATE TABLE IF NOT EXISTS logs
   (
     id INT NOT NULL AUTO_INCREMENT,
     message VARCHAR(5000),
@@ -136,7 +136,7 @@ CREATE TABLE logs
     PRIMARY KEY (id)
   );
 
-CREATE TABLE settings
+CREATE TABLE IF NOT EXISTS settings
   (
     id INT NOT NULL AUTO_INCREMENT,
     key_ VARCHAR(50) NOT NULL UNIQUE,

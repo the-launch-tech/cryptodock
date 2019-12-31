@@ -2,7 +2,7 @@ require('dotenv').config()
 
 import { app as CryptoDock } from 'electron'
 import * as path from 'path'
-import { Pool } from 'mysql-layer'
+import { Conn } from 'mysql-layer'
 import IpcRoutes from './ipc/IpcRoutes'
 import WindowManager from './windows/WindowManager'
 import NotificationManager from './NotificationManager'
@@ -13,7 +13,7 @@ if (module.hot) {
 
 const Windows = new WindowManager()
 
-global.Pool = new Pool({
+global.Conn = new Conn({
   hostname: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -24,18 +24,21 @@ global.Pool = new Pool({
 CryptoDock.on('window-all-closed', () => {
   console.log('All Closed, Start Notification Squad')
   NotificationManager.show('app-CLOSED')
+  global.Conn.end()
 })
 
 CryptoDock.on('activate', () => {
   if (!Windows.isActive('mainWindow')) {
     Windows.activate('mainWindow')
     NotificationManager.show('mainWindow-ACTIVATING')
+    global.Conn.connection.connect()
   }
 })
 
 CryptoDock.on('ready', () => {
   if (!Windows.isActive('mainWindow')) {
     Windows.activate('mainWindow')
+    global.Conn.connection.connect()
   }
 
   IpcRoutes.onRendererPing((event, arg) => {

@@ -11,10 +11,13 @@ export default class Table extends React.Component {
 
     this.getTableThroughPath = this.getTableThroughPath.bind(this)
     this.onGetTableDetails = this.onGetTableDetails.bind(this)
+    this.onGetTableRowCount = this.onGetTableRowCount.bind(this)
 
     this.state = {
       table: null,
       tableDetails: null,
+      tableRows: null,
+      tableRowCount: 0,
     }
   }
 
@@ -33,15 +36,21 @@ export default class Table extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.table !== prevState.table && this.state.table) {
       this.getTableDetails()
+      this.getTableRowCount()
     }
   }
 
   ipcListeners() {
     ipc.on('res--db-TABLE_DETAILS', this.onGetTableDetails)
+    ipc.on('res--db-TABLE_ROW_COUNT', this.onGetTableRowCount)
   }
 
   getTableDetails() {
     ipc.send('db', { id: 'TABLE_DETAILS', data: { tableName: this.state.table } })
+  }
+
+  getTableRowCount() {
+    ipc.send('db', { id: 'TABLE_ROW_COUNT', data: { tableName: this.state.table } })
   }
 
   onGetTableDetails(event, tableDetails) {
@@ -50,14 +59,20 @@ export default class Table extends React.Component {
     })
   }
 
+  onGetTableRowCount(event, tableRowCount) {
+    this.setState({ tableRowCount }, () => {
+      log('Table Row Count Recieved')
+    })
+  }
+
   getTableThroughPath() {
-    this.setState({ table: this.props.location.pathname.substr(-12) }, () => {
+    this.setState({ table: this.props.location.pathname.substr(-10) }, () => {
       log('Table Set Through Path')
     })
   }
 
   render() {
-    const { table, tableDetails } = this.state
+    const { table, tableDetails, tableRows, tableRowCount } = this.state
 
     return (
       <div className="relative">
@@ -65,13 +80,15 @@ export default class Table extends React.Component {
           Back
         </Link>
         <div
-          className="p-3 border-1 border-solid border-white-200 rounded"
+          className="p-3 border-1 border-solid border-white-200 rounded mt-10"
           style={{ minHeight: '35vh' }}
         >
           <h5 className="text-center font-thin mb-3 font-head">
-            Table Details For{' '}
+            Table Schema For{' '}
             {tableDetails ? (
-              <pre className="inline-block">{tableDetails.name}</pre>
+              <pre className="inline-block">
+                {table} ({tableRowCount} Rows)
+              </pre>
             ) : (
               <span className="text-tiny font-head">(Unable To Get Table Details)</span>
             )}
@@ -89,7 +106,7 @@ export default class Table extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {tableDetails.columns.map((col, i) => (
+                {tableDetails.map((col, i) => (
                   <tr
                     key={i}
                     className={`border-b border-solid border-white-400 ${
@@ -97,22 +114,22 @@ export default class Table extends React.Component {
                     }`}
                   >
                     <td className="w-1/6">
-                      <pre className="text-tiny">{col.field}</pre>
+                      <pre className="text-tiny">{col.Field}</pre>
                     </td>
                     <td className="w-1/6">
-                      <pre className="text-tiny">{col.type}</pre>
+                      <pre className="text-tiny">{col.Type}</pre>
                     </td>
                     <td className="w-1/6">
-                      <pre className="text-tiny">{col.null}</pre>
+                      <pre className="text-tiny">{col.Null}</pre>
                     </td>
                     <td className="w-1/6">
-                      <pre className="text-tiny">{col.key}</pre>
+                      <pre className="text-tiny">{col.Key}</pre>
                     </td>
                     <td className="w-1/6">
-                      <pre className="text-tiny">{col.default}</pre>
+                      <pre className="text-tiny">{col.Default}</pre>
                     </td>
                     <td className="w-1/6">
-                      <pre className="text-tiny">{col.extra}</pre>
+                      <pre className="text-tiny">{col.Extra}</pre>
                     </td>
                   </tr>
                 ))}

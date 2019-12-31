@@ -1,41 +1,65 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { ipcRenderer } from 'electron'
 import moment from 'moment'
 
 class Strategies extends React.Component {
   constructor(props) {
     super(props)
 
+    this.onSetLinkStrategy = this.onSetLinkStrategy.bind(this)
+    this.onLinkStrategy = this.onLinkStrategy.bind(this)
+    this.onStrategyList = this.onStrategyList.bind(this)
+
     this.state = {
       strategyDirectory: null,
-      loadedStrategies: [
-        {
-          id: 1,
-          active: false,
-          name: 'Bollinger Extended',
-          description: 'Bollinger Bands based strategy with other Technical Analysis utilities.',
-          exchange: ['CoinbasePro'],
-          created: moment().format('LL'),
-          updated: moment(new Date(2019, 12, 16)).format('LL'),
-          fullPath: '/Users/danielgriffiths/Desktop/strategies/bollinger-extended',
-        },
-        {
-          id: 2,
-          active: true,
-          name: 'Rolling Moving Average',
-          description:
-            'Using a combination of RMA and EWMA along with a Statistical Arbetrage methodology.',
-          exchange: ['Kraken', 'Binance', 'CoinbasePro'],
-          created: moment(new Date(2019, 9, 16)).format('LL'),
-          updated: moment(new Date(2019, 10, 12)).format('LL'),
-          fullPath: '/Users/danielgriffiths/Desktop/strategies/rma',
-        },
-      ],
+      loadedStrategies: null,
     }
   }
 
-  handleLinkStrategy(e) {
-    e.preventDefault()
+  componentDidMount() {
+    this.sendForDefaults()
+    this.addListeners()
+  }
+
+  componentWillUnmount() {
+    this.removeListeners()
+  }
+
+  sendForDefaults() {
+    ipcRenderer.send('setting', { id: 'DIR_LINK' })
+    ipcRenderer.send('strategy', { id: 'LIST' })
+  }
+
+  addListeners() {
+    ipcRenderer.once('res--setting-SET_DIR_LINK', this.onSetLinkStrategy)
+    ipcRenderer.once('res--setting-DIR_LINK', this.onLinkStrategy)
+    ipcRenderer.once('res--strategy-LIST', this.onStrategyList)
+  }
+
+  removeListeners() {
+    ipcRenderer.removeListener('res--setting-SET_DIR_LINK', this.onSetLinkStrategy)
+    ipcRenderer.removeListener('res--setting-DIR_LINK', this.onLinkStrategy)
+    ipcRenderer.removeListener('res--strategy-LIST', this.onStrategyList)
+  }
+
+  handleSetLinkStrategy(e) {
+    ipcRenderer.send('setting', { id: 'SET_DIR_LINK' })
+  }
+
+  onSetLinkStrategy(event, strategyDirectory) {
+    console.log('onSetLinkStrategy', strategyDirectory)
+    this.setState({ strategyDirectory })
+  }
+
+  onLinkStrategy(event, strategyDirectory) {
+    console.log('onLinkStrategy', strategyDirectory)
+    this.setState({ strategyDirectory })
+  }
+
+  onStrategyList(event, loadedStrategies) {
+    console.log('onStrategyList', loadedStrategies)
+    this.setState({ loadedStrategies })
   }
 
   editStrategy(e, strategy) {}
@@ -48,7 +72,7 @@ class Strategies extends React.Component {
           <button
             type="button"
             className="pt-1 pb-1 pl-3 pr-3 bg-tran border-1 border-solid border-red-2 text-white rounded-lg transition transition-200 font-head mr-2 ml-2 text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
-            onClick={this.handleLinkStrategy}
+            onClick={this.handleSetLinkStrategy}
           >
             Link Directory
           </button>
@@ -61,7 +85,7 @@ class Strategies extends React.Component {
             Loaded Strategies
           </h5>
           <div className="mt-5 pl-2 pr-2 pt-0 pb-0 border-1 border-solid border-white-400 rounded-lg pt-5">
-            {this.state.loadedStrategies ? (
+            {this.state.loadedStrategies && Array.isArray(this.state.loadedStrategies) ? (
               <ul>
                 {this.state.loadedStrategies.map((strategy, i) => (
                   <li key={i} className="mb-5">
@@ -114,7 +138,7 @@ class Strategies extends React.Component {
                 ))}
               </ul>
             ) : (
-              <h6 className="font-body text-white font-thin text-center cursor-default">
+              <h6 className="font-body text-white font-thin text-center cursor-default pb-5">
                 No Loaded Strategies
               </h6>
             )}
