@@ -1,15 +1,14 @@
-import path from 'path'
 import readFile from '../../common/helpers/readFile'
 
+const error = console.error
+
 export default {
-  static: function(path, cb) {
-    readFile(path.join(__dirname, path), false)
-      .then(contents => {
-        global.Pool.getConnection((err, conn) => {
-          if (err) throw err
-          conn.query(contents, [], cb)
-        })
-      })
+  static: function(fileDir, cb) {
+    readFile(fileDir, false)
+      .then(contents => contents.replace(/(\r\n|\n|\r)/gm, ' '))
+      .then(contents => contents.replace(/\s+/g, ' '))
+      .then(contents => contents.trim())
+      .then(contents => global.Pool.asyncQuery(contents, cb))
       .catch(error)
   },
 }

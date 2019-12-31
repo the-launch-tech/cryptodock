@@ -3,15 +3,18 @@ import { withRouter } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import Header from './Header'
 import Overview from './Overview/Overview'
-import DBManager from './DBManager/DBManager'
-import StrategyLoader from './StrategyLoader/StrategyLoader'
-import StrategyManager from './StrategyManager/StrategyManager'
+import Database from './Database/Database'
+import Table from './Database/Table'
+import Strategies from './Strategies/Strategies'
+import Strategy from './Strategies/Strategy'
 import Logs from './Logs/Logs'
 
 const routes = [
   { link: '/', label: 'Overview', Component: Overview, exact: true },
-  { link: '/db-manager', label: 'DB Manager', Component: DBManager },
-  { link: '/strategy-loader', label: 'Strategy Loader', Component: StrategyLoader },
+  { link: '/database', label: 'Database', Component: Database, exact: true },
+  { link: '/strategies', label: 'Strategies', Component: Strategies, exact: true },
+  { link: '/strategies/:id', label: null, Component: Strategy },
+  { link: '/database/:id', label: null, Component: Table },
 ]
 
 class App extends React.Component {
@@ -28,7 +31,7 @@ class App extends React.Component {
                 key={i}
                 path={link}
                 exact={exact}
-                component={() => <Component {...this.props} />}
+                component={() => <Component {...this.props} {...this.state} />}
               />
             ))}
           </Switch>

@@ -13,11 +13,12 @@ if (module.hot) {
 
 const Windows = new WindowManager()
 
-global.DBPool = new Pool({
+global.Pool = new Pool({
   hostname: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  name: process.env.DB_NAME,
+  database: process.env.DB_NAME,
+  multipleStatements: true,
 })
 
 CryptoDock.on('window-all-closed', () => {
