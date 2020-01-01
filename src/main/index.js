@@ -3,6 +3,7 @@ require('dotenv').config()
 import { app as CryptoDock } from 'electron'
 import * as path from 'path'
 import { Conn } from 'mysql-layer'
+import cron from 'node-cron'
 import activateWindow from '../common/helpers/activateWindow'
 import _key from '../common/helpers/_key'
 import IpcManager from './ipc/IpcManager'

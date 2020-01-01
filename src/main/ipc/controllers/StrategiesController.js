@@ -1,4 +1,5 @@
 import NotificationManager from '../../NotificationManager'
+import StrategyBootstrapper from '../../../common/utilities/StrategyBootstrapper'
 import activateWindow from '../../../common/helpers/activateWindow'
 import _key from '../../../common/helpers/_key'
 
@@ -23,8 +24,19 @@ export default {
     }
   },
   DETAILS: (event, arg, win, key) => {
+    // Strategy.getOneByValue('id', arg.data.id, data => event.reply(channel(key, 'DETAILS'), data))
     global.Conn.asyncQuery('SELECT * FROM strategies WHERE id="' + arg.data.id + '" LIMIT=1')
       .then(data => event.reply(channel(key, 'DETAILS'), data))
       .catch(error)
+  },
+  NEW: (event, arg, win, key) => {
+    StrategyBootstrapper(arg.data, (err, strategy) => {
+      if (err) {
+        NotificationManager.show('NEW_STRATEGY_BOOTSTRAPPED_FAILED')
+        return err
+      }
+      event.reply(channel(key, 'NEW'), strategy)
+      NotificationManager.show('NEW_STRATEGY_BOOTSTRAPPED')
+    })
   },
 }

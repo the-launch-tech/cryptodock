@@ -40,13 +40,13 @@ CREATE TABLE IF NOT EXISTS product_exchange
 CREATE TABLE IF NOT EXISTS strategies
   (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(40) NOT NULL,
-    label VARCHAR(40) NOT NULL UNIQUE,
-    status VARCHAR(12) NOT NULL DEFAULT "latent",
+    name VARCHAR(40) NOT NULL UNIQUE,
+    label VARCHAR(40),
+    status VARCHAR(12) DEFAULT "latent",
     updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    exchange_id INT NOT NULL,
-    product_id INT NOT NULL,
+    exchange_id INT,
+    product_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (exchange_id) REFERENCES exchanges (id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE

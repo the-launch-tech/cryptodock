@@ -10,8 +10,7 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          MysqlProvider.static('src/static/migration-ROLLBACK.sql', (err, data, release) => {
-            release()
+          MysqlProvider.static('src/static/migration-ROLLBACK.sql', (err, data) => {
             if (err) {
               event.reply(channel(key, 'ROLLBACK'), false)
               NotificationManager.show('MIGRATION_ROLLBACK_NULLED')
@@ -32,8 +31,7 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          MysqlProvider.static('src/static/migration-REFRESH.sql', (err, data, release) => {
-            release()
+          MysqlProvider.static('src/static/migration-REFRESH.sql', (err, data) => {
             if (err) {
               event.reply(channel(key, 'REFRESH'), false)
               NotificationManager.show('MIGRATION_REFRESH_NULLED')
