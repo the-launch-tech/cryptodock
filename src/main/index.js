@@ -3,15 +3,21 @@ require('dotenv').config()
 import { app as CryptoDock } from 'electron'
 import * as path from 'path'
 import { Conn } from 'mysql-layer'
-import IpcRoutes from './ipc/IpcRoutes'
+import activateWindow from '../common/helpers/activateWindow'
+import _key from '../common/helpers/_key'
+import IpcManager from './ipc/IpcManager'
 import WindowManager from './windows/WindowManager'
 import NotificationManager from './NotificationManager'
+
+const { log, error } = console
 
 if (module.hot) {
   module.hot.accept()
 }
 
-const Windows = new WindowManager()
+global.IPC = new IpcManager()
+
+global.Windows = new WindowManager()
 
 global.Conn = new Conn({
   hostname: process.env.DB_HOST,
@@ -21,37 +27,37 @@ global.Conn = new Conn({
   multipleStatements: true,
 })
 
+const mainKey = 'mainWindow'
+
 CryptoDock.on('window-all-closed', () => {
-  console.log('All Closed, Start Notification Squad')
-  NotificationManager.show('app-CLOSED')
+  NotificationManager.show('ALL_WINDOWS_CLOSED')
+
   global.Conn.end()
+
+  global.IPC.removeAllHandlers()
 })
 
 CryptoDock.on('activate', () => {
-  if (!Windows.isActive('mainWindow')) {
-    Windows.activate('mainWindow')
-    NotificationManager.show('mainWindow-ACTIVATING')
-    global.Conn.connection.connect()
+  if (!global.Windows.isActive(mainKey)) {
+    activateWindow(mainKey)
   }
 })
 
 CryptoDock.on('ready', () => {
-  if (!Windows.isActive('mainWindow')) {
-    Windows.activate('mainWindow')
-    global.Conn.connection.connect()
+  if (!global.Windows.exists(mainKey)) {
+    global.Windows.configure(mainKey, null, activateWindow)
+  } else if (!global.Windows.isActive(mainKey)) {
+    activateWindow(mainKey)
   }
 
-  IpcRoutes.onRendererPing((event, arg) => {
-    event.reply('res--renderer-PING', 'pong')
-    console.log('Main IPC Pinged')
-
-    Object.keys(IpcRoutes.onRendererIPC).map((key, i) => {
-      const listener = IpcRoutes.onRendererIPC[key]
-      if (typeof listener === 'function') {
-        listener(Windows.get('mainWindow'))
+  global.IPC.onRendererPing((event, windowArgs) => {
+    event.reply('res--app.renderer-PING', windowArgs)
+    global.IPC.createHandlers(windowArgs.type, windowArgs.id, (added, handlers) => {
+      if (added) {
+        global.IPC.addHandlers(windowArgs.type, windowArgs.id, handlers)
       }
     })
   })
 
-  NotificationManager.show('app-READY')
+  NotificationManager.show('APP_READY')
 })

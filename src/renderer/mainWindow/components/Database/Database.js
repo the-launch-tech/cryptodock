@@ -31,33 +31,33 @@ class Database extends React.Component {
   }
 
   addListeners() {
-    ipcRenderer.once('res--db-DATABASE', this.onGetDb)
-    ipcRenderer.once('res--db-TABLES', this.onGetTables)
-    ipcRenderer.once('res--migration-ROLLBACK', this.onRollback)
-    ipcRenderer.once('res--migration-REFRESH', this.onRefresh)
+    ipcRenderer.once('res--mainWindow.db-DATABASE', this.onGetDb)
+    ipcRenderer.once('res--mainWindow.db-TABLES', this.onGetTables)
+    ipcRenderer.once('res--mainWindow.migration-ROLLBACK', this.onRollback)
+    ipcRenderer.once('res--mainWindow.migration-REFRESH', this.onRefresh)
   }
 
   removeListeners() {
-    ipcRenderer.removeListener('res--db-DATABASE', this.onGetDb)
-    ipcRenderer.removeListener('res--db-TABLES', this.onGetTables)
-    ipcRenderer.removeListener('res--migration-ROLLBACK', this.onRollback)
-    ipcRenderer.removeListener('res--migration-REFRESH', this.onRefresh)
+    ipcRenderer.removeListener('res--mainWindow.db-DATABASE', this.onGetDb)
+    ipcRenderer.removeListener('res--mainWindow.db-TABLES', this.onGetTables)
+    ipcRenderer.removeListener('res--mainWindow.migration-ROLLBACK', this.onRollback)
+    ipcRenderer.removeListener('res--mainWindow.migration-REFRESH', this.onRefresh)
   }
 
   sendForDefaults() {
-    ipcRenderer.send('db', { id: 'DATABASE' })
-    ipcRenderer.send('db', { id: 'TABLES' })
+    ipcRenderer.send('mainWindow.db', { id: 'DATABASE' })
+    ipcRenderer.send('mainWindow.db', { id: 'TABLES' })
   }
 
   refresh(e) {
     this.setState({ migrating: true }, () => {
-      ipcRenderer.send('migration', { id: 'REFRESH' })
+      ipcRenderer.send('mainWindow.migration', { id: 'REFRESH' })
     })
   }
 
   rollback(e) {
     this.setState({ migrating: true }, () => {
-      ipcRenderer.send('migration', { id: 'ROLLBACK' })
+      ipcRenderer.send('mainWindow.migration', { id: 'ROLLBACK' })
     })
   }
 
@@ -75,7 +75,7 @@ class Database extends React.Component {
 
   onRefresh(event, message) {
     this.setState({ migrating: false }, () => {
-      ipcRenderer.send('db', { id: 'TABLES' })
+      ipcRenderer.send('mainWindow.db', { id: 'TABLES' })
     })
   }
 

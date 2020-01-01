@@ -1,29 +1,48 @@
 import { BrowserWindow } from 'electron'
 import { format as formatUrl } from 'url'
-import mainWindow from './mainWindow'
+import windowConfig from './windowConfig'
+import isFn from '../../common/helpers/isFn'
+import _key from '../../common/helpers/_key'
 import isDev from '../../common/helpers/isDev'
+
+const { log, error } = console
 
 export default class WindowManager {
   constructor() {
-    this.windows = {
-      mainWindow,
-      warning: null,
-    }
+    this.windows = {}
   }
 
-  get(key) {
+  exists(type, id = null) {
+    const key = _key(type, id)
+    return this.windows[key]
+  }
+
+  get(type, id = null) {
+    const key = _key(type, id)
     return this.windows[key].window
   }
 
-  isActive(key) {
+  isActive(type, id = null) {
+    const key = _key(type, id)
     return this.windows[key].active
   }
 
-  setActive(key) {
+  setActive(type, id = null) {
+    const key = _key(type, id)
     this.windows[key].active = true
   }
 
-  activate(key) {
+  configure(type, id = null, callback) {
+    const key = _key(type, id)
+
+    this.windows[key] = windowConfig(type, id)
+
+    if (isFn(callback)) {
+      callback(key)
+    }
+  }
+
+  activate(key, callback) {
     if (this.isActive(key)) {
       return false
     }
@@ -55,9 +74,28 @@ export default class WindowManager {
       })
     })
 
+    if (isFn(callback)) {
+      callback()
+    }
+  }
+
+  onClosed(key, callback) {
     this.windows[key].window.on('closed', () => {
       this.windows[key].active = false
+
       this.windows[key].window = null
+
+      if (isFn(callback)) {
+        callback(key)
+      }
     })
+  }
+
+  destroy(type, id = null) {
+    const key = _key(type, id)
+
+    if (this.exists(key)) {
+      delete this.windows[key]
+    }
   }
 }

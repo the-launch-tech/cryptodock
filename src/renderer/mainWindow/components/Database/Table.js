@@ -25,9 +25,7 @@ export default class Table extends React.Component {
     this.ipcListeners()
 
     if (this.props.location && this.props.location.state) {
-      this.setState({ table: this.props.location.state.table }, () => {
-        log('Table Set On Mount')
-      })
+      this.setState({ table: this.props.location.state.table })
     } else {
       this.getTableThroughPath()
     }
@@ -41,34 +39,28 @@ export default class Table extends React.Component {
   }
 
   ipcListeners() {
-    ipc.on('res--db-TABLE_DETAILS', this.onGetTableDetails)
-    ipc.on('res--db-TABLE_ROW_COUNT', this.onGetTableRowCount)
+    ipc.on('res--mainWindow.db-TABLE_DETAILS', this.onGetTableDetails)
+    ipc.on('res--mainWindow.db-TABLE_ROW_COUNT', this.onGetTableRowCount)
   }
 
   getTableDetails() {
-    ipc.send('db', { id: 'TABLE_DETAILS', data: { tableName: this.state.table } })
+    ipc.send('mainWindow.db', { id: 'TABLE_DETAILS', data: { tableName: this.state.table } })
   }
 
   getTableRowCount() {
-    ipc.send('db', { id: 'TABLE_ROW_COUNT', data: { tableName: this.state.table } })
+    ipc.send('mainWindow.db', { id: 'TABLE_ROW_COUNT', data: { tableName: this.state.table } })
   }
 
   onGetTableDetails(event, tableDetails) {
-    this.setState({ tableDetails }, () => {
-      log('Table Details Recieved')
-    })
+    this.setState({ tableDetails })
   }
 
   onGetTableRowCount(event, tableRowCount) {
-    this.setState({ tableRowCount }, () => {
-      log('Table Row Count Recieved')
-    })
+    this.setState({ tableRowCount })
   }
 
   getTableThroughPath() {
-    this.setState({ table: this.props.location.pathname.substr(-10) }, () => {
-      log('Table Set Through Path')
-    })
+    this.setState({ table: this.props.location.pathname.substr(-10) })
   }
 
   render() {
