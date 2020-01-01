@@ -28,13 +28,12 @@ global.Conn = new Conn({
   multipleStatements: true,
 })
 
+global.Conn.connection.connect()
+
 const mainKey = 'mainWindow'
 
 CryptoDock.on('window-all-closed', () => {
   NotificationManager.show('ALL_WINDOWS_CLOSED')
-
-  global.Conn.end()
-
   global.IPC.removeAllHandlers()
 })
 

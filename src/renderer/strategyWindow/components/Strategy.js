@@ -18,6 +18,7 @@ export default class Strategy extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props, this.state)
     if (this.props.location && this.props.location.state) {
       this.setState({ strategy: this.props.location.state.strategy }, () => {
         log('Strategy Set On Mount')
@@ -28,10 +29,10 @@ export default class Strategy extends React.Component {
   }
 
   getStrategyById() {
-    ipc.send('strategy', {
-      id: 'GET_BY_ID',
-      data: { id: this.props.location.pathname.substr(-12) },
-    })
+    // ipc.send(`strategyWindow-${id}.strategy`, {
+    //   id: 'GET_BY_ID',
+    //   data: { id: this.props.location.pathname.substr(-12) },
+    // })
   }
 
   onGetStrategyById(event, strategy) {

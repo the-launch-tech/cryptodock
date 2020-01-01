@@ -12,6 +12,8 @@ export default function(type, id) {
         type,
       })}`,
       args: {
+        opacity: 0.985,
+        title: 'CryptoDock',
         width: 800,
         height: 600,
         resizable: false,
@@ -29,6 +31,8 @@ export default function(type, id) {
         id,
       })}`,
       args: {
+        opacity: 0.985,
+        title: 'Strategy Viewer',
         width: 600,
         height: 600,
         resizable: false,

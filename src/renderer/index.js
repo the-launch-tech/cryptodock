@@ -18,10 +18,15 @@ query.type = query['?type']
 delete query['?type']
 
 const loadWindow = async App => {
+  if (App) {
+    ipcRenderer.send('app.renderer-PING', query)
+    ipcRenderer.once('res--app.renderer-PING', (event, arg) => log('Renderer IPC Ponged', arg))
+  }
+
   try {
     return await ReactDOM.render(
       <HashRouter>
-        <App />
+        <App type={query.type} id={query.id} />
       </HashRouter>,
       document.getElementById('app')
     )
@@ -30,19 +35,8 @@ const loadWindow = async App => {
   }
 }
 
-const sendSuccessPing = loadedApp => {
-  if (loadedApp) {
-    ipcRenderer.send('app.renderer-PING', query)
-    ipcRenderer.once('res--app.renderer-PING', (event, arg) => log('Renderer IPC Ponged', arg))
-  }
-}
-
 if (query.type === 'mainWindow') {
-  loadWindow(MainApp)
-    .then(sendSuccessPing)
-    .catch(error)
+  loadWindow(MainApp).catch(error)
 } else if (query.type === 'strategyWindow') {
-  loadWindow(StrategyApp)
-    .then(sendSuccessPing)
-    .catch(error)
+  loadWindow(StrategyApp).catch(error)
 }

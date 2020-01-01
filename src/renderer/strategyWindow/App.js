@@ -1,6 +1,16 @@
 import React from 'react'
 
 class App extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { id: null, type: null }
+  }
+
+  componentDidMount() {
+    this.setState({ id: this.props.id, type: this.props.type })
+  }
+
   render() {
     return (
       <main className="h-screen w-screen flex flex-wrap justify-start items-start bg-black-850">
