@@ -1,5 +1,4 @@
-const log = console.log
-const error = console.error
+const { log, error } = console
 
 export default (event, arg, reducer, win = null, key) => {
   if (!reducer || !event || !arg || !key) {

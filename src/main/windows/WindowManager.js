@@ -19,7 +19,7 @@ export default class WindowManager {
 
   get(type, id = null) {
     const key = _key(type, id)
-    return this.windows[key].window
+    return this.windows[key] ? this.windows[key].window : null
   }
 
   isActive(type, id = null) {

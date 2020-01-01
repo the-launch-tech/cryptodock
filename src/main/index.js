@@ -3,12 +3,12 @@ require('dotenv').config()
 import { app as CryptoDock } from 'electron'
 import * as path from 'path'
 import { Conn } from 'mysql-layer'
-import cron from 'node-cron'
 import activateWindow from '../common/helpers/activateWindow'
 import _key from '../common/helpers/_key'
 import IpcManager from './ipc/IpcManager'
 import WindowManager from './windows/WindowManager'
-import NotificationManager from './NotificationManager'
+import NotificationManager from './notifications/NotificationManager'
+import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
 
 const { log, error } = console
 
@@ -33,7 +33,7 @@ global.Conn.connection.connect()
 const mainKey = 'mainWindow'
 
 CryptoDock.on('window-all-closed', () => {
-  NotificationManager.show('ALL_WINDOWS_CLOSED')
+  NotificationManager.show(ALL_WINDOWS_CLOSED)
   global.IPC.removeAllHandlers()
 })
 
@@ -59,5 +59,5 @@ CryptoDock.on('ready', () => {
     })
   })
 
-  NotificationManager.show('APP_READY')
+  NotificationManager.show(APP_READY)
 })

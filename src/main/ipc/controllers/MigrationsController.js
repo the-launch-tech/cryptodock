@@ -1,6 +1,12 @@
-import NotificationManager from '../../NotificationManager'
+import NotificationManager from '../../notifications/NotificationManager'
 import DialogManager from '../../dialogs/DialogManager'
-import MysqlProvider from '../../../common/mysql/MysqlProvider'
+import Model from '../../../common/models/Model'
+import {
+  MIGRATION_ROLLEDBACK,
+  MIGRATION_ROLLBACK_NULLED,
+  MIGRATION_REFRESHED,
+  MIGRATION_REFRESH_NULLED,
+} from '../../notifications/actions'
 
 const { log, error } = console
 const channel = (key, id) => `res--${key}.migration-${id}`
@@ -10,19 +16,19 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          MysqlProvider.static('src/static/migration-ROLLBACK.sql', (err, data) => {
-            if (err) {
-              event.reply(channel(key, 'ROLLBACK'), false)
-              NotificationManager.show('MIGRATION_ROLLBACK_NULLED')
-              throw err
-            } else {
+          Model.staticFile('migration-ROLLBACK.sql')
+            .then(data => {
               event.reply(channel(key, 'ROLLBACK'), true)
-              NotificationManager.show('MIGRATION_ROLLEDBACK')
-            }
-          })
+              NotificationManager.show(MIGRATION_ROLLEDBACK)
+            })
+            .catch(err => {
+              event.reply(channel(key, 'ROLLBACK'), false)
+              NotificationManager.show(MIGRATION_ROLLBACK_NULLED)
+              error(err)
+            })
         } else {
           event.reply(channel(key, 'ROLLBACK'), false)
-          NotificationManager.show('MIGRATION_ROLLBACK_NULLED')
+          NotificationManager.show(MIGRATION_ROLLBACK_NULLED)
         }
       })
       .catch(error)
@@ -31,19 +37,19 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          MysqlProvider.static('src/static/migration-REFRESH.sql', (err, data) => {
-            if (err) {
-              event.reply(channel(key, 'REFRESH'), false)
-              NotificationManager.show('MIGRATION_REFRESH_NULLED')
-              throw err
-            } else {
+          Model.staticFile('migration-REFRESH.sql')
+            .then(data => {
               event.reply(channel(key, 'REFRESH'), true)
-              NotificationManager.show('MIGRATION_REFRESHED')
-            }
-          })
+              NotificationManager.show(MIGRATION_REFRESHED)
+            })
+            .catch(err => {
+              event.reply(channel(key, 'REFRESH'), false)
+              NotificationManager.show(MIGRATION_REFRESH_NULLED)
+              error(err)
+            })
         } else {
           event.reply(channel(key, 'REFRESH'), false)
-          NotificationManager.show('MIGRATION_REFRESH_NULLED')
+          NotificationManager.show(MIGRATION_REFRESH_NULLED)
         }
       })
       .catch(error)

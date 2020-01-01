@@ -1,14 +1,20 @@
-import NotificationManager from '../../NotificationManager'
+import NotificationManager from '../../notifications/NotificationManager'
 import StrategyBootstrapper from '../../../common/utilities/StrategyBootstrapper'
+import Strategy from '../../../common/models/Strategy'
 import activateWindow from '../../../common/helpers/activateWindow'
 import _key from '../../../common/helpers/_key'
+import {
+  STRATEGY_WINDOW_EXISTS,
+  NEW_STRATEGY_BOOTSTRAPPED_FAILED,
+  NEW_STRATEGY_BOOTSTRAPPED,
+} from '../../notifications/actions'
 
 const { log, error } = console
 const channel = (key, id) => `res--${key}.strategy-${id}`
 
 export default {
   LIST: (event, arg, win, key) => {
-    global.Conn.asyncQuery('SELECT * FROM strategies')
+    Strategy.getAll()
       .then(data => event.reply(channel(key, 'LIST'), data))
       .catch(error)
   },
@@ -20,23 +26,22 @@ export default {
     } else if (!global.Windows.isActive(newKey)) {
       activateWindow(newKey)
     } else {
-      NotificationManager.show('STRATEGY_WINDOW_EXISTS')
+      NotificationManager.show(STRATEGY_WINDOW_EXISTS)
     }
   },
   DETAILS: (event, arg, win, key) => {
-    // Strategy.getOneByValue('id', arg.data.id, data => event.reply(channel(key, 'DETAILS'), data))
-    global.Conn.asyncQuery('SELECT * FROM strategies WHERE id="' + arg.data.id + '" LIMIT=1')
+    Strategy.getOneByValue('id', arg.data.id)
       .then(data => event.reply(channel(key, 'DETAILS'), data))
       .catch(error)
   },
   NEW: (event, arg, win, key) => {
     StrategyBootstrapper(arg.data, (err, strategy) => {
       if (err) {
-        NotificationManager.show('NEW_STRATEGY_BOOTSTRAPPED_FAILED')
+        NotificationManager.show(NEW_STRATEGY_BOOTSTRAPPED_FAILED)
         return err
       }
       event.reply(channel(key, 'NEW'), strategy)
-      NotificationManager.show('NEW_STRATEGY_BOOTSTRAPPED')
+      NotificationManager.show(NEW_STRATEGY_BOOTSTRAPPED)
     })
   },
 }
