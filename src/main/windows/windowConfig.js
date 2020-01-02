@@ -34,7 +34,7 @@ export default function(type, id) {
         opacity: 0.985,
         title: 'Strategy Viewer',
         width: 600,
-        height: 600,
+        height: 400,
         resizable: false,
         webPreferences: { nodeIntegration: true },
         titleBarStyle: 'hidden',

@@ -6,13 +6,14 @@ import Overview from './components/Overview/Overview'
 import Database from './components/Database/Database'
 import Table from './components/Database/Table'
 import Strategies from './components/Strategies/Strategies'
-import Logs from './components/Logs/Logs'
+import Documentation from './components/Documentation/Documentation'
 
 const routes = [
   { link: '/', label: 'Overview', Component: Overview, exact: true },
   { link: '/database', label: 'Database', Component: Database, exact: true },
-  { link: '/strategies', label: 'Strategies', Component: Strategies, exact: true },
   { link: '/database/:id', label: null, Component: Table },
+  { link: '/strategies', label: 'Strategies', Component: Strategies, exact: true },
+  { link: '/documentation', label: 'Documentation', Component: Documentation, exact: true },
 ]
 
 class App extends React.Component {

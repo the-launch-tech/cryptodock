@@ -1,6 +1,18 @@
 import React from 'react'
+import { withRouter } from 'react-router'
+import { Link, Switch, Route } from 'react-router-dom'
+import Details from './components/Details/Details'
+import Backtester from './components/Backtester/Backtester'
+import Activity from './components/Activity/Activity'
+import Header from './components/Header'
 
 const { error, log } = console
+
+const routes = [
+  { link: '/', label: 'Details', Component: Details, exact: true },
+  { link: '/backtesting', label: 'Backtester', Component: Backtester, exact: true },
+  { link: '/activity', label: 'Activity', Component: Activity, exact: true },
+]
 
 class App extends React.Component {
   constructor(props) {
@@ -32,18 +44,24 @@ class App extends React.Component {
   render() {
     return (
       <main className="h-screen w-screen flex flex-wrap justify-start items-start bg-black-850">
-        <article className="w-full h-full p-5 overflow-y-scroll">
-          <h5>Needs:</h5>
-          <h5>Data and MetaData</h5>
-          <h5>Activate Button</h5>
-          <h5>Backtest Button</h5>
-          <h5>Progress MetaData</h5>
-          <h5>Progress Data</h5>
-          <h5>Backtest Data</h5>
+        <header className="w-1/4 h-full bg-gray-3-400 pt-10 pb-0">
+          <Header routes={routes} {...this.state} {...this.props} />
+        </header>
+        <article className="w-3/4 h-full p-5 overflow-y-scroll">
+          <Switch>
+            {routes.map(({ link, exact, Component }, i) => (
+              <Route
+                key={i}
+                path={link}
+                exact={exact}
+                component={() => <Component {...this.props} {...this.state} />}
+              />
+            ))}
+          </Switch>
         </article>
       </main>
     )
   }
 }
 
-export default App
+export default withRouter(App)
