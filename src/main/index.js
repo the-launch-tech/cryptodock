@@ -7,7 +7,6 @@ import activateWindow from '../common/helpers/activateWindow'
 import _key from '../common/helpers/_key'
 import IpcManager from './ipc/IpcManager'
 import WindowManager from './windows/WindowManager'
-import DirectoryWatcher from '../common/utilities/DirectoryWatcher'
 import CryptoDockApi from '../common/api/index'
 import NotificationManager from './notifications/NotificationManager'
 import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
@@ -60,8 +59,6 @@ CryptoDock.on('ready', () => {
       }
     })
   })
-
-  DirectoryWatcher()
 
   CryptoDockApi()
 

@@ -10,7 +10,7 @@ export default function(params, callback) {
   const { newStrategy, dirPath } = params
   const { name, label, description } = newStrategy
   const fullDirPath = path.join(dirPath, name)
-  const newJSON = path.join(fullDirPath, 'cryptodock.config.json')
+  const newJSON = path.join(fullDirPath, '.cryptodock.config.json')
   const staticPy = path.join(__static, 'main.py')
   const newPy = path.join(fullDirPath, 'main.py')
 
