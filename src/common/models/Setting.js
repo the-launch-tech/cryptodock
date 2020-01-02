@@ -13,7 +13,7 @@ class Setting extends Model {
         'SELECT _value FROM settings WHERE key_="strategy_dir_link"',
         (err, data) => {
           if (err) reject(err)
-          resolve(data ? data[0]['_value'] : '')
+          resolve(data && data[0] ? data[0]['_value'] : '')
         }
       )
     })

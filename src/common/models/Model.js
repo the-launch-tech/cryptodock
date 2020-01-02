@@ -22,7 +22,7 @@ class Model {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery('SELECT DATABASE()', (err, data) => {
         if (err) reject(err)
-        resolve(Object.keys(data[0]) ? data[0]['DATABASE()'] : '')
+        resolve(data && data[0] && Object.keys(data[0]) ? data[0]['DATABASE()'] : '')
       })
     })
   }
@@ -49,7 +49,7 @@ class Model {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery('SELECT COUNT(*) FROM ' + tableName, (err, data) => {
         if (err) reject(err)
-        resolve(data[0]['COUNT(*)'])
+        resolve(data && data[0] ? data[0]['COUNT(*)'] : 0)
       })
     })
   }

@@ -42,14 +42,12 @@ CREATE TABLE IF NOT EXISTS strategies
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(40) NOT NULL UNIQUE,
     label VARCHAR(40),
-    status VARCHAR(12) DEFAULT "latent",
-    updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    exchange_id INT,
-    product_id INT,
-    PRIMARY KEY (id),
-    FOREIGN KEY (exchange_id) REFERENCES exchanges (id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
+    description VARCHAR(5000),
+    full_path VARCHAR(255) NOT NULL,
+    status VARCHAR(12) NOT NULL DEFAULT "latent",
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
   );
 
 CREATE TABLE IF NOT EXISTS strategymetas
