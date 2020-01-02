@@ -6,7 +6,8 @@ export default function(type, id) {
     mainWindow: {
       window: null,
       active: false,
-      devTools: true,
+      devTools: false,
+      show: false,
       template: path.join(__dirname, 'index.html'),
       address: `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?${querystring.stringify({
         type,
@@ -24,7 +25,8 @@ export default function(type, id) {
     strategyWindow: {
       window: null,
       active: false,
-      devTools: true,
+      devTools: false,
+      show: false,
       template: path.join(__dirname, 'index.html'),
       address: `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?${querystring.stringify({
         type,

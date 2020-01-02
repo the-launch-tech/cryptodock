@@ -4,7 +4,11 @@ export default function() {
   const Api = express()
   const PORT = 1337
 
-  Api.get('/test', (req, res) => {
+  Api.get('/products/:id?/:fields?', (req, res) => {
+    res.json({ msg: 'Success Testing' })
+  })
+
+  Api.get('/exchanges/:id?/:fields?', (req, res) => {
     res.json({ msg: 'Success Testing' })
   })
 
