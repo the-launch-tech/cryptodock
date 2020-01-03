@@ -16,7 +16,7 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          Model.staticFile('migration-ROLLBACK.sql')
+          Model.staticFile('migrations/rollback.sql')
             .then(data => {
               event.reply(channel(key, 'ROLLBACK'), true)
               NotificationManager.show(MIGRATION_ROLLEDBACK)
@@ -37,7 +37,7 @@ export default {
     DialogManager.showMessage(arg, win, 'migrationConfirmation')
       .then(res => {
         if (res === 0) {
-          Model.staticFile('migration-REFRESH.sql')
+          Model.staticFile('migrations/refresh.sql')
             .then(data => {
               event.reply(channel(key, 'REFRESH'), true)
               NotificationManager.show(MIGRATION_REFRESHED)

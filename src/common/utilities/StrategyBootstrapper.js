@@ -11,7 +11,7 @@ export default function(params, callback) {
   const { name, label, description } = newStrategy
   const fullDirPath = path.join(dirPath, name)
   const newJSON = path.join(fullDirPath, '.cryptodock.config.json')
-  const staticPy = path.join(__static, 'main.py')
+  const staticPy = path.join(__static, 'bootstrap/main.py')
   const newPy = path.join(fullDirPath, 'main.py')
 
   global.Conn.asyncQuery(
