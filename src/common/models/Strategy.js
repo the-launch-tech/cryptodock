@@ -19,7 +19,7 @@ class Strategy extends Model {
   static async getOneByValue(key, value) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'SELECT * FROM strategies WHERE ' + key + '="' + value + '" LIMIT=1',
+        'SELECT * FROM strategies WHERE ' + key + '=' + value + ' LIMIT 1',
         (err, data) => {
           if (err) reject(err)
           resolve(data[0])

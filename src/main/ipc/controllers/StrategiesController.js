@@ -31,7 +31,10 @@ export default {
   },
   DETAILS: (event, arg, win, key) => {
     Strategy.getOneByValue('id', arg.data.id)
-      .then(data => event.reply(channel(key, 'DETAILS'), data))
+      .then(data => {
+        console.log(channel(key, 'DETAILS'), data)
+        event.reply(channel(key, 'DETAILS'), data)
+      })
       .catch(error)
   },
   NEW: (event, arg, win, key) => {

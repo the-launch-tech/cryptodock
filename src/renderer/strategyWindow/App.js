@@ -1,4 +1,5 @@
 import React from 'react'
+import { ipcRenderer } from 'electron'
 import { withRouter } from 'react-router'
 import { Link, Switch, Route } from 'react-router-dom'
 import Details from './components/Details/Details'
@@ -20,25 +21,31 @@ class App extends React.Component {
 
     this.getStrategyById = this.getStrategyById.bind(this)
     this.onGetStrategyById = this.onGetStrategyById.bind(this)
+    this.setListeners = this.setListeners.bind(this)
 
-    this.state = { id: null, type: null }
+    this.state = { id: null, type: null, status: null }
   }
 
   componentDidMount() {
-    this.setState({ id: this.props.id, type: this.props.type })
+    this.setState({ id: this.props.id, type: this.props.type }, () => {
+      this.setListeners()
+      this.getStrategyById()
+    })
+  }
+
+  setListeners() {
+    ipcRenderer.on(`res--strategyWindow-${this.state.id}.strategy-DETAILS`, this.onGetStrategyById)
   }
 
   getStrategyById() {
-    ipc.send(`strategyWindow-${id}.strategy`, {
-      id: 'GET_BY_ID',
+    ipcRenderer.send(`strategyWindow-${this.state.id}.strategy`, {
+      id: 'DETAILS',
       data: { id: this.state.id },
     })
   }
 
   onGetStrategyById(event, strategy) {
-    this.setState({ strategy }, () => {
-      log('Strategy Set After onGetStrategyById')
-    })
+    this.setState({ strategy, status: strategy.status })
   }
 
   render() {
