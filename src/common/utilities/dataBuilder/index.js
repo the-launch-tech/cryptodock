@@ -1,7 +1,7 @@
 import cron from 'node-cron'
-import Exchange from '../models/Exchange'
-import coinbaseProClient from '../clients/CoinbasePro'
-import kucoinClient from '../clients/Kucoin'
+import Exchange from '../../models/Exchange'
+import coinbaseProClient from '../../clients/CoinbasePro'
+import kucoinClient from '../../clients/Kucoin'
 import iOfArrObj from '../../helpers/iOfArrObj'
 import productBuilder from './productBuilder'
 import kLineBuilder from './kLineBuilder'
@@ -10,7 +10,7 @@ import orderBookBuilder from './orderBookBuilder'
 
 const { log, error } = console
 
-const builders = [productBuilder, tradeBuilder, kLineBuilder, orderBookBuilder]
+const builders = [productBuilder]
 
 export default function() {
   const Kucoin = kucoinClient.initialize()
@@ -28,9 +28,11 @@ export default function() {
 
   const loopBuilders = (id, name, client) => {
     builders.map(builder => {
-      cron.schedule('1-59/5 * * * *', () => {
-        client && builder(id, name, client)
-      })
+      builder(id, name, client)
+      // cron.schedule('1-59/5 * * * *', () => {
+      //   console.log(id, name, Date.now())
+      //   client && builder(id, name, client)
+      // })
     })
   }
 

@@ -10,6 +10,7 @@ export default {
       base_min: 'base_min_size',
       base_max: 'base_max_size',
       quote_min: 'quote_increment',
+      margin: 'margin_enabled',
     },
     klineArr: [0, 1, 2, 3, 4, 5],
     klinePeriod: {
@@ -20,7 +21,7 @@ export default {
     },
   },
   kucoin: {
-    getProducts: 'getProducts',
+    getProducts: 'getSymbolsList',
     getKLinePeriod: 'getKlines',
     product: 'symbol',
     object: {

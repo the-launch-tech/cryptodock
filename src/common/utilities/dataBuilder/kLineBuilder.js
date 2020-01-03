@@ -1,7 +1,7 @@
 import KLine from '../../models/KLine'
 import RequestBalancer from '../RequestBalancer'
-import Product from '../../../models/Product'
-import exchangeMap from '../../../clients/exchangeMap'
+import Product from '../../models/Product'
+import exchangeMap from '../../clients/exchangeMap'
 
 const { log, error } = console
 
@@ -21,8 +21,8 @@ export default function(exchangeId, exchangeName, client) {
 
   Product.getExchangeProducts(exchangeId)
     .then(products => {
-      products.map(({ product_id, pair }) => {
-        KLine.getLastTimestamp(product_id, exchangeId)
+      products.map(({ id, pair }) => {
+        KLine.getLastTimestamp(id, exchangeId)
           .then(lastTimestamp => {
             const prevTimeFormatted = new Date(lastTimestamp)
             const diffMs = currentTimestamp - prevTimeFormatted
@@ -38,9 +38,7 @@ export default function(exchangeId, exchangeName, client) {
                     new Date(start).addHours(maxCandlesInGroup / 60),
                     granularity
                   )
-                    .then(history =>
-                      history.map(bucket => KLine.save(bucket, product_id, exchangeId, map))
-                    )
+                    .then(history => history.map(bucket => KLine.save(bucket, id, exchangeId, map)))
                     .catch(error),
                 exchangeName,
                 exchangeName

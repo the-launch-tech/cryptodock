@@ -1,10 +1,25 @@
 import RequestBalancer from '../RequestBalancer'
-import Product from '../../../models/Product'
-import exchangeMap from '../../../clients/exchangeMap'
+import Product from '../../models/Product'
+import exchangeMap from '../../clients/exchangeMap'
+
+const { log, error } = console
+
+const getProducts = (exchangeName, Client) => {
+  return new Promise((resolve, reject) => {
+    if (exchangeName === 'coinbasepro') {
+      Client.getProducts()
+        .then(resolve)
+        .catch(reject)
+    } else if (exchangeName === 'kucoin') {
+      Client.getSymbolsList()
+        .then(resolve)
+        .catch(reject)
+    }
+  })
+}
 
 export default function(exchangeId, exchangeName, Client) {
   let map = exchangeMap[exchangeName]
-  const getProducts = Client[map.getProducts]
 
   const siftUnique = (arrOne, arrTwo, callback) => {
     let uniqueArr = []
@@ -17,7 +32,7 @@ export default function(exchangeId, exchangeName, Client) {
         }
       })
       if (unique) {
-        unique.push(elOne)
+        uniqueArr.push(elOne)
       }
     })
 
@@ -26,14 +41,22 @@ export default function(exchangeId, exchangeName, Client) {
 
   RequestBalancer.request(
     retry =>
-      getProducts(exchangeProducts => {
-        Product.getAll().then(localProducts => {
-          siftUnique(localProducts, exchangeProducts, uniqueProducts => {
-            uniqueProducts.map(product => Product.save(exchangeId, product, map.object))
-          })
+      getProducts(exchangeName, Client)
+        .then(exchangeProducts => {
+          Product.getExchangeProducts(exchangeId)
+            .then(localProducts => {
+              siftUnique(exchangeProducts, localProducts, uniqueProducts => {
+                uniqueProducts.map(product => {
+                  Product.save(exchangeId, product, map.object)
+                    .then(log)
+                    .catch(error)
+                })
+              })
+            })
+            .catch(error)
         })
-      }),
+        .catch(error),
     exchangeName,
     exchangeName
-  )
+  ).catch(error)
 }
