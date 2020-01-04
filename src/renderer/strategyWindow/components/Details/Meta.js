@@ -3,18 +3,19 @@ import moment from 'moment'
 import { shell } from 'electron'
 
 export default ({ strategy, toggleActivation }) => {
+  console.log('Meta', strategy)
   return (
     <div>
       <h3>Strategy Meta</h3>
       <div className="w-7/12 mb-3 pr-2">
-        <h6 className="text-tiny font-head flex items-center justify-start mb-3 transition-all transition-200 hover:text-red-2 cursor-pointer">
-          <div
-            className={`${
-              strategy.status === 'active' ? 'bg-green-2' : 'bg-yellow-2'
-            } rounded-full top-20 right-20 mr-3`}
-            style={{ width: 20, height: 20 }}
-            onClick={toggleActivation}
-          ></div>
+        <div
+          className={`${
+            strategy.status === 'active' ? 'bg-green-2' : 'bg-yellow-2'
+          } rounded-full top-20 right-20 mr-3 cursor-pointer`}
+          style={{ width: 20, height: 20 }}
+          onClick={toggleActivation}
+        ></div>
+        <h6 className="text-tiny font-head flex items-center justify-start mb-3">
           {strategy.label && strategy.label.length > 1 ? strategy.label : strategy.name}
         </h6>
         <p className="font-body font-hairline text-white-850">{strategy.description}</p>

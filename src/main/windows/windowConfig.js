@@ -25,7 +25,7 @@ export default function(type, id) {
     strategyWindow: {
       window: null,
       active: false,
-      devTools: true,
+      devTools: false,
       show: true,
       template: path.join(__dirname, 'index.html'),
       address: `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?${querystring.stringify({

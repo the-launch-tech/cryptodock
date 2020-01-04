@@ -12,6 +12,7 @@ export default key => {
           arg,
           {
             DETAILS: StrategiesController.DETAILS,
+            TOGGLE_ACTIVATION: StrategiesController.TOGGLE_ACTIVATION,
           },
           win,
           key

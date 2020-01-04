@@ -10,10 +10,10 @@ class Setting extends Model {
   static getFieldByPair(field, key, value) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'SELECT _value FROM settings WHERE key_="strategy_dir_link"',
+        'SELECT ' + field + ' FROM settings WHERE ' + key + '="' + value + '"',
         (err, data) => {
           if (err) reject(err)
-          resolve(data && data[0] ? data[0]['_value'] : '')
+          resolve(data && data[0] ? data[0][field] : null)
         }
       )
     })

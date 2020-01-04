@@ -22,8 +22,11 @@ class App extends React.Component {
     this.getStrategyById = this.getStrategyById.bind(this)
     this.onGetStrategyById = this.onGetStrategyById.bind(this)
     this.setListeners = this.setListeners.bind(this)
+    this.onToggleActive = this.onToggleActive.bind(this)
+    this.toggleActivation = this.toggleActivation.bind(this)
+    this.updateStatus = this.updateStatus.bind(this)
 
-    this.state = { id: null, type: null, status: null }
+    this.state = { id: null, type: null, strategy: null }
   }
 
   componentDidMount() {
@@ -33,8 +36,24 @@ class App extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    this.removeListeners()
+  }
+
   setListeners() {
     ipcRenderer.on(`res--strategyWindow-${this.state.id}.strategy-DETAILS`, this.onGetStrategyById)
+    ipcRenderer.on(`res--strategyWindow-${this.state.id}.strategy-ACTIVATE`, this.onToggleActive)
+  }
+
+  removeListeners() {
+    ipcRenderer.removeListener(
+      `res--strategyWindow-${this.state.id}.strategy-DETAILS`,
+      this.onGetStrategyById
+    )
+    ipcRenderer.removeListener(
+      `res--strategyWindow-${this.state.id}.strategy-ACTIVATE`,
+      this.onToggleActive
+    )
   }
 
   getStrategyById() {
@@ -44,8 +63,40 @@ class App extends React.Component {
     })
   }
 
+  updateStatus(status, callback = null) {
+    if (!status) {
+      return false
+    }
+
+    const strategy = Object.assign({}, this.state.strategy)
+    strategy.status = status
+    this.setState({ strategy }, () => {
+      if (typeof callback === 'function') {
+        callback()
+      }
+    })
+  }
+
+  toggleActivation(e) {
+    this.updateStatus(this.state.strategy.status === 'active' ? 'latent' : 'active', () => {
+      ipcRenderer.send(`strategyWindow-${this.state.id}.strategy`, {
+        id: 'TOGGLE_ACTIVATION',
+        data: {
+          id: this.state.id,
+          status: this.state.strategy.status,
+        },
+      })
+    })
+  }
+
   onGetStrategyById(event, strategy) {
     this.setState({ strategy, status: strategy.status })
+  }
+
+  onToggleActive(event, data) {
+    if (data.status !== this.state.strategy.status) {
+      this.updateStatus(data.status)
+    }
   }
 
   render() {
@@ -61,7 +112,13 @@ class App extends React.Component {
                 key={i}
                 path={link}
                 exact={exact}
-                component={() => <Component {...this.props} {...this.state} />}
+                component={() => (
+                  <Component
+                    {...this.props}
+                    {...this.state}
+                    toggleActivation={this.toggleActivation}
+                  />
+                )}
               />
             ))}
           </Switch>

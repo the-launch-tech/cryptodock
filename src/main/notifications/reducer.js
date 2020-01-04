@@ -76,4 +76,16 @@ export default {
     log,
     click: item => item.close(),
   },
+  STRATEGY_LATENT: {
+    title: 'Strategy Set To Latent',
+    body: 'You have set a strategy to latent state through an open strategy window!',
+    log,
+    click: item => item.close(),
+  },
+  STRATEGY_ACTIVE: {
+    title: 'Strategy Set To ACTIVE',
+    body: 'You have activated a strategy on real currency through an open strategy window!',
+    log,
+    click: item => item.close(),
+  },
 }

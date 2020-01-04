@@ -7,6 +7,8 @@ import {
   STRATEGY_WINDOW_EXISTS,
   NEW_STRATEGY_BOOTSTRAPPED_FAILED,
   NEW_STRATEGY_BOOTSTRAPPED,
+  STRATEGY_ACTIVE,
+  STRATEGY_LATENT,
 } from '../../notifications/actions'
 
 const { log, error } = console
@@ -32,7 +34,6 @@ export default {
   DETAILS: (event, arg, win, key) => {
     Strategy.getOneByValue('id', arg.data.id)
       .then(data => {
-        console.log(channel(key, 'DETAILS'), data)
         event.reply(channel(key, 'DETAILS'), data)
       })
       .catch(error)
@@ -46,5 +47,14 @@ export default {
       event.reply(channel(key, 'NEW'), strategy)
       NotificationManager.show(NEW_STRATEGY_BOOTSTRAPPED)
     })
+  },
+  TOGGLE_ACTIVATION: (event, arg, win, key) => {
+    Strategy.updateState(arg.data.id, arg.data.status)
+      .then(status => global.Strategies.manage(arg.data.id, status))
+      .then(status => {
+        event.reply(channel(key, 'TOGGLE_ACTIVATION'), { id: arg.data.id, status })
+        NotificationManager.show(status === 'active' ? STRATEGY_ACTIVE : STRATEGY_LATENT)
+      })
+      .catch(error)
   },
 }

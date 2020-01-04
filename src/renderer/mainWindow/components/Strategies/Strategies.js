@@ -24,6 +24,7 @@ class Strategies extends React.Component {
     this.submitStrategy = this.submitStrategy.bind(this)
     this.cancelSubmit = this.cancelSubmit.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
+    this.onToggleActive = this.onToggleActive.bind(this)
 
     this.state = {
       strategyDirectory: null,
@@ -53,6 +54,7 @@ class Strategies extends React.Component {
     ipcRenderer.once('res--mainWindow.setting-DIR_LINK', this.onLinkStrategy)
     ipcRenderer.once('res--mainWindow.strategy-LIST', this.onStrategyList)
     ipcRenderer.once('res--mainWindow.strategy-NEW', this.onNewStrategy)
+    ipcRenderer.on('res--mainWindow.strategy-TOGGLE_ACTIVATION', this.onToggleActive)
   }
 
   removeListeners() {
@@ -60,6 +62,7 @@ class Strategies extends React.Component {
     ipcRenderer.removeListener('res--mainWindow.setting-DIR_LINK', this.onLinkStrategy)
     ipcRenderer.removeListener('res--mainWindow.strategy-LIST', this.onStrategyList)
     ipcRenderer.removeListener('res--mainWindow.strategy-NEW', this.onNewStrategy)
+    ipcRenderer.removeListener('res--mainWindow.strategy-TOGGLE_ACTIVATION', this.onToggleActive)
   }
 
   handleSetLinkStrategy(e) {
@@ -89,6 +92,14 @@ class Strategies extends React.Component {
   }
 
   onStrategyList(event, loadedStrategies) {
+    this.setState({ loadedStrategies })
+  }
+
+  onToggleActive(event, data) {
+    const loadedStrategies = Object.assign([], this.state.loadedStrategies)
+    const index = iOfArrObj(this.state.loadedStrategies, 'id', data.id)
+    const strategy = loadedStrategies[index]
+    strategy.status = data.status
     this.setState({ loadedStrategies })
   }
 

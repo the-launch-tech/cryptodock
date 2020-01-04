@@ -13,18 +13,26 @@ export default {
       .catch(error)
   },
   SET_DIR_LINK: (event, arg, win, key) => {
-    DialogManager.showOpen(arg, win, 'getStrategyDirectory')
-      .then(res => {
-        if (res && !res.canceled && Array.isArray(res)) {
-          Setting.replace('strategy_dir_link', res[0])
-            .then(() => {
-              event.reply(channel(key, 'SET_DIR_LINK'), res[0])
-              NotificationManager.show(STRATEGY_DIR_LINK_SET)
+    DialogManager.showMessage(arg, win, 'changeDirConfirm')
+      .then(confirmRes => {
+        if (confirmRes === 0) {
+          DialogManager.showOpen(arg, win, 'getStrategyDirectory')
+            .then(res => {
+              if (res && !res.canceled && Array.isArray(res)) {
+                global.Strategies.pauseAll()
+                  .then(() => Setting.replace('strategy_dir_link', res[0]))
+                  .then(() => global.Strategies.initialize())
+                  .then(() => {
+                    event.reply(channel(key, 'SET_DIR_LINK'), res[0])
+                    NotificationManager.show(STRATEGY_DIR_LINK_SET)
+                  })
+                  .catch(error)
+              } else {
+                event.reply(channel(key, 'SET_DIR_LINK'), false)
+                NotificationManager.show(STRATEGY_DIR_LINK_NOT_SET)
+              }
             })
             .catch(error)
-        } else {
-          event.reply(channel(key, 'SET_DIR_LINK'), false)
-          NotificationManager.show(STRATEGY_DIR_LINK_NOT_SET)
         }
       })
       .catch(error)

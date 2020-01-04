@@ -10,6 +10,7 @@ import WindowManager from './windows/WindowManager'
 import CryptoDockApi from '../common/api/index'
 import DataBuilder from '../common/utilities/dataBuilder/index'
 import NotificationManager from './notifications/NotificationManager'
+import StrategyManager from '../common/utilities/StrategyManager'
 import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
 
 const { log, error } = console
@@ -17,10 +18,6 @@ const { log, error } = console
 if (module.hot) {
   module.hot.accept()
 }
-
-global.IPC = new IpcManager()
-
-global.Windows = new WindowManager()
 
 global.Conn = new Conn({
   hostname: process.env.DB_HOST,
@@ -31,6 +28,9 @@ global.Conn = new Conn({
 })
 
 global.Conn.connection.connect()
+global.IPC = new IpcManager()
+global.Windows = new WindowManager()
+global.Strategies = new StrategyManager()
 
 const mainKey = 'mainWindow'
 

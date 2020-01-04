@@ -27,6 +27,18 @@ class Strategy extends Model {
       )
     })
   }
+
+  static updateState(id, status) {
+    return new Promise((resolve, reject) => {
+      global.Conn.asyncQuery(
+        'UPDATE strategies SET status="' + status + '" WHERE id=' + id,
+        (err, data) => {
+          if (err) reject(err)
+          resolve(status)
+        }
+      )
+    })
+  }
 }
 
 export default Strategy
