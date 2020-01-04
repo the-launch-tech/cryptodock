@@ -19,9 +19,8 @@ class Product extends Model {
   static getExchangeProducts(exchangeId) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'SELECT * FROM product_exchange AS pe INNER JOIN products p ON pe.product_id = p.id INNER JOIN exchanges e ON pe.exchange_id = e.id WHERE e.id = "' +
-          exchangeId +
-          '"',
+        'SELECT * FROM product_exchange AS pe INNER JOIN products p ON pe.product_id = p.id WHERE pe.exchange_id=?',
+        [exchangeId],
         (err, data) => {
           if (err) reject(err)
           resolve(data)

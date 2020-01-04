@@ -11,7 +11,7 @@ import orderBookBuilder from './orderBookBuilder'
 const { log, error } = console
 
 export default function() {
-  const builders = [productBuilder]
+  const builders = []
 
   const exchanges = [
     { client: kucoinClient.initialize(), name: 'kucoin', label: 'Kucoin' },

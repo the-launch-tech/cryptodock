@@ -1,4 +1,5 @@
 import Model from './Model'
+import moment from 'moment'
 
 const { log, error } = console
 
@@ -7,26 +8,41 @@ class KLine extends Model {
     super()
   }
 
-  static getLastTimestamp(exchangeId) {
+  static getLastTimestamp(productId, exchangeId) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'SELECT server_time FROM klines WHERE exchange_id="' +
-          exchangeId +
-          '" ORDERBY server_time DESC LIMIT 1',
+        'SELECT server_time FROM klines WHERE product_id=? AND exchange_id=? ORDER BY server_time DESC LIMIT 1',
+        [productId, exchangeId],
         (err, data) => {
           if (err) reject(err)
-          resolve(data && data[0] ? data[0]['_value'] : '')
+          resolve(data && data[0] ? data[0]['server_time'] : moment().subtract({ hours: 12 }))
         }
       )
     })
   }
 
-  static save(key, value) {
+  static save(kline, productId, exchangeId, map) {
+    const klineArr = map.klineArr
     return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery('INSERT INTO klines', (err, data) => {
-        if (err) reject(err)
-        resolve(data)
-      })
+      global.Conn.asyncQuery(
+        'INSERT INTO klines (server_time, low, high, open, close, amount, volume, exchange_id, product_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+          kline[klineArr[0]],
+          kline[klineArr[1]],
+          kline[klineArr[2]],
+          kline[klineArr[3]],
+          kline[klineArr[4]],
+          kline[klineArr[5]],
+          kline[klineArr[6]],
+          exchangeId,
+          productId,
+        ],
+        (err, data) => {
+          console.log('data', data)
+          if (err) reject(err)
+          resolve(data)
+        }
+      )
     })
   }
 }

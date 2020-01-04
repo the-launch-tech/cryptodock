@@ -12,7 +12,7 @@ export default {
       quote_min: 'quote_increment',
       margin: 'margin_enabled',
     },
-    klineArr: [0, 1, 2, 3, 4, 5],
+    klineArr: [0, 1, 2, 3, 4, 6, 5],
     klinePeriod: {
       60: 60,
       300: 300,
@@ -35,7 +35,7 @@ export default {
       margin: 'isMarginEnabled',
       trading: 'enableTrading',
     },
-    klineArr: [0, 3, 4, 2, 1, 6],
+    klineArr: [0, 3, 4, 2, 1, 5, 6],
     klinePeriod: {
       60: '1min',
       300: '5min',
