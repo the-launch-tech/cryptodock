@@ -46,24 +46,24 @@ CryptoDock.on('activate', () => {
 })
 
 CryptoDock.on('ready', () => {
-  if (!global.Windows.exists(mainKey)) {
-    global.Windows.configure(mainKey, null, activateWindow)
-  } else if (!global.Windows.isActive(mainKey)) {
-    activateWindow(mainKey)
-  }
+  // if (!global.Windows.exists(mainKey)) {
+  //   global.Windows.configure(mainKey, null, activateWindow)
+  // } else if (!global.Windows.isActive(mainKey)) {
+  //   activateWindow(mainKey)
+  // }
+  //
+  // global.IPC.onRendererPing((event, windowArgs) => {
+  //   event.reply('res--app.renderer-PING', windowArgs)
+  //   global.IPC.createHandlers(windowArgs.type, windowArgs.id, (added, handlers) => {
+  //     if (added) {
+  //       global.IPC.addHandlers(windowArgs.type, windowArgs.id, handlers)
+  //     }
+  //   })
+  // })
+  //
+  // CryptoDockApi()
+  //
+  // NotificationManager.show(APP_READY)
 
-  global.IPC.onRendererPing((event, windowArgs) => {
-    event.reply('res--app.renderer-PING', windowArgs)
-    global.IPC.createHandlers(windowArgs.type, windowArgs.id, (added, handlers) => {
-      if (added) {
-        global.IPC.addHandlers(windowArgs.type, windowArgs.id, handlers)
-      }
-    })
-  })
-
-  // DataBuilder()
-
-  CryptoDockApi()
-
-  NotificationManager.show(APP_READY)
+  DataBuilder()
 })

@@ -9,6 +9,16 @@ export default {
       buttons: ['Yes', 'No'],
     }
   },
+  changeDirConfirm: arg => {
+    return {
+      type: 'question',
+      title: 'Change Directory',
+      message: 'Are you sure you want to change the current strategy directory?',
+      detail: 'This action cannot be reversed',
+      defaultId: 1,
+      buttons: ['Yes', 'No'],
+    }
+  },
   getStrategyDirectory: arg => {
     return {
       title: 'Set Strategy Dock Directory For Python Strategies',

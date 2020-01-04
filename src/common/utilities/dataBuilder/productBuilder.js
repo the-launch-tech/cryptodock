@@ -12,7 +12,7 @@ const getProducts = (exchangeName, Client) => {
         .catch(reject)
     } else if (exchangeName === 'kucoin') {
       Client.getSymbolsList()
-        .then(resolve)
+        .then(res => resolve(res.data))
         .catch(reject)
     }
   })
@@ -21,7 +21,7 @@ const getProducts = (exchangeName, Client) => {
 export default function(exchangeId, exchangeName, Client) {
   let map = exchangeMap[exchangeName]
 
-  const siftUnique = (arrOne, arrTwo, callback) => {
+  const siftUnique = (arrOne = [], arrTwo = [], callback) => {
     let uniqueArr = []
 
     arrOne.map(elOne => {
@@ -43,6 +43,7 @@ export default function(exchangeId, exchangeName, Client) {
     retry =>
       getProducts(exchangeName, Client)
         .then(exchangeProducts => {
+          log('exchangeProducts', exchangeProducts.length)
           Product.getExchangeProducts(exchangeId)
             .then(localProducts => {
               siftUnique(exchangeProducts, localProducts, uniqueProducts => {

@@ -16,19 +16,14 @@ class Exchange extends Model {
     })
   }
 
-  static save(name) {
-    const map = {
-      coinbasepro: {
-        label: 'CoinbasePro',
-      },
-      kucoin: {
-        label: 'Kucoin',
-      },
-    }
-
+  static save(exchange) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'INSERT INTO exchanges (name, label) values ("' + name + '", "' + map[name].label + '")',
+        'INSERT INTO exchanges (name, label) values ("' +
+          exchange.name +
+          '", "' +
+          exchange.label +
+          '")',
         (err, data) => {
           if (err) reject(err)
           resolve(data.insertId)

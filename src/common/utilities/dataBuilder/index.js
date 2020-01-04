@@ -10,34 +10,26 @@ import orderBookBuilder from './orderBookBuilder'
 
 const { log, error } = console
 
-const builders = [productBuilder]
-
 export default function() {
-  const Kucoin = kucoinClient.initialize()
-  const CoinbasePro = coinbaseProClient.initialize()
+  const builders = [productBuilder]
 
-  const checkInitialization = ({ name, client }, exchanges, callback) => {
-    const i = iOfArrObj(exchanges, 'name', name)
+  const exchanges = [
+    { client: kucoinClient.initialize(), name: 'kucoin', label: 'Kucoin' },
+    { client: coinbaseProClient.initialize(), name: 'coinbasepro', label: 'CoinbasePro' },
+  ]
 
-    if (i > -1) {
-      callback(exchanges[i].id, name, client)
-    } else {
-      Exchange.save(name).then(id => callback(id, name, client))
-    }
-  }
-
-  const loopBuilders = (id, name, client) => {
-    builders.map(builder => {
-      builder(id, name, client)
-      // cron.schedule('1-59/5 * * * *', () => {
-      //   console.log(id, name, Date.now())
-      //   client && builder(id, name, client)
-      // })
+  Exchange.getAll()
+    .then(localExchanges => {
+      exchanges.map(exchange => {
+        const i = iOfArrObj(localExchanges, 'name', exchange.name)
+        if (i > -1) {
+          builders.map(builder => builder(localExchanges[i].id, exchange.name, exchange.client))
+        } else {
+          Exchange.save(exchange)
+            .then(id => builders.map(builder => builder(id, exchange.name, exchange.client)))
+            .catch(error)
+        }
+      })
     })
-  }
-
-  Exchange.getAll().then(exchanges => {
-    checkInitialization({ name: 'coinbasepro', client: CoinbasePro }, exchanges, loopBuilders)
-    checkInitialization({ name: 'kucoin', client: Kucoin }, exchanges, loopBuilders)
-  })
+    .catch(error)
 }

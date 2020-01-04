@@ -134,11 +134,13 @@ class StrategyManager {
   }
 
   deBootShell(obj) {
-    obj.process.kill('SIGHUP')
+    if (obj && obj.process) {
+      obj.process.kill('SIGHUP')
+    }
   }
 
-  pauseAll() {
-    Object.keys(this.state).map(id => this.deBootShell(this.state[id]))
+  async pauseAll() {
+    await Object.keys(this.state).map(id => this.deBootShell(this.state[id]))
   }
 }
 
