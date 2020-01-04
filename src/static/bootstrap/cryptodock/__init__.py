@@ -1,1 +1,2 @@
-from cryptodock.sdk import *
+from .sdk import SDK
+__all__ = ['SDK']

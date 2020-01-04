@@ -2,7 +2,7 @@ import express from 'express'
 
 export default function() {
   const Api = express()
-  const PORT = 1337
+  const PORT = process.env.API_PORT
 
   Api.get('/products/:id?/:fields?', (req, res) => {
     res.json({ msg: 'Success Testing' })
