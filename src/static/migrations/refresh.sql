@@ -64,13 +64,14 @@ CREATE TABLE IF NOT EXISTS strategymetas
 CREATE TABLE IF NOT EXISTS klines
   (
     id INT NOT NULL AUTO_INCREMENT,
-    server_time INT(11),
+    server_time TIMESTAMP NOT NULL,
     low DECIMAL(22, 11),
     high DECIMAL(22, 11),
     open DECIMAL(22, 11),
     close DECIMAL(22, 11),
     amount DECIMAL(22, 11),
     volume DECIMAL(22, 11),
+    period INT(6),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     exchange_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -82,8 +83,8 @@ CREATE TABLE IF NOT EXISTS klines
 CREATE TABLE IF NOT EXISTS trades
   (
     id INT NOT NULL AUTO_INCREMENT,
-    sequenceID INT(11),
-    server_time INT(11),
+    server_time TIMESTAMP NOT NULL,
+    sequence BIGINT(12),
     price DECIMAL(22, 11),
     size DECIMAL(22, 11),
     quote_size DECIMAL(22, 11),
@@ -97,15 +98,16 @@ CREATE TABLE IF NOT EXISTS trades
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS orderbooks
+CREATE TABLE IF NOT EXISTS tickers
   (
     id INT NOT NULL AUTO_INCREMENT,
-    sequenceID INT(11),
-    server_time INT(11),
-    bid_price DECIMAL(22, 11),
-    bid_size DECIMAL(22, 11),
-    ask_price DECIMAL(22, 11),
-    ask_size DECIMAL(22, 11),
+    server_time TIMESTAMP NOT NULL,
+    sequence BIGINT(12) NOT NULL,
+    price DECIMAL(22, 11) NOT NULL,
+    size DECIMAL(22, 11) NOT NULL,
+    bid DECIMAL(22, 11) NOT NULL,
+    ask DECIMAL(22, 11) NOT NULL,
+    volume DECIMAL(22, 11),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     exchange_id INT NOT NULL,
     product_id INT NOT NULL,

@@ -21,19 +21,21 @@ class KLine extends Model {
     })
   }
 
-  static save(kline, productId, exchangeId, map) {
+  static save(kline, productId, exchangeId, map, periodInSeconds) {
+    log(kline)
     const klineArr = map.klineArr
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'INSERT INTO klines (server_time, low, high, open, close, amount, volume, exchange_id, product_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO klines (server_time, low, high, open, close, amount, volume, period, exchange_id, product_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
-          kline[klineArr[0]],
+          moment(kline[klineArr[0]]).format('YYYY-MM-DD HH:mm:ss.SSS'),
           kline[klineArr[1]],
           kline[klineArr[2]],
           kline[klineArr[3]],
           kline[klineArr[4]],
           kline[klineArr[5]],
           kline[klineArr[6]],
+          periodInSeconds,
           exchangeId,
           productId,
         ],

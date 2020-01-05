@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default {
   coinbasepro: {
     getProducts: 'getProducts',
@@ -19,6 +21,28 @@ export default {
       900: 900,
       3600: 3600,
     },
+    getTradesObject: {
+      sequence: 'trade_id',
+      server_time: 'time',
+      price: 'price',
+      size: 'size',
+      quote_size: 'quote_size',
+      side: 'side',
+      best_match: 'best_match',
+    },
+    getTradesTimeFn: server_time => moment(server_time).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    tickerObject_L1: {
+      sequence: 'trade_id',
+      server_time: 'time',
+      price: 'price',
+      size: 'size',
+      bid: 'bid',
+      ask: 'ask',
+      volume: 'volume',
+      best_bid_size: 'bestBidSize',
+      best_ask_size: 'bestAskSize',
+    },
+    getTickersTimeFn: server_time => moment(server_time).format('YYYY-MM-DD HH:mm:ss.SSS'),
   },
   kucoin: {
     getProducts: 'getSymbolsList',
@@ -42,5 +66,29 @@ export default {
       900: '15min',
       3600: '1hour',
     },
+    getTradesObject: {
+      sequence: 'sequence',
+      server_time: 'time',
+      price: 'price',
+      size: 'size',
+      quote_size: 'quote_size',
+      side: 'side',
+      best_match: 'best_match',
+    },
+    getTradesTimeFn: server_time =>
+      moment(parseInt(server_time.toString().substr(0, 13), 10)).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    tickerObject_L1: {
+      sequence: 'sequence',
+      server_time: 'time',
+      price: 'price',
+      size: 'size',
+      bid: 'bestBid',
+      ask: 'bestAsk',
+      volume: 'volume',
+      best_bid_size: 'bestBidSize',
+      best_ask_size: 'bestAskSize',
+    },
+    getTickersTimeFn: server_time =>
+      moment(parseInt(server_time.toString().substr(0, 13), 10)).format('YYYY-MM-DD HH:mm:ss.SSS'),
   },
 }

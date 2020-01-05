@@ -1,4 +1,4 @@
-import Trade from '../../models/Trade'
+import Ticker from '../../models/Ticker'
 import RequestBalancer from '../RequestBalancer'
 import Product from '../../models/Product'
 import exchangeMap from '../../clients/exchangeMap'
@@ -7,17 +7,17 @@ const { log, error } = console
 
 export default function(exchangeId, exchangeName, Client) {
   const map = exchangeMap[exchangeName]
-  const tradeObject = map.getTradesObject
-  const getTradesTimeFn = map.getTradesTimeFn
+  const tickerObject = map.getTickerObject
+  const getTickerTimesFn = map.getTickerTimesFn
 
-  const getTrades = (pair, start, end, granularity) => {
+  const getTicker = pair => {
     return new Promise((resolve, reject) => {
       if (exchangeName === 'coinbasepro') {
-        Client.getProductTrades(pair)
+        Client.getProductTicker(pair)
           .then(resolve)
           .catch(reject)
       } else if (exchangeName === 'kucoin') {
-        Client.getTradeHistories({ symbol: pair })
+        Client.getTicker({ symbol: pair })
           .then(res => resolve(res.data))
           .catch(reject)
       }
@@ -27,18 +27,15 @@ export default function(exchangeId, exchangeName, Client) {
   Product.getExchangeProducts(exchangeId)
     .then(products => {
       products.map(({ id, pair }) => {
-        Trade.getLastSequence(id, exchangeId)
+        Ticker.getLastSequence(id, exchangeId)
           .then(lastSequence => {
             RequestBalancer.request(
               retry =>
-                getTrades(pair)
-                  .then(trades => {
-                    trades = exchangeName === 'coinbasepro' ? trades.reverse() : trades
-                    trades.map(trade => {
-                      if (trade[tradeObject['sequence']] > lastSequence) {
-                        Trade.save(trade, id, exchangeId, tradeObject, getTradesTimeFn)
-                      }
-                    })
+                getTicker(pair)
+                  .then(ticker => {
+                    if (ticker[tickerObject['sequence']] > lastSequence) {
+                      Ticker.save(ticker, id, exchangeId, tickerObject, getTickerTimesFn)
+                    }
                   })
                   .catch(error),
               exchangeName,

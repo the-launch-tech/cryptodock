@@ -4,22 +4,22 @@ import exchangeMap from '../../clients/exchangeMap'
 
 const { log, error } = console
 
-const getProducts = (exchangeName, Client) => {
-  return new Promise((resolve, reject) => {
-    if (exchangeName === 'coinbasepro') {
-      Client.getProducts()
-        .then(resolve)
-        .catch(reject)
-    } else if (exchangeName === 'kucoin') {
-      Client.getSymbolsList()
-        .then(res => resolve(res.data))
-        .catch(reject)
-    }
-  })
-}
-
 export default function(exchangeId, exchangeName, Client) {
-  let map = exchangeMap[exchangeName]
+  const map = exchangeMap[exchangeName]
+
+  const getProducts = () => {
+    return new Promise((resolve, reject) => {
+      if (exchangeName === 'coinbasepro') {
+        Client.getProducts()
+          .then(resolve)
+          .catch(reject)
+      } else if (exchangeName === 'kucoin') {
+        Client.getSymbolsList()
+          .then(res => resolve(res.data))
+          .catch(reject)
+      }
+    })
+  }
 
   const siftUnique = (arrOne = [], arrTwo = [], callback) => {
     let uniqueArr = []
@@ -41,9 +41,8 @@ export default function(exchangeId, exchangeName, Client) {
 
   RequestBalancer.request(
     retry =>
-      getProducts(exchangeName, Client)
+      getProducts()
         .then(exchangeProducts => {
-          log('exchangeProducts', exchangeProducts.length)
           Product.getExchangeProducts(exchangeId)
             .then(localProducts => {
               siftUnique(exchangeProducts, localProducts, uniqueProducts => {

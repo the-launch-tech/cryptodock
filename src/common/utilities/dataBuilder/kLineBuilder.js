@@ -10,10 +10,10 @@ Date.prototype.addHours = function(h) {
   return this
 }
 
-export default function(exchangeId, exchangeName, Client) {
+export default function(exchangeId, exchangeName, Client, { period }) {
   const map = exchangeMap[exchangeName]
   const klinePeriod = map.klinePeriod
-  const granularity = klinePeriod['60']
+  const granularity = klinePeriod[period.toString()]
   const maxCandlesInGroup = 300
   const currentTimestamp = new Date()
 
@@ -24,7 +24,12 @@ export default function(exchangeId, exchangeName, Client) {
           .then(resolve)
           .catch(reject)
       } else if (exchangeName === 'kucoin') {
-        Client.getKlines({ symbol: pair, startAt: start, endAt: end, type: granularity })
+        Client.getKlines({
+          symbol: pair,
+          startAt: new Date(start).getTime(),
+          endAt: new Date(end).getTime(),
+          type: granularity,
+        })
           .then(res => resolve(res.data))
           .catch(reject)
       }
@@ -36,7 +41,7 @@ export default function(exchangeId, exchangeName, Client) {
       products.map(({ id, pair }) => {
         KLine.getLastTimestamp(id, exchangeId)
           .then(lastTimestamp => {
-            console.log('lastTimestamp', lastTimestamp)
+            log('lastTimestamp', new Date(lastTimestamp))
             const prevTimeFormatted = new Date(lastTimestamp)
             const diffMs = currentTimestamp - prevTimeFormatted
             const diffMins = Math.round(diffMs / 60000)
@@ -48,10 +53,14 @@ export default function(exchangeId, exchangeName, Client) {
                   getKLinePeriod(
                     pair,
                     start,
-                    new Date(start).addHours(maxCandlesInGroup / 60),
+                    new Date(start).addHours((5 * period) / 60),
                     granularity
                   )
-                    .then(history => history.map(kline => KLine.save(kline, id, exchangeId, map)))
+                    .then(history =>
+                      history.map(kline => {
+                        KLine.save(kline, id, exchangeId, map, period)
+                      })
+                    )
                     .catch(error),
                 exchangeName,
                 exchangeName
