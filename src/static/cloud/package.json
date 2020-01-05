@@ -1,0 +1,16 @@
+{
+  "name": "cryptodock-archive",
+  "version": "0.0.1",
+  "description": "Server based data builder for CryptoDock, lives on the cloud.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Griffiths",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "moment": "^2.24.0",
+    "node-schedule": "^1.3.2"
+  }
+}

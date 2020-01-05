@@ -40,7 +40,6 @@ class KLine extends Model {
           productId,
         ],
         (err, data) => {
-          console.log('data', data)
           if (err) reject(err)
           resolve(data)
         }

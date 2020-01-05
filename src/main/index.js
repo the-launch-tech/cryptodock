@@ -8,7 +8,6 @@ import _key from '../common/helpers/_key'
 import IpcManager from './ipc/IpcManager'
 import WindowManager from './windows/WindowManager'
 import CryptoDockApi from '../common/api/index'
-import DataBuilder from '../common/utilities/dataBuilder/index'
 import NotificationManager from './notifications/NotificationManager'
 import StrategyManager from '../common/utilities/StrategyManager'
 import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
@@ -64,6 +63,4 @@ CryptoDock.on('ready', () => {
   CryptoDockApi()
 
   NotificationManager.show(APP_READY)
-
-  // DataBuilder()
 })
