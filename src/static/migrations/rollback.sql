@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS klines;
 DROP TABLE IF EXISTS orderbooks;
 DROP TABLE IF EXISTS trades;
+DROP TABLE IF EXISTS tickers;
 DROP TABLE IF EXISTS strategymetas;
 DROP TABLE IF EXISTS strategies;
 DROP TABLE IF EXISTS product_exchange;

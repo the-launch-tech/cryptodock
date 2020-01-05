@@ -6,6 +6,7 @@ import exchangeMap from '../../clients/exchangeMap'
 const { log, error } = console
 
 export default function(exchangeId, exchangeName, Client) {
+  log('In Trade Builder')
   const map = exchangeMap[exchangeName]
   const tradeObject = map.getTradesObject
   const getTradesTimeFn = map.getTradesTimeFn

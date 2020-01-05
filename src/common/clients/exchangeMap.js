@@ -31,7 +31,7 @@ export default {
       best_match: 'best_match',
     },
     getTradesTimeFn: server_time => moment(server_time).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    tickerObject_L1: {
+    tickerObject: {
       sequence: 'trade_id',
       server_time: 'time',
       price: 'price',
@@ -42,7 +42,7 @@ export default {
       best_bid_size: 'bestBidSize',
       best_ask_size: 'bestAskSize',
     },
-    getTickersTimeFn: server_time => moment(server_time).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    tickersTimeFn: server_time => moment(server_time).format('YYYY-MM-DD HH:mm:ss.SSS'),
   },
   kucoin: {
     getProducts: 'getSymbolsList',
@@ -77,7 +77,7 @@ export default {
     },
     getTradesTimeFn: server_time =>
       moment(parseInt(server_time.toString().substr(0, 13), 10)).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    tickerObject_L1: {
+    tickerObject: {
       sequence: 'sequence',
       server_time: 'time',
       price: 'price',
@@ -88,7 +88,7 @@ export default {
       best_bid_size: 'bestBidSize',
       best_ask_size: 'bestAskSize',
     },
-    getTickersTimeFn: server_time =>
+    tickersTimeFn: server_time =>
       moment(parseInt(server_time.toString().substr(0, 13), 10)).format('YYYY-MM-DD HH:mm:ss.SSS'),
   },
 }

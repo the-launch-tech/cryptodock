@@ -30,13 +30,11 @@ class Product extends Model {
   }
 
   static save(exchangeId, product, map) {
-    const pair = product[map['pair']]
-    const base = product[map['base']]
-    const quote = product[map['quote']]
+    log('Saving Product', product)
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
         'INSERT INTO products (pair, base, quote) values (?, ?, ?)',
-        [pair, base, quote],
+        [product[map['pair']], product[map['base']], product[map['quote']]],
         (err, productData) => {
           if (err) reject(err)
           global.Conn.asyncQuery(

@@ -6,9 +6,10 @@ import exchangeMap from '../../clients/exchangeMap'
 const { log, error } = console
 
 export default function(exchangeId, exchangeName, Client) {
+  log('In Ticker Builder')
   const map = exchangeMap[exchangeName]
-  const tickerObject = map.getTickerObject
-  const getTickerTimesFn = map.getTickerTimesFn
+  const tickerObject = map.tickerObject
+  const tickersTimeFn = map.tickersTimeFn
 
   const getTicker = pair => {
     return new Promise((resolve, reject) => {
@@ -34,7 +35,7 @@ export default function(exchangeId, exchangeName, Client) {
                 getTicker(pair)
                   .then(ticker => {
                     if (ticker[tickerObject['sequence']] > lastSequence) {
-                      Ticker.save(ticker, id, exchangeId, tickerObject, getTickerTimesFn)
+                      Ticker.save(ticker, id, exchangeId, tickerObject, tickersTimeFn)
                     }
                   })
                   .catch(error),

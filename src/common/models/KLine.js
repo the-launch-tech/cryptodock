@@ -15,14 +15,14 @@ class KLine extends Model {
         [productId, exchangeId],
         (err, data) => {
           if (err) reject(err)
-          resolve(data && data[0] ? data[0]['server_time'] : moment().subtract({ hours: 12 }))
+          resolve(data && data[0] ? data[0]['server_time'] : moment().subtract({ hours: 1 }))
         }
       )
     })
   }
 
   static save(kline, productId, exchangeId, map, periodInSeconds) {
-    log(kline)
+    log('Saving Kline', kline)
     const klineArr = map.klineArr
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(

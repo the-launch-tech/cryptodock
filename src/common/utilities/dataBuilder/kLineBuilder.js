@@ -11,6 +11,7 @@ Date.prototype.addHours = function(h) {
 }
 
 export default function(exchangeId, exchangeName, Client, { period }) {
+  log('In Kline Builder')
   const map = exchangeMap[exchangeName]
   const klinePeriod = map.klinePeriod
   const granularity = klinePeriod[period.toString()]
@@ -41,7 +42,6 @@ export default function(exchangeId, exchangeName, Client, { period }) {
       products.map(({ id, pair }) => {
         KLine.getLastTimestamp(id, exchangeId)
           .then(lastTimestamp => {
-            log('lastTimestamp', new Date(lastTimestamp))
             const prevTimeFormatted = new Date(lastTimestamp)
             const diffMs = currentTimestamp - prevTimeFormatted
             const diffMins = Math.round(diffMs / 60000)

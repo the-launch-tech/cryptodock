@@ -4,7 +4,8 @@ import exchangeMap from '../../clients/exchangeMap'
 
 const { log, error } = console
 
-export default function(exchangeId, exchangeName, Client) {
+export default async function(exchangeId, exchangeName, Client) {
+  log('In Product Builder')
   const map = exchangeMap[exchangeName]
 
   const getProducts = () => {
@@ -39,7 +40,7 @@ export default function(exchangeId, exchangeName, Client) {
     callback(uniqueArr)
   }
 
-  RequestBalancer.request(
+  await RequestBalancer.request(
     retry =>
       getProducts()
         .then(exchangeProducts => {
@@ -47,9 +48,7 @@ export default function(exchangeId, exchangeName, Client) {
             .then(localProducts => {
               siftUnique(exchangeProducts, localProducts, uniqueProducts => {
                 uniqueProducts.map(product => {
-                  Product.save(exchangeId, product, map.object)
-                    .then(log)
-                    .catch(error)
+                  Product.save(exchangeId, product, map.object).catch(error)
                 })
               })
             })
