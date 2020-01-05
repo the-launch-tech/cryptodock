@@ -1,10 +1,10 @@
-import RequestBalancer from '../RequestBalancer'
-import Product from '../../models/Product'
-import exchangeMap from '../../clients/exchangeMap'
+const RequestBalancer = require('../utils/RequestBalancer')
+const Product = require('../models/Product')
+const exchangeMap = require('../utils/exchangeMap')
 
 const { log, error } = console
 
-export default async function(exchangeId, exchangeName, Client) {
+module.exports = async function(exchangeId, exchangeName, Client) {
   log('In Product Builder')
   const map = exchangeMap[exchangeName]
 

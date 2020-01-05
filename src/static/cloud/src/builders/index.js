@@ -1,12 +1,12 @@
-import Cron from 'node-schedule'
-import Exchange from '../../models/Exchange'
-import coinbaseProClient from '../../clients/CoinbasePro'
-import kucoinClient from '../../clients/Kucoin'
-import iOfArrObj from '../../helpers/iOfArrObj'
-import productBuilder from './productBuilder'
-import kLineBuilder from './kLineBuilder'
-import tradeBuilder from './tradeBuilder'
-import tickerBuilder from './tickerBuilder'
+const Cron = require('node-schedule')
+const Exchange = require('../models/Exchange')
+const coinbaseProClient = require('../clients/CoinbasePro')
+const kucoinClient = require('../clients/Kucoin')
+const iOfArrObj = require('../utils/iOfArrObj')
+const productBuilder = require('./productBuilder')
+const kLineBuilder = require('./kLineBuilder')
+const tradeBuilder = require('./tradeBuilder')
+const tickerBuilder = require('./tickerBuilder')
 
 const { log, error } = console
 
@@ -17,7 +17,7 @@ const klineDataMid = { fn: kLineBuilder, cron: '0 0 2 * * *', args: { period: 36
 const klineDataLong = { fn: kLineBuilder, cron: '0 0 3 * * *', args: { period: 86400 } }
 const tickerData = { fn: tickerBuilder, cron: '0 */5 * * * *' }
 
-export default function() {
+module.exports = function() {
   const builders = [tickerData]
 
   const exchanges = [

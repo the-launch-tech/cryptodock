@@ -1,7 +1,7 @@
-import KLine from '../../models/KLine'
-import RequestBalancer from '../RequestBalancer'
-import Product from '../../models/Product'
-import exchangeMap from '../../clients/exchangeMap'
+const KLine = require('../models/KLine')
+const RequestBalancer = require('../utils/RequestBalancer')
+const Product = require('../models/Product')
+const exchangeMap = require('../utils/exchangeMap')
 
 const { log, error } = console
 
@@ -10,7 +10,7 @@ Date.prototype.addHours = function(h) {
   return this
 }
 
-export default function(exchangeId, exchangeName, Client, { period }) {
+module.exports = function(exchangeId, exchangeName, Client, { period }) {
   log('In Kline Builder')
   const map = exchangeMap[exchangeName]
   const klinePeriod = map.klinePeriod

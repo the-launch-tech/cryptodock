@@ -1,11 +1,11 @@
-import Trade from '../../models/Trade'
-import RequestBalancer from '../RequestBalancer'
-import Product from '../../models/Product'
-import exchangeMap from '../../clients/exchangeMap'
+const Trade = require('../models/Trade')
+const RequestBalancer = require('../utils/RequestBalancer')
+const Product = require('../models/Product')
+const exchangeMap = require('../utils/exchangeMap')
 
 const { log, error } = console
 
-export default function(exchangeId, exchangeName, Client) {
+module.exports = function(exchangeId, exchangeName, Client) {
   log('In Trade Builder')
   const map = exchangeMap[exchangeName]
   const tradeObject = map.getTradesObject

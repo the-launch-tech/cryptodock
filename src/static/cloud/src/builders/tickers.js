@@ -1,11 +1,11 @@
-import Ticker from '../../models/Ticker'
-import RequestBalancer from '../RequestBalancer'
-import Product from '../../models/Product'
-import exchangeMap from '../../clients/exchangeMap'
+const Ticker = require('../models/Ticker')
+const RequestBalancer = require('../utils/RequestBalancer')
+const Product = require('../models/Product')
+const exchangeMap = require('../utils/exchangeMap')
 
 const { log, error } = console
 
-export default function(exchangeId, exchangeName, Client) {
+module.exports = function(exchangeId, exchangeName, Client) {
   log('In Ticker Builder')
   const map = exchangeMap[exchangeName]
   const tickerObject = map.tickerObject
