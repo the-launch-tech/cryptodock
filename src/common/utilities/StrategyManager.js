@@ -1,4 +1,3 @@
-import cron from 'node-cron'
 import chalk from 'chalk'
 import path from 'path'
 import { spawn } from 'child_process'
@@ -126,7 +125,7 @@ class StrategyManager {
     }
     obj.process = spawn(process.env.PYTHON_PATH, [
       path.join(obj.strategy.full_path, 'main.py'),
-      process.env.API_PORT,
+      process.env.REMOTE_PORT,
     ])
     obj.process.stdout.on('data', data => log(chalk.blue(this.uint8arrayToString(data))))
     obj.process.stderr.on('data', data => log(chalk.red(this.uint8arrayToString(data))))
