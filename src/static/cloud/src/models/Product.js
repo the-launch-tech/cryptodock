@@ -30,7 +30,6 @@ class Product extends Model {
   }
 
   static save(exchangeId, product, map) {
-    log('Saving Product', product)
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
         'INSERT INTO products (pair, base, quote) values (?, ?, ?)',

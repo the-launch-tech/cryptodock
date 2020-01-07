@@ -3,7 +3,7 @@ require('dotenv').config()
 import express from 'express'
 import bodyParser from 'body-parser'
 import { Conn } from 'mysql-layer'
-import Builder from './builder/index'
+import RestBuilder from './builder/index'
 import routes from './routes/index'
 
 const { log, error } = console
@@ -36,5 +36,5 @@ Api.listen(process.env.PORT, () => {
   log('App Booted At: ' + process.env.PORT + '. Version: ' + process.env.VERSION)
   log('Just adding a log!')
 
-  // Builder()
+  RestBuilder()
 })

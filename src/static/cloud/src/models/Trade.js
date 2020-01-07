@@ -21,7 +21,6 @@ class Trade extends Model {
   }
 
   static save(trade, productId, exchangeId, getTradesObject, tradeTimeFn) {
-    log('Saving Trade', trade)
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
         'INSERT INTO trades (sequence, server_time, price, size, quote_size, side, best_match, exchange_id, product_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',

@@ -1,7 +1,7 @@
-const KLine = require('../models/KLine')
-const RequestBalancer = require('../utils/RequestBalancer')
-const Product = require('../models/Product')
-const exchangeMap = require('../utils/exchangeMap')
+import KLine from '../models/KLine'
+import RequestBalancer from '../utils/RequestBalancer'
+import Product from '../models/Product'
+import exchangeMap from '../utils/exchangeMap'
 
 const { log, error } = console
 

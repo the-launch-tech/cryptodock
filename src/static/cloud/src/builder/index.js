@@ -1,40 +1,33 @@
-const Cron = require('node-schedule')
-const Exchange = require('../models/Exchange')
-const coinbaseProClient = require('../clients/CoinbasePro')
-const kucoinClient = require('../clients/Kucoin')
-const iOfArrObj = require('../utils/iOfArrObj')
-const productBuilder = require('./products')
-const kLineBuilder = require('./klines')
-const tradeBuilder = require('./trades')
-const tickerBuilder = require('./tickers')
+import Cron from 'node-schedule'
+import Exchange from '../models/Exchange'
+import coinbaseProClient from '../clients/CoinbasePro'
+import kucoinClient from '../clients/Kucoin'
+import iOfArrObj from '../utils/iOfArrObj'
+import productBuilder from './products'
+import kLineBuilder from './klines'
+import tradeBuilder from './trades'
+import tickerBuilder from './tickers'
 
 const { log, error } = console
 
-module.exports = function() {
-  this.productData = { fn: productBuilder, cron: '0 0 0 * * *' }
-  this.tradeData = { fn: tradeBuilder, cron: '0 0 * * * *' }
-  this.klineDataTight = { fn: kLineBuilder, cron: '0 0 1 * * *', args: { period: 60 } }
-  this.klineDataMid = { fn: kLineBuilder, cron: '0 0 2 * * *', args: { period: 3600 } }
-  this.klineDataLong = { fn: kLineBuilder, cron: '0 0 3 * * *', args: { period: 86400 } }
-  this.tickerData = { fn: tickerBuilder, cron: '0 */5 * * * *' }
-  this.builders = [
-    this.productData,
-    this.tradeData,
-    this.klineDataTight,
-    this.klineDataMid,
-    this.klineDataLong,
-    this.tickerData,
-  ]
-  this.clientExchanges = [
+const RestBuilder = function() {
+  const productData = { fn: productBuilder, cron: '0 0 0 * * *' }
+  const tradeData = { fn: tradeBuilder, cron: '0 0 * * * *' }
+  const klineDataTight = { fn: kLineBuilder, cron: '0 0 1 * * *', args: { period: 60 } }
+  const klineDataMid = { fn: kLineBuilder, cron: '0 0 2 * * *', args: { period: 3600 } }
+  const klineDataLong = { fn: kLineBuilder, cron: '0 0 3 * * *', args: { period: 86400 } }
+  const tickerData = { fn: tickerBuilder, cron: '0 */5 * * * *' }
+  const builders = [productData, tradeData, klineDataTight, klineDataMid, klineDataLong, tickerData]
+  const clientExchanges = [
     { client: kucoinClient.initialize(), name: 'kucoin', label: 'Kucoin' },
     { client: coinbaseProClient.initialize(), name: 'coinbasepro', label: 'CoinbasePro' },
   ]
 
   const run = (exchangeId, clientExchange) => {
-    this.productData
+    productData
       .fn(exchangeId, clientExchange.name, clientExchange.client)
       .then(() => {
-        this.builders.map(builder => {
+        builders.map(builder => {
           Cron.scheduleJob(builder.cron, () => {
             builder.fn(exchangeId, clientExchange.name, clientExchange.client, builder.args)
           })
@@ -45,7 +38,7 @@ module.exports = function() {
 
   Exchange.getAll()
     .then(localExchanges => {
-      this.clientExchanges.map(clientExchange => {
+      clientExchanges.map(clientExchange => {
         const i = iOfArrObj(localExchanges, 'name', clientExchange.name)
         if (i > -1) {
           run(localExchanges[i].id, clientExchange)
@@ -58,3 +51,5 @@ module.exports = function() {
     })
     .catch(error)
 }
+
+export default RestBuilder
