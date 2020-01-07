@@ -4,16 +4,35 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import python from 'highlight.js/lib/languages/python'
 
 export default class Documentation extends React.Component {
-  render() {
+  constructor(props) {
+    super(props)
+
+    this.codeRefs = []
+
+    this.createCodeRef = this.createCodeRef.bind(this)
+  }
+
+  componentDidMount() {
     hljs.registerLanguage('javascript', javascript)
     hljs.registerLanguage('python', python)
-    hljs.initHighlightingOnLoad()
 
+    this.codeRefs.map(ref => {
+      hljs.highlightBlock(ref)
+    })
+  }
+
+  createCodeRef(ref) {
+    this.codeRefs.push(ref)
+  }
+
+  render() {
     return (
       <div>
         <h5>Python SDK Documentation</h5>
-        <pre>
+        <pre ref={this.createCodeRef}>
           <code className="javascript">var two = 2</code>
+        </pre>
+        <pre ref={this.createCodeRef}>
           <code className="python">def main() : return 'test'</code>
         </pre>
       </div>
