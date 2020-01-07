@@ -154,7 +154,7 @@ class Database extends React.Component {
           className="p-3 mb-5 border-1 border-solid border-white-200 rounded"
           style={{ minHeight: '35vh' }}
         >
-          <h5 className="text-center font-thin mb-3 font-head">Remote Tables For {remoteDbName}</h5>
+          <h5 className="text-center font-thin mb-3 font-head">List Tables For {remoteDbName}</h5>
           <ul>
             {remoteTables.map((table, i) => (
               <li

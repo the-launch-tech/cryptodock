@@ -6,6 +6,7 @@ import { ipcRenderer } from 'electron'
 import MainApp from './mainWindow/App'
 import StrategyApp from './strategyWindow/App'
 import './assets/app.scss'
+import './assets/atom-one-dark.css'
 
 const { log, error } = console
 
