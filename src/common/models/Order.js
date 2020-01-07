@@ -2,10 +2,10 @@ import Model from './Model'
 
 const { log, error } = console
 
-class Log extends Model {
+class Order extends Model {
   constructor() {
     super()
   }
 }
 
-export default Log
+export default Order
