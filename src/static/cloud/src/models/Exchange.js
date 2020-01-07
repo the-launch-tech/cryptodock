@@ -1,4 +1,4 @@
-const Model = require('./Model')
+import Model from './Model'
 
 const { log, error } = console
 
@@ -30,4 +30,4 @@ class Exchange extends Model {
   }
 }
 
-module.exports = Exchange
+export default Exchange

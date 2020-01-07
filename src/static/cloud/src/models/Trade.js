@@ -1,4 +1,4 @@
-const Model = require('./Model')
+import Model from './Model'
 
 const { log, error } = console
 
@@ -45,4 +45,4 @@ class Trade extends Model {
   }
 }
 
-module.exports = Trade
+export default Trade

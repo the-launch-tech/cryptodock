@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS klines
     close DECIMAL(22, 11),
     amount DECIMAL(22, 11),
     volume DECIMAL(22, 11),
-    period INT(6),
+    period INT(10),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     exchange_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -90,12 +90,4 @@ CREATE TABLE IF NOT EXISTS tickers
     PRIMARY KEY (id),
     FOREIGN KEY (exchange_id) REFERENCES exchanges (id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS logs
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    message VARCHAR(5000),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
   );

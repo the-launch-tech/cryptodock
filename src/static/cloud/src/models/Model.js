@@ -4,4 +4,4 @@ class Model {
   constructor() {}
 }
 
-module.exports = Model
+export default Model

@@ -1,4 +1,4 @@
-const Model = require('./Model')
+import Model from './Model'
 
 const { log, error } = console
 
@@ -44,4 +44,4 @@ class Ticker extends Model {
   }
 }
 
-module.exports = Ticker
+export default Ticker

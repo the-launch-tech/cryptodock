@@ -17,7 +17,14 @@ module.exports = function() {
   this.klineDataMid = { fn: kLineBuilder, cron: '0 0 2 * * *', args: { period: 3600 } }
   this.klineDataLong = { fn: kLineBuilder, cron: '0 0 3 * * *', args: { period: 86400 } }
   this.tickerData = { fn: tickerBuilder, cron: '0 */5 * * * *' }
-  this.builders = [this.tickerData]
+  this.builders = [
+    this.productData,
+    this.tradeData,
+    this.klineDataTight,
+    this.klineDataMid,
+    this.klineDataLong,
+    this.tickerData,
+  ]
   this.clientExchanges = [
     { client: kucoinClient.initialize(), name: 'kucoin', label: 'Kucoin' },
     { client: coinbaseProClient.initialize(), name: 'coinbasepro', label: 'CoinbasePro' },

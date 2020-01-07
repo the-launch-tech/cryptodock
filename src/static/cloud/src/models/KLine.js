@@ -1,5 +1,5 @@
-const Model = require('./Model')
-const moment = require('moment')
+import Model from './Model'
+import moment from 'moment'
 
 const { log, error } = console
 
@@ -48,4 +48,4 @@ class KLine extends Model {
   }
 }
 
-module.exports = KLine
+export default KLine
