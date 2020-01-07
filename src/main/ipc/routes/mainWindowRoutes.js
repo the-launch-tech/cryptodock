@@ -23,6 +23,23 @@ export default key => {
         )
       },
     },
+    remote: {
+      channel: `${key}.remote`,
+      listener: (event, arg, win) => {
+        ipcRouterDelegator(
+          event,
+          arg,
+          {
+            REMOTE_DATABASE: DatabaseController.REMOTE_DATABASE,
+            REMOTE_TABLES: DatabaseController.REMOTE_TABLES,
+            REMOTE_TABLE_DETAILS: DatabaseController.REMOTE_TABLE_DETAILS,
+            REMOTE_TABLE_ROW_COUNT: DatabaseController.REMOTE_TABLE_ROW_COUNT,
+          },
+          win,
+          key
+        )
+      },
+    },
     migration: {
       channel: `${key}.migration`,
       listener: (event, arg, win) => {

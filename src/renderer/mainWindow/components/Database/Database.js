@@ -9,6 +9,8 @@ class Database extends React.Component {
 
     this.onGetDb = this.onGetDb.bind(this)
     this.onGetTables = this.onGetTables.bind(this)
+    this.onGetRemoteDb = this.onGetRemoteDb.bind(this)
+    this.onGetRemoteTables = this.onGetRemoteTables.bind(this)
     this.refresh = this.refresh.bind(this)
     this.rollback = this.rollback.bind(this)
     this.onRollback = this.onRollback.bind(this)
@@ -17,6 +19,8 @@ class Database extends React.Component {
     this.state = {
       dbName: '',
       tables: [],
+      remoteDbName: '',
+      remoteTables: [],
       migrating: false,
     }
   }
@@ -35,6 +39,8 @@ class Database extends React.Component {
     ipcRenderer.once('res--mainWindow.db-TABLES', this.onGetTables)
     ipcRenderer.once('res--mainWindow.migration-ROLLBACK', this.onRollback)
     ipcRenderer.once('res--mainWindow.migration-REFRESH', this.onRefresh)
+    ipcRenderer.once('res--mainWindow.remote-REMOTE_DATABASE', this.onGetRemoteDb)
+    ipcRenderer.once('res--mainWindow.remote-REMOTE_TABLES', this.onGetRemoteTables)
   }
 
   removeListeners() {
@@ -42,11 +48,15 @@ class Database extends React.Component {
     ipcRenderer.removeListener('res--mainWindow.db-TABLES', this.onGetTables)
     ipcRenderer.removeListener('res--mainWindow.migration-ROLLBACK', this.onRollback)
     ipcRenderer.removeListener('res--mainWindow.migration-REFRESH', this.onRefresh)
+    ipcRenderer.removeListener('res--mainWindow.remote-REMOTE_DATABASE', this.onGetRemoteDb)
+    ipcRenderer.removeListener('res--mainWindow.remote-REMOTE_TABLES', this.onGetRemoteTables)
   }
 
   sendForDefaults() {
     ipcRenderer.send('mainWindow.db', { id: 'DATABASE' })
     ipcRenderer.send('mainWindow.db', { id: 'TABLES' })
+    ipcRenderer.send('mainWindow.remote', { id: 'REMOTE_DATABASE' })
+    ipcRenderer.send('mainWindow.remote', { id: 'REMOTE_TABLES' })
   }
 
   refresh(e) {
@@ -79,8 +89,16 @@ class Database extends React.Component {
     })
   }
 
+  onGetRemoteDb(event, remoteDbName) {
+    this.setState({ remoteDbName })
+  }
+
+  onGetRemoteTables(event, remoteTables) {
+    this.setState({ remoteTables })
+  }
+
   render() {
-    const { dbName, migrating, tables } = this.state
+    const { dbName, migrating, tables, remoteTables, remoteDbName } = this.state
 
     return (
       <div>
@@ -122,8 +140,33 @@ class Database extends React.Component {
                 <Link
                   className="p-0 bg-tran text-white transition transition-100 font-body ml-5 text-tiny outline-none hover:text-red-3 active:text-white"
                   to={{
-                    pathname: `/database/${table}`,
-                    state: { table },
+                    pathname: `/database/l/${table}`,
+                    state: { table, db: 'local' },
+                  }}
+                >
+                  Details
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div
+          className="p-3 mb-5 border-1 border-solid border-white-200 rounded"
+          style={{ minHeight: '35vh' }}
+        >
+          <h5 className="text-center font-thin mb-3 font-head">Remote Tables For {remoteDbName}</h5>
+          <ul>
+            {remoteTables.map((table, i) => (
+              <li
+                key={i}
+                className="mt-2 mb-2 pb-2 border-b border-solid border-white-200 flex justify-between items-center"
+              >
+                <pre className="inline-block text-tiny m-0">{table}</pre>{' '}
+                <Link
+                  className="p-0 bg-tran text-white transition transition-100 font-body ml-5 text-tiny outline-none hover:text-red-3 active:text-white"
+                  to={{
+                    pathname: `/database/r/${table}`,
+                    state: { table, db: 'remote' },
                   }}
                 >
                   Details

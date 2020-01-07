@@ -24,8 +24,10 @@ export default class Table extends React.Component {
   componentDidMount() {
     this.ipcListeners()
 
+    log(this.props.location)
+
     if (this.props.location && this.props.location.state) {
-      this.setState({ table: this.props.location.state.table })
+      this.setState({ table: this.props.location.state.table, db: this.props.location.state.db })
     } else {
       this.getTableThroughPath()
     }
@@ -33,14 +35,21 @@ export default class Table extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.table !== prevState.table && this.state.table) {
-      this.getTableDetails()
-      this.getTableRowCount()
+      if (this.state.db === 'local') {
+        this.getTableDetails()
+        this.getTableRowCount()
+      } else if (this.state.db === 'remote') {
+        this.getRemoteTableDetails()
+        this.getRemoteTableRowCount()
+      }
     }
   }
 
   ipcListeners() {
     ipc.on('res--mainWindow.db-TABLE_DETAILS', this.onGetTableDetails)
     ipc.on('res--mainWindow.db-TABLE_ROW_COUNT', this.onGetTableRowCount)
+    ipc.on('res--mainWindow.remote-REMOTE_TABLE_DETAILS', this.onGetTableDetails)
+    ipc.on('res--mainWindow.remote-REMOTE_TABLE_ROW_COUNT', this.onGetTableRowCount)
   }
 
   getTableDetails() {
@@ -49,6 +58,20 @@ export default class Table extends React.Component {
 
   getTableRowCount() {
     ipc.send('mainWindow.db', { id: 'TABLE_ROW_COUNT', data: { tableName: this.state.table } })
+  }
+
+  getRemoteTableDetails() {
+    ipc.send('mainWindow.remote', {
+      id: 'REMOTE_TABLE_DETAILS',
+      data: { tableName: this.state.table },
+    })
+  }
+
+  getRemoteTableRowCount() {
+    ipc.send('mainWindow.remote', {
+      id: 'REMOTE_TABLE_ROW_COUNT',
+      data: { tableName: this.state.table },
+    })
   }
 
   onGetTableDetails(event, tableDetails) {
@@ -60,7 +83,10 @@ export default class Table extends React.Component {
   }
 
   getTableThroughPath() {
-    this.setState({ table: this.props.location.pathname.substr(-10) })
+    this.setState({
+      table: this.props.location.pathname.substr(-12),
+      db: this.props.location.pathname.substr(10, 1),
+    })
   }
 
   render() {

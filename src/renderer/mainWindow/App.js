@@ -11,7 +11,7 @@ import Documentation from './components/Documentation/Documentation'
 const routes = [
   { link: '/', label: 'Overview', Component: Overview, exact: true },
   { link: '/database', label: 'Database', Component: Database, exact: true },
-  { link: '/database/:id', label: null, Component: Table },
+  { link: '/database/:db/:table', label: null, Component: Table },
   { link: '/strategies', label: 'Strategies', Component: Strategies, exact: true },
   { link: '/documentation', label: 'Documentation', Component: Documentation, exact: true },
 ]

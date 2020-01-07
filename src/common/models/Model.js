@@ -53,6 +53,42 @@ class Model {
       })
     })
   }
+
+  static getRemoteDatabase() {
+    return new Promise((resolve, reject) => {
+      global.RemoteConn.asyncQuery('SELECT DATABASE()', (err, data) => {
+        if (err) reject(err)
+        resolve(data && data[0] && Object.keys(data[0]) ? data[0]['DATABASE()'] : '')
+      })
+    })
+  }
+
+  static getRemoteTables() {
+    return new Promise((resolve, reject) => {
+      global.RemoteConn.asyncQuery('SHOW TABLES', (err, data) => {
+        if (err) reject(err)
+        resolve(data.map(row => row[Object.keys(row)[0]]))
+      })
+    })
+  }
+
+  static getRemoteTableDetails(tableName) {
+    return new Promise((resolve, reject) => {
+      global.RemoteConn.asyncQuery('DESCRIBE ' + tableName, (err, data) => {
+        if (err) reject(err)
+        resolve(data)
+      })
+    })
+  }
+
+  static getRemoteTableRowCount(tableName) {
+    return new Promise((resolve, reject) => {
+      global.RemoteConn.asyncQuery('SELECT COUNT(*) FROM ' + tableName, (err, data) => {
+        if (err) reject(err)
+        resolve(data && data[0] ? data[0]['COUNT(*)'] : 0)
+      })
+    })
+  }
 }
 
 export default Model

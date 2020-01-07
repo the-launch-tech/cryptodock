@@ -6,7 +6,7 @@ export default function(type, id) {
     mainWindow: {
       window: null,
       active: false,
-      devTools: false,
+      devTools: true,
       show: true,
       template: path.join(__dirname, 'index.html'),
       address: `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?${querystring.stringify({

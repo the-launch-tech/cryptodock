@@ -25,7 +25,16 @@ global.Conn = new Conn({
   multipleStatements: true,
 })
 
+global.RemoteConn = new Conn({
+  hostname: process.env.REMOTE_DB_HOST,
+  user: process.env.REMOTE_DB_USER,
+  password: process.env.REMOTE_DB_PASSWORD,
+  database: process.env.REMOTE_DB_NAME,
+  multipleStatements: true,
+})
+
 global.Conn.connection.connect()
+global.RemoteConn.connection.connect()
 global.IPC = new IpcManager()
 global.Windows = new WindowManager()
 global.Strategies = new StrategyManager()
