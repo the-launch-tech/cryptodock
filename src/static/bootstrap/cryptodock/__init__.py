@@ -1,2 +1,2 @@
-from .sdk import SDK
-__all__ = ['SDK']
+from .sdk import Sdk
+__all__ = ['Sdk']

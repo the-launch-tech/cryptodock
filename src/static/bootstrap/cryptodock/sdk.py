@@ -1,20 +1,19 @@
-import requests
-import sys
-
+from .local import Local
+from .kucoin import Kucoin
+from .coinbasepro import CoinbasePro
+from .socket import Socket
 from . import version
 
-get_products = "/products"
+import sys
 
 class Sdk :
 
     def __init__(self) :
-        self.port = str(sys.argv)[1]
-        self.uri = "http://localhost:{}".format(self.port)
+        # self.port = sys.argv[1]
+        self.port = 5000
+        self.uri = "http://localhost:{}/api/{}".format(self.port, version)
 
-    def get(endpoint, params = {}) :
-        response = requests.get(self.uri + endpoint, params)
-        return { code: response.status_code, data: response.json() }
-
-    def get_products(self, exchanges = [], fields = []) :
-        res = self.get(get_products, { exchanges: exchanges, fields: fields })
-        return [res.code, res.data]
+        self.local = Local(self.uri)
+        self.kucoin = Kucoin(self.uri)
+        self.coinbasepro = CoinbasePro(self.uri)
+        self.socket = Socket()

@@ -15,10 +15,7 @@ export default class Documentation extends React.Component {
   componentDidMount() {
     hljs.registerLanguage('javascript', javascript)
     hljs.registerLanguage('python', python)
-
-    this.codeRefs.map(ref => {
-      hljs.highlightBlock(ref)
-    })
+    this.codeRefs.map(hljs.highlightBlock)
   }
 
   createCodeRef(ref) {
