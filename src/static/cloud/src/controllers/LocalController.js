@@ -1,4 +1,9 @@
 import Controller from './Controller'
+import Exchange from '../models/Exchange'
+import Product from '../models/Product'
+import Trade from '../models/Trade'
+import Ticker from '../models/Ticker'
+import KLine from '../models/KLine'
 
 class LocalController extends Controller {
   constructor() {

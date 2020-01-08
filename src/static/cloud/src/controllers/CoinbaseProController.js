@@ -7,9 +7,6 @@ class CoinbaseProController extends Controller {
     super()
   }
 
-  /*
-   * Get products
-   */
   getProducts(req, res, next) {
     CoinbasePro.getProducts((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -17,15 +14,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get single product orderbook
-   * @query pair <string>
-   * @param level <int> [optional]
-   */
   getProductOrderBook(req, res, next) {
     const { level } = req.params
     if (!req.query.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getProductOrderBook(
       req.query.pair,
@@ -37,13 +29,9 @@ class CoinbaseProController extends Controller {
     )
   }
 
-  /*
-   * Get the recent ticker movements of a single product
-   * @query pair <string>
-   */
   getProductTicker(req, res, next) {
     if (!req.query.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getProductTicker(req.query.pair, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -51,15 +39,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get the recent trades for a single product
-   * @query pair <string>
-   * @param after <int> [optional]
-   */
   getProductTrades(req, res, next) {
     const { after } = req.params
     if (!req.query.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getProductTrades(
       req.query.pair,
@@ -71,17 +54,10 @@ class CoinbaseProController extends Controller {
     )
   }
 
-  /*
-   * Get the klines (historic rates) for a single product
-   * @query pair <string>
-   * @param granularity <int> [optional]
-   * @param start <datetime> [optional]
-   * @param end <datetime> [optional]
-   */
   getProductHistoricRates(req, res, next) {
     const { granularity, start, end } = req.params
     if (!req.query.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getProductHistoricRates(
       req.query.pair,
@@ -93,13 +69,9 @@ class CoinbaseProController extends Controller {
     )
   }
 
-  /*
-   * Get the 24 hour stats for a single product
-   * @query pair <string>
-   */
   getProduct24HrStats(req, res, next) {
     if (!req.query.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getProduct24HrStats(req.query.pair, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -107,9 +79,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get list of all currencies
-   */
   getCurrencies(req, res, next) {
     CoinbasePro.getCurrencies((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -117,9 +86,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get the server_time
-   */
   getTime(req, res, next) {
     CoinbasePro.getTime((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -127,9 +93,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * List your coinbase accounts
-   */
   getCoinbaseAccounts(req, res, next) {
     CoinbasePro.getCoinbaseAccounts((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -137,9 +100,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get list of payment methods
-   */
   getPaymentMethods(req, res, next) {
     CoinbasePro.getPaymentMethods((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -147,9 +107,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get list of accounts
-   */
   getAccounts(req, res, next) {
     CoinbasePro.getAccounts((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -157,10 +114,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get single account details
-   * @query accountID <string>
-   */
   getAccount(req, res, next) {
     CoinbasePro.getAccount(req.query.accountID, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -168,10 +121,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get history of single account
-   * @query accountID <string>
-   */
   getAccountHistory(req, res, next) {
     const { before } = req.params
     const args = {}
@@ -184,10 +133,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get transfers on single account
-   * @query accountID <string>
-   */
   getAccountTransfers(req, res, next) {
     const { before } = req.params
     const args = {}
@@ -200,10 +145,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get holds on single account
-   * @query accountID <string>
-   */
   getAccountHolds(req, res, next) {
     const { before } = req.params
     const args = {}
@@ -216,16 +157,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Create BUY on product pair
-   * @query pair <string>
-   * @param price <int>
-   * @param size <int>
-   */
   buy(req, res, next) {
     const { price, size, product_id } = req.params
     if (!price || !size || !product_id) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.buy(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -233,16 +168,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Creat SELL on product pair
-   * @query pair <string>
-   * @param price <int>
-   * @param size <int>
-   */
   sell(req, res, next) {
     const { price, size, product_id } = req.params
     if (!price || !size || !product_id) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.sell(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -250,17 +179,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Create order on product pair
-   * @query pair <string>
-   * @param price <int>
-   * @param size <int>
-   * @param side <string>
-   */
   placeOrder(req, res, next) {
     const { price, size, product_id, side } = req.params
     if (!price || !size || !product_id || !side) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.placeOrder(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -268,13 +190,9 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Cancel order by id
-   * @query orderID <string>
-   */
   cancelOrder(req, res, next) {
     if (!req.query.orderID) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.cancelOrder(req.query.orderID, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -282,9 +200,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Cancels open orders
-   */
   cancelOrders(req, res, next) {
     CoinbasePro.cancelOrders((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -292,13 +207,9 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Cancels all orders
-   * @query pair <string>
-   */
   cancelAllOrders(req, res, next) {
     if (!req.query.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.cancelAllOrders(req.query.pair, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -306,11 +217,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get orders
-   * @param after <int> [optional]
-   * @param status <string> [optional]
-   */
   getOrders(req, res, next) {
     CoinbasePro.getOrders(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -318,13 +224,9 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get order
-   * @query orderID <int>
-   */
   getOrder(req, res, next) {
     if (!req.query.orderID) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getOrder(req.query.orderID, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -332,14 +234,9 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get fills
-   * @param pair <int>
-   * @param before <int> [optional]
-   */
   getFills(req, res, next) {
     if (!req.params.pair) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.getFills(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -347,9 +244,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get fundings
-   */
   getFundings(req, res, next) {
     CoinbasePro.getFundings((err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -357,15 +251,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Repay amount in currency
-   * @param amount <int>
-   * @param currency <string>
-   */
   repay(req, res, next) {
     const { amount, currency } = req.params
     if (!amount || !currency) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.repay(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -373,17 +262,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Create a margin transfer
-   * @param margin_profile_id <string>
-   * @param type <string>
-   * @param amount <int>
-   * @param currency <string>
-   */
   marginTransfer(req, res, next) {
     const { margin_profile_id, type, amount, currency } = req.params
     if (!margin_profile_id || !type || !amount || !currency) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.marginTransfer(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -391,10 +273,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Close a position
-   * @param repay_only <boolean>
-   */
   closePosition(req, res, next) {
     CoinbasePro.closePosition(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -402,16 +280,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Convert a currency
-   * @param from <string>
-   * @param to <string>
-   * @param amount <int>
-   */
   convert(req, res, next) {
     const { from, to, amount } = req.params
     if (!from || !to || !amount) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.convert(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -419,16 +291,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Make a deposit
-   * @param amount <int>
-   * @param currency <string>
-   * @param coinbase_account_id <string>
-   */
   deposit(req, res, next) {
     const { amount, currency, coinbase_account_id } = req.params
     if (!amount || !currency || !coinbase_account_id) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.deposit(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -436,16 +302,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Make a withdrawal
-   * @param amount <int>
-   * @param currency <string>
-   * @param coinbase_account_id <string>
-   */
   withdraw(req, res, next) {
     const { amount, currency, coinbase_account_id } = req.params
     if (!amount || !currency || !coinbase_account_id) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.withdraw(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -453,14 +313,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Fetch a deposit address from your Exchange BTC account.
-   * @param currency <string>
-   */
   depositCrypto(req, res, next) {
     const { currency } = req.params
     if (!currency) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.depositCrypto(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -468,16 +324,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Withdraw from your Exchange BTC account to another BTC address.
-   * @param amount <int>
-   * @param currency <string>
-   * @param crypto_address <string>
-   */
   withdrawCrypto(req, res, next) {
     const { amount, currency, crypto_address } = req.params
     if (!amount || !currency || !crypto_address) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.withdrawCrypto(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -485,16 +335,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Schedule Deposit to your Exchange USD account from a configured payment method.
-   * @param amount <int>
-   * @param currency <string>
-   * @param payment_method_id <string>
-   */
   depositPayment(req, res, next) {
     const { amount, currency, payment_method_id } = req.params
     if (!amount || !currency || !payment_method_id) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.depositPayment(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -502,16 +346,10 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Withdraw from your Exchange USD account to a configured payment method.
-   * @param amount <int>
-   * @param currency <string>
-   * @param payment_method_id <string>
-   */
   withdrawPayment(req, res, next) {
     const { amount, currency, payment_method_id } = req.params
     if (!amount || !currency || !payment_method_id) {
-      return super.err(res, 500, err)
+      return super.err(res, 500)
     }
     CoinbasePro.withdrawPayment(req.params, (err, response, data) => {
       if (err) return super.err(res, 500, err)
@@ -519,9 +357,6 @@ class CoinbaseProController extends Controller {
     })
   }
 
-  /*
-   * Get your 30 day trailing volumes.
-   */
   getTrailingVolume(req, res, next) {
     CoinbasePro.getTrailingVolume((err, response, data) => {
       if (err) return super.err(res, 500, err)
