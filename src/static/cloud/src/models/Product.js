@@ -42,11 +42,11 @@ class Product extends Model {
         })
         query += updatedFields.join(',')
       } else {
-        if (cols.e.includes(f)) {
+        if (cols.e.includes(fields)) {
           query += 'e.' + fields.replace(/[^0-9a-z_]/gi, '')
-        } else if (cols.p.includes(f)) {
+        } else if (cols.p.includes(fields)) {
           query += 'p.' + fields.replace(/[^0-9a-z_]/gi, '')
-        } else if (cols.pe.includes(f)) {
+        } else if (cols.pe.includes(fields)) {
           query += 'pe.' + fields.replace(/[^0-9a-z_]/gi, '')
         } else {
           query += ''

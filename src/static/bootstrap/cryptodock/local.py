@@ -22,36 +22,37 @@ class Local :
             'fields': fields
         })
 
-    def get_tickers(self, pairs, exchanges, fields, start = False, end = False, granularity = 3600, limit = -1) :
+    def get_tickers(self, pairs=None, exchanges=None, fields=None, start=None, end=None, limit=-1, order='DESC') :
         return self.get("/tickers", {
             'pairs': pairs,
             'exchanges': exchanges,
             'fields': fields,
             'start': start,
             'end': end,
-            'granularity': granularity,
-            'limit': limit
+            'limit': limit,
+            'order': order
         })
 
 
-    def get_trades(self, pairs, exchanges, fields, start = False, end = False, granularity = 3600, limit = -1) :
+    def get_trades(self, pairs=None, exchanges=None, fields=None, start=None, end=None, limit=-1, order='DESC') :
         return self.get("/trades", {
             'pairs': pairs,
             'exchanges': exchanges,
             'fields': fields,
             'start': start,
             'end': end,
-            'granularity': granularity,
-            'limit': limit
+            'limit': limit,
+            'order': order
         })
 
-    def get_klines(self, pairs, exchanges, fields, start = False, end = False, granularity = 3600, limit = -1) :
+    def get_klines(self, pairs=None, exchanges=None, fields=None, start=None, end=None, period=3600, limit=-1, order='DESC') :
         return self.get("/klines", {
             'pairs': pairs,
             'exchanges': exchanges,
             'fields': fields,
             'start': start,
             'end': end,
-            'granularity': granularity,
-            'limit': limit
+            'period': period,
+            'limit': limit,
+            'order': order
         })

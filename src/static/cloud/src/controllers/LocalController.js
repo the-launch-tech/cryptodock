@@ -37,15 +37,17 @@ class LocalController extends Controller {
 
   /*
    * Get Klines
-   * @query pairs <arr >
+   * @query pairs <arr > [optional]
+   * @query exchanges <arr > [optional]
    * @query fields <obj name, label, etc...> [optional]
    * @query start <datetime> [optional]
    * @query end <datetime> [optional]
-   * @query granularity <int> [optional]
+   * @query period <int> [optional]
    * @query limit <int> [optional]
+   * @query order <string> [default='DESC']
    */
   getKlines(req, res, next) {
-    const { pairs, fields, start, end, granularity, limit } = req.query
+    const { pairs, exchanges, fields, start, end, period, limit, order } = req.query
     KLine.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
@@ -53,15 +55,16 @@ class LocalController extends Controller {
 
   /*
    * Get Tickers
-   * @query pairs <arr >
+   * @query pairs <arr > [optional]
+   * @query exchanges <arr > [optional]
    * @query fields <obj name, label, etc...> [optional]
    * @query start <datetime> [optional]
    * @query end <datetime> [optional]
-   * @query granularity <int> [optional]
    * @query limit <int> [optional]
+   * @query order <string> [default='DESC']
    */
   getTickers(req, res, next) {
-    const { pairs, fields, start, end, granularity, limit } = req.query
+    const { pairs, exchanges, fields, start, end, limit, order } = req.query
     Ticker.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
@@ -69,15 +72,16 @@ class LocalController extends Controller {
 
   /*
    * Get Trades
-   * @query pairs <arr >
+   * @query pairs <arr > [optional]
+   * @query exchanges <arr > [optional]
    * @query fields <obj name, label, etc...> [optional]
    * @query start <datetime> [optional]
    * @query end <datetime> [optional]
-   * @query granularity <int> [optional]
    * @query limit <int> [optional]
+   * @query order <string> [default='DESC']
    */
   getTrades(req, res, next) {
-    const { pairs, fields, start, end, granularity, limit } = req.query
+    const { pairs, exchanges, fields, start, end, limit, order } = req.query
     Trade.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
