@@ -25,8 +25,7 @@ RowDataPacket {
 }
 ]
 """
-base_currency
-baseCurrency
+
 e2 = sdk.local.get_exchanges(fields='name')
 print(e2)
 """
