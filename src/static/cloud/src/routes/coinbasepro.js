@@ -1,19 +1,19 @@
 export default (Api, CoinbaseProController, basePath) => {
   const base = `${process.env.DB_API}/${basePath}`
 
-  Api.get(`${productPath}`, CoinbaseProController.getProducts)
+  Api.get(`${base}/public/products`, CoinbaseProController.getProducts)
 
-  Api.get(`${base}/products/:pair/orderbook`, CoinbaseProController.getProductOrderBook)
+  Api.get(`${base}/public/products/:pair/orderbook`, CoinbaseProController.getProductOrderBook)
 
-  Api.get(`${base}/products/:pair/ticker`, CoinbaseProController.getProductTicker)
+  Api.get(`${base}/public/products/:pair/ticker`, CoinbaseProController.getProductTicker)
 
-  Api.get(`${base}/products/:pair/trades`, CoinbaseProController.getProductTrades)
+  Api.get(`${base}/public/products/:pair/trades`, CoinbaseProController.getProductTrades)
 
-  Api.get(`${base}/products/:pair/historic`, CoinbaseProController.getProductHistoricRates)
+  Api.get(`${base}/public/products/:pair/historic`, CoinbaseProController.getProductHistoricRates)
 
-  Api.get(`${base}/products/:pair/24_hours`, CoinbaseProController.getProduct24HrStats)
+  Api.get(`${base}/public/products/:pair/24_hours`, CoinbaseProController.getProduct24HrStats)
 
-  Api.get(`${publicPath}/currencies`, CoinbaseProController.getCurrencies)
+  Api.get(`${base}/public/public/currencies`, CoinbaseProController.getCurrencies)
 
   Api.get(`${base}/public/time`, CoinbaseProController.getTime)
 
@@ -47,7 +47,7 @@ export default (Api, CoinbaseProController, basePath) => {
 
   Api.get(`${base}/auth/orders/:orderID`, CoinbaseProController.getOrder)
 
-  Api.get(`${base}/auth/fills`, CoinbaseProController.getFills)
+  Api.get(`${base}/auth/fills/:pair`, CoinbaseProController.getFills)
 
   Api.get(`${base}/auth/fundings`, CoinbaseProController.getFundings)
 

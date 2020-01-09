@@ -12,13 +12,14 @@ class LocalController extends Controller {
 
   /*
    * Get Exchanges
-   * @param name <[<string>]> [optional]
+   * @query name <[<string>]> [optional]
    * @param fields <obj name, label, etc...> [optional]
    */
   getExchanges(req, res, next) {
-    const { fields, name } = req.params
-
-    res.json({ message: 'getExchanges' })
+    const { name, fields } = req.query
+    Exchange.get(name, fields)
+      .then(data => res.json(data))
+      .catch(err => super.err(res, 500, err))
   }
 
   /*
@@ -27,9 +28,9 @@ class LocalController extends Controller {
    * @param fields <obj pair, base, quote, etc...> [optional]
    */
   getProducts(req, res, next) {
-    const { pair, fields } = req.params
-
-    res.json({ message: 'getProducts' })
+    Product.get(req.params)
+      .then(data => res.json(data))
+      .catch(err => super.err(res, 500, err))
   }
 
   /*
@@ -42,9 +43,9 @@ class LocalController extends Controller {
    * @param limit <int> [optional]
    */
   getKlines(req, res, next) {
-    const { pair, fields, start, end, granularity } = req.params
-
-    res.json({ message: 'getKlines' })
+    KLine.get(req.params)
+      .then(data => res.json(data))
+      .catch(err => super.err(res, 500, err))
   }
 
   /*
@@ -57,9 +58,9 @@ class LocalController extends Controller {
    * @param limit <int> [optional]
    */
   getTickers(req, res, next) {
-    const { pair, fields, start, end, granularity } = req.params
-
-    res.json({ message: 'getTickers' })
+    Ticker.get(req.params)
+      .then(data => res.json(data))
+      .catch(err => super.err(res, 500, err))
   }
 
   /*
@@ -72,9 +73,9 @@ class LocalController extends Controller {
    * @param limit <int> [optional]
    */
   getTrades(req, res, next) {
-    const { pair, fields, start, end, granularity } = req.params
-
-    res.json({ message: 'getTrades' })
+    Trade.get(req.params)
+      .then(data => res.json(data))
+      .catch(err => super.err(res, 500, err))
   }
 }
 

@@ -22,6 +22,7 @@ class KLine extends Model {
   }
 
   static save(kline, productId, exchangeId, map, periodInSeconds) {
+    log('SAVING KLINE')
     const klineArr = map.klineArr
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(

@@ -3,30 +3,72 @@ import sys
 
 sdk = cryptodock.Sdk()
 
-local_exchanges = sdk.local.get_exchanges()
+"""
+GET exchanges from local data store examples:
+"""
 
-if (local_exchanges) :
+e1 = sdk.local.get_exchanges()
+print(e1)
+"""
+[
+RowDataPacket {
+    id: 1,
+    name: 'kucoin',
+    label: 'Kucoin',
+    created: 2020-01-07T00:21:08.000Z
+},
+RowDataPacket {
+    id: 2,
+    name: 'coinbasepro',
+    label: 'CoinbasePro',
+    created: 2020-01-07T00:21:08.000Z
+}
+]
+"""
+base_currency
+baseCurrency
+e2 = sdk.local.get_exchanges(fields='name')
+print(e2)
+"""
+[
+RowDataPacket { name: 'coinbasepro' },
+RowDataPacket { name: 'kucoin' }
+]
+"""
 
-    local_products = sdk.local.get_products(exchanges=local_exchanges)
+e3 = sdk.local.get_exchanges(name=["coinbasepro"])
+print(e3)
+"""
+[
+RowDataPacket {
+    id: 2,
+    name: 'coinbasepro',
+    label: 'CoinbasePro',
+    created: 2020-01-07T00:21:08.000Z
+}
+]
+"""
 
-    if (local_products) :
-        first_product = local_products[0]['pair']
+e4 = sdk.local.get_exchanges(fields=['name','id'],name="kucoin")
+print(e4)
+"""
+[
+RowDataPacket {
+    name: 'kucoin',
+    id: 1
+}
+]
+"""
 
-        local_tickers = sdk.local.get_tickers(
-            pairs=[first_product],
-            exchanges=['coinbasepro']
-        )
-        kucoin_orderbook = sdk.kucoin.get_order_book(
-            pairs=[first_product],
-            level=2,
-            depth=100
-        )
-
-        print(local_tickers)
-        print(kucoin_orderbook)
-
-    else :
-        print('No Products!')
-
-else :
-    print('No Exchanges!')
+e5 = sdk.local.get_exchanges(name=["coinbasepro", "kcin"])
+print(e5)
+"""
+[
+RowDataPacket {
+    id: 2,
+    name: 'coinbasepro',
+    label: 'CoinbasePro',
+    created: 2020-01-07T00:21:08.000Z
+}
+]
+"""

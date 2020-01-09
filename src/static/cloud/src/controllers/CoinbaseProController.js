@@ -235,10 +235,10 @@ class CoinbaseProController extends Controller {
   }
 
   getFills(req, res, next) {
-    if (!req.params.pair) {
+    if (!req.query.pair) {
       return super.err(res, 500)
     }
-    CoinbasePro.getFills(req.params, (err, response, data) => {
+    CoinbasePro.getFills(req.query.pair, (err, response, data) => {
       if (err) return super.err(res, 500, err)
       res.json(data)
     })

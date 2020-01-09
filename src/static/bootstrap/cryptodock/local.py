@@ -7,11 +7,12 @@ class Local :
 
     def get(self, endpoint, params = {}) :
         response = requests.get(self.uri + '/local' + endpoint, params)
-        return response.json() if response.status_code > 199 and response.status_code < 300 else False
+        return response.json() if response.status_code > 199 and response.status_code < 300 else response
 
-    def get_exchanges(self, exchanges) :
+    def get_exchanges(self, name=None, fields=None) :
         return self.get("/exchanges", {
-            'exchanges': exchanges,
+            'name': name,
+            'fields': fields
         })
 
     def get_products(self, pairs, exchanges, fields) :
