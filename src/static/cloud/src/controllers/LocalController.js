@@ -12,68 +12,73 @@ class LocalController extends Controller {
 
   /*
    * Get Exchanges
-   * @query name <[<string>]> [optional]
-   * @param fields <obj name, label, etc...> [optional]
+   * @query names <arr > [optional]
+   * @query fields <arr name, label, etc...> [optional]
    */
   getExchanges(req, res, next) {
     const { name, fields } = req.query
-    Exchange.get(name, fields)
+    Exchange.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
   }
 
   /*
    * Get Products
-   * @param pair <[<string>]> [optional]
-   * @param fields <obj pair, base, quote, etc...> [optional]
+   * @query pairs <arr > [optional]
+   * @query exchanges <arr > [optional]
+   * @query fields <arr pair, base, quote, etc...> [optional]
    */
   getProducts(req, res, next) {
-    Product.get(req.params)
+    const { pairs, exchanges, fields } = req.query
+    Product.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
   }
 
   /*
    * Get Klines
-   * @param pair <[<string>]>
-   * @param fields <obj name, label, etc...> [optional]
-   * @param start <datetime> [optional]
-   * @param end <datetime> [optional]
-   * @param granularity <int> [optional]
-   * @param limit <int> [optional]
+   * @query pairs <arr >
+   * @query fields <obj name, label, etc...> [optional]
+   * @query start <datetime> [optional]
+   * @query end <datetime> [optional]
+   * @query granularity <int> [optional]
+   * @query limit <int> [optional]
    */
   getKlines(req, res, next) {
-    KLine.get(req.params)
+    const { pairs, fields, start, end, granularity, limit } = req.query
+    KLine.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
   }
 
   /*
    * Get Tickers
-   * @param pair <[<string>]>
-   * @param fields <obj name, label, etc...> [optional]
-   * @param start <datetime> [optional]
-   * @param end <datetime> [optional]
-   * @param granularity <int> [optional]
-   * @param limit <int> [optional]
+   * @query pairs <arr >
+   * @query fields <obj name, label, etc...> [optional]
+   * @query start <datetime> [optional]
+   * @query end <datetime> [optional]
+   * @query granularity <int> [optional]
+   * @query limit <int> [optional]
    */
   getTickers(req, res, next) {
-    Ticker.get(req.params)
+    const { pairs, fields, start, end, granularity, limit } = req.query
+    Ticker.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
   }
 
   /*
    * Get Trades
-   * @query pair <[<string>]>
-   * @param fields <obj name, label, etc...> [optional]
-   * @param start <datetime> [optional]
-   * @param end <datetime> [optional]
-   * @param granularity <int> [optional]
-   * @param limit <int> [optional]
+   * @query pairs <arr >
+   * @query fields <obj name, label, etc...> [optional]
+   * @query start <datetime> [optional]
+   * @query end <datetime> [optional]
+   * @query granularity <int> [optional]
+   * @query limit <int> [optional]
    */
   getTrades(req, res, next) {
-    Trade.get(req.params)
+    const { pairs, fields, start, end, granularity, limit } = req.query
+    Trade.get(req.query)
       .then(data => res.json(data))
       .catch(err => super.err(res, 500, err))
   }

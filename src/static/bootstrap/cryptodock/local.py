@@ -9,13 +9,13 @@ class Local :
         response = requests.get(self.uri + '/local' + endpoint, params)
         return response.json() if response.status_code > 199 and response.status_code < 300 else response
 
-    def get_exchanges(self, name=None, fields=None) :
+    def get_exchanges(self, names=None, fields=None) :
         return self.get("/exchanges", {
-            'name': name,
+            'names': names,
             'fields': fields
         })
 
-    def get_products(self, pairs, exchanges, fields) :
+    def get_products(self, pairs=None, exchanges=None, fields=None) :
         return self.get("/products", {
             'pairs': pairs,
             'exchanges': exchanges,

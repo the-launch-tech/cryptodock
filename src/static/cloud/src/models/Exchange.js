@@ -7,10 +7,7 @@ class Exchange extends Model {
     super()
   }
 
-  static get(name, fields) {
-    log('fields <[string]>', fields)
-    log('name <[string]>', name)
-
+  static get({ names, fields }) {
     let query = 'SELECT '
     let args = []
 
@@ -26,24 +23,21 @@ class Exchange extends Model {
 
     query += ' FROM exchanges '
 
-    if (name) {
-      if (Array.isArray(name)) {
+    if (names) {
+      if (Array.isArray(names)) {
         let nameArr = []
-        name.forEach(n => nameArr.push('name=? '))
+        names.forEach(n => nameArr.push('name=? '))
         query += 'WHERE (' + nameArr.join('OR ') + ')'
-        args = name
+        args = names
       } else {
         query += 'WHERE name=?'
-        args.push(name)
+        args.push(names)
       }
     }
-
-    log(query, args)
 
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(query, args, (err, data) => {
         if (err) reject(err)
-        log(data)
         resolve(data)
       })
     })
