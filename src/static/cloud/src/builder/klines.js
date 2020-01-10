@@ -2,6 +2,7 @@ import KLine from '../models/KLine'
 import RequestBalancer from '../utils/RequestBalancer'
 import Product from '../models/Product'
 import exchangeMap from '../utils/exchangeMap'
+import moment from 'moment'
 
 const { log, error } = console
 
@@ -15,23 +16,28 @@ module.exports = function(exchangeId, exchangeName, Client, { period }) {
   const map = exchangeMap[exchangeName]
   const klinePeriod = map.klinePeriod
   const granularity = klinePeriod[period.toString()]
-  const maxCandlesInGroup = 300
-  const currentTimestamp = new Date()
+  const maxCandlesInGroup = map.maxCandles
+  const currentTimestamp = moment().unix() * 1000
 
   const getKLinePeriod = (pair, start, end, granularity) => {
     return new Promise((resolve, reject) => {
       if (exchangeName === 'coinbasepro') {
-        Client.getProductHistoricRates(pair, start, end, granularity)
+        Client.getProductHistoricRates(pair, {
+          granularity,
+          start,
+          end,
+        })
           .then(resolve)
           .catch(reject)
       } else if (exchangeName === 'kucoin') {
+        log(moment(start).unix(), moment(end).unix())
         Client.getKlines({
           symbol: pair,
-          startAt: new Date(start).getTime(),
-          endAt: new Date(end).getTime(),
+          startAt: moment(start).unix(),
+          endAt: moment(end).unix(),
           type: granularity,
         })
-          .then(res => resolve(res.data))
+          .then(data => resolve(data.data))
           .catch(reject)
       }
     })
@@ -42,30 +48,38 @@ module.exports = function(exchangeId, exchangeName, Client, { period }) {
       products.map(({ id, pair }) => {
         KLine.getLastTimestamp(id, exchangeId)
           .then(lastTimestamp => {
-            const prevTimeFormatted = new Date(lastTimestamp)
+            log(moment(moment(lastTimestamp).unix() * 1000).format('YYYY-MM-DD HH:mm:ss'))
+            const prevTimeFormatted = moment(lastTimestamp).unix() * 1000
             const diffMs = currentTimestamp - prevTimeFormatted
-            const diffMins = Math.round(diffMs / 60000)
-            const candleGroupCount = Math.floor(diffMins / maxCandlesInGroup)
+            const diffSec = Math.round(diffMs / 1000)
+            const periodCount = Math.floor(diffSec / period)
+            const candleGroupCount =
+              periodCount < maxCandlesInGroup ? 1 : Math.floor(periodCount / maxCandlesInGroup)
             let start = prevTimeFormatted
             for (let i = 0; i < candleGroupCount; i++) {
               RequestBalancer.request(
-                retry =>
+                retry => {
                   getKLinePeriod(
                     pair,
-                    start,
-                    new Date(start).addHours((5 * period) / 60),
+                    moment(start).format('YYYY-MM-DD HH:mm:ss'),
+                    moment(start)
+                      .add({ hours: maxCandlesInGroup * (period / 60 / 60) })
+                      .format('YYYY-MM-DD HH:mm:ss'),
                     granularity
                   )
-                    .then(history =>
-                      history.map(kline => {
-                        KLine.save(kline, id, exchangeId, map, period)
-                      })
-                    )
-                    .catch(error),
+                    .then(history => {
+                      log('kline count', history.length)
+                      history.reverse().map(kline => KLine.save(kline, id, exchangeId, map, period))
+                    })
+                    .catch(error)
+                  start =
+                    moment(start)
+                      .add({ hours: maxCandlesInGroup * (period / 60 / 60) })
+                      .unix() * 1000
+                },
                 exchangeName,
                 exchangeName
               ).catch(error)
-              start = new Date(start).addHours(maxCandlesInGroup / 60)
             }
           })
           .catch(error)

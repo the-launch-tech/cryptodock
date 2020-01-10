@@ -43,6 +43,7 @@ module.exports = {
       best_ask_size: 'bestAskSize',
     },
     tickersTimeFn: server_time => moment(server_time).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    maxCandles: 300,
   },
   kucoin: {
     getProducts: 'getSymbolsList',
@@ -59,7 +60,7 @@ module.exports = {
       margin: 'isMarginEnabled',
       trading: 'enableTrading',
     },
-    klineArr: [0, 3, 4, 2, 1, 5, 6],
+    klineArr: [0, 4, 3, 1, 2, 5, 6],
     klinePeriod: {
       60: '1min',
       300: '5min',
@@ -90,5 +91,6 @@ module.exports = {
     },
     tickersTimeFn: server_time =>
       moment(parseInt(server_time.toString().substr(0, 13), 10)).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    maxCandles: 1500,
   },
 }

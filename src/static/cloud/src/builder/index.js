@@ -12,11 +12,11 @@ const { log, error } = console
 
 const RestBuilder = function() {
   const productData = { fn: productBuilder, cron: '0 0 0 * * *' }
-  const tradeData = { fn: tradeBuilder, cron: '0 0 * * * *' }
-  const klineDataTight = { fn: kLineBuilder, cron: '0 0 1 * * *', args: { period: 60 } }
-  const klineDataMid = { fn: kLineBuilder, cron: '0 0 2 * * *', args: { period: 3600 } }
-  const klineDataLong = { fn: kLineBuilder, cron: '0 0 3 * * *', args: { period: 86400 } }
-  const tickerData = { fn: tickerBuilder, cron: '0 */5 * * * *' }
+  const tradeData = { fn: tradeBuilder, cron: '0 */3 * * * *' }
+  const klineDataTight = { fn: kLineBuilder, cron: '0 0 */12 * * *', args: { period: 60 } }
+  const klineDataMid = { fn: kLineBuilder, cron: '0 0 */12 * * *', args: { period: 3600 } }
+  const klineDataLong = { fn: kLineBuilder, cron: '0 0 */12 * * *', args: { period: 86400 } }
+  const tickerData = { fn: tickerBuilder, cron: '0 */3 * * * *' }
   const builders = [productData, tradeData, klineDataTight, klineDataMid, klineDataLong, tickerData]
   const clientExchanges = [
     { client: kucoinClient.initialize(), name: 'kucoin', label: 'Kucoin' },
