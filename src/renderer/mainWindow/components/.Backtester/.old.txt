@@ -1,0 +1,118 @@
+;<div className="w-full flex flex-wrap justify-between items-start my-5">
+  <div className="w-1/2 p-1 block mb-2">
+    <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+      Name
+    </label>
+    <input
+      className="appearance-none block w-full bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+      type="text"
+      name="name"
+      onChange={e => this.handleTextChange(e, 'newTesterData', newTesterData)}
+    />
+  </div>
+  <div className="w-1/2 p-1 block mb-2">
+    <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+      Label
+    </label>
+    <input
+      className="appearance-none block w-full bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+      type="text"
+      name="label"
+      onChange={e => this.handleTextChange(e, 'newTesterData', newTesterData)}
+    />
+  </div>
+  <div className="w-full p-1 block mb-2">
+    <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+      Description
+    </label>
+    <input
+      className="appearance-none block w-full bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+      type="text"
+      name="description"
+      onChange={e => this.handleTextChange(e, 'newTesterData', newTesterData)}
+    />
+  </div>
+  <div className="w-1/3 p-1 block mb-2">
+    <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+      Remote Host
+    </label>
+    <input
+      className="appearance-none block w-full bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+      type="text"
+      name="remote_host"
+      onChange={e => this.handleTextChange(e, 'newTesterData', newTesterData)}
+    />
+  </div>
+  <div className="w-1/3 p-1 block mb-2">
+    <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+      Remote Path
+    </label>
+    <input
+      className="appearance-none block w-full bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+      type="text"
+      name="remote_path"
+      onChange={e => this.handleTextChange(e, 'newTesterData', newTesterData)}
+    />
+  </div>
+  <div className="w-1/3 p-1 block mb-2">
+    <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+      Remote Entry
+    </label>
+    <input
+      className="appearance-none block w-full bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+      type="text"
+      name="remote_entry"
+      onChange={e => this.handleTextChange(e, 'newTesterData', newTesterData)}
+    />
+  </div>
+  <div className="w-full p-2 flex justify-between items-center">
+    <button
+      className="py-2 px-3 bg-tran border-1 border-solid border-red-2 text-white rounded transition transition-200 font-head text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
+      type="button"
+      onClick={this.saveCustom}
+      disabled={this.invalidCreation()}
+    >
+      Bootstrap
+    </button>
+    <button
+      className="py-2 px-3 bg-tran border-1 border-solid border-red-2 text-white rounded transition transition-200 font-head text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default"
+      type="button"
+      onClick={this.toggleCreation}
+    >
+      Cancel
+    </button>
+  </div>
+</div>
+
+
+invalidCreation() {
+  console.log('invalidCreation', this.state.newTesterData)
+  let invalid = false
+  Object.keys(this.state.newTesterData).map(key => {
+    const el = this.state.newTesterData[key]
+    if (!el || el.length < 1) {
+      invalid = true
+    }
+  })
+  return invalid
+}
+
+toggleList(visibleTests) {
+  this.setState({ visibleTests })
+}
+
+toggleCreation(e) {
+  this.setState(
+    prev => ({
+      creatingNew: !prev.creatingNew,
+      currentData: this.defaultCurrentData,
+      newTesterData: this.defaultNewTesterData,
+    }),
+    () => {
+      const inputs = document.querySelectorAll('input')
+      Array.from(inputs).map(el => (el.value = ''))
+    }
+  )
+}
+
+saveCustom(e) {}

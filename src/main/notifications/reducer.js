@@ -88,4 +88,28 @@ export default {
     log,
     click: item => item.close(),
   },
+  ERROR_GETTING_BACKTEST_HISTORY: {
+    title: 'Unable To Get History',
+    body: 'There was an error getting the history of your backtests!',
+    log,
+    click: item => item.close(),
+  },
+  ERROR_GETTING_BACKTESTERS: {
+    title: 'Unable To Get Backtesters',
+    body: 'There was an error getting the backtesters!',
+    log,
+    click: item => item.close(),
+  },
+  SUCCESS_STARTING_BACKTEST: {
+    title: 'Success Starting Backtester',
+    body: 'The backtester was started successfully!',
+    log,
+    click: item => item.close(),
+  },
+  ERROR_STARTING_BACKTEST: {
+    title: 'Unable Start Backtester',
+    body: 'There was an error starting the backtester!',
+    log,
+    click: item => item.close(),
+  },
 }

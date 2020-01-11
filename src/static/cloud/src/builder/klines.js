@@ -30,7 +30,6 @@ module.exports = function(exchangeId, exchangeName, Client, { period }) {
           .then(resolve)
           .catch(reject)
       } else if (exchangeName === 'kucoin') {
-        log(moment(start).unix(), moment(end).unix())
         Client.getKlines({
           symbol: pair,
           startAt: moment(start).unix(),
@@ -48,7 +47,6 @@ module.exports = function(exchangeId, exchangeName, Client, { period }) {
       products.map(({ id, pair }) => {
         KLine.getLastTimestamp(id, exchangeId)
           .then(lastTimestamp => {
-            log(moment(moment(lastTimestamp).unix() * 1000).format('YYYY-MM-DD HH:mm:ss'))
             const prevTimeFormatted = moment(lastTimestamp).unix() * 1000
             const diffMs = currentTimestamp - prevTimeFormatted
             const diffSec = Math.round(diffMs / 1000)
@@ -68,7 +66,6 @@ module.exports = function(exchangeId, exchangeName, Client, { period }) {
                     granularity
                   )
                     .then(history => {
-                      log('kline count', history.length)
                       history.reverse().map(kline => KLine.save(kline, id, exchangeId, map, period))
                     })
                     .catch(error)

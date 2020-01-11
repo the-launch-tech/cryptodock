@@ -38,6 +38,7 @@ export default {
       .then(res => {
         if (res === 0) {
           Model.staticFile('migrations/refresh.sql')
+            .then(data => Model.staticFile('migrations/seed.sql'))
             .then(data => {
               event.reply(channel(key, 'REFRESH'), true)
               NotificationManager.show(MIGRATION_REFRESHED)

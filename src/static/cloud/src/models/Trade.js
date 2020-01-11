@@ -1,4 +1,5 @@
 import Model from './Model'
+import moment from 'moment'
 
 const { log, error } = console
 
@@ -52,17 +53,17 @@ class Trade extends Model {
         query += updatedFields.join(',')
       } else {
         if (cols.exchanges.includes(fields)) {
-          query += 'exchanges.' + fields.replace(/[^0-9a-z_]/gi, '') + ', trades.server_time '
+          query += ' exchanges.' + fields.replace(/[^0-9a-z_]/gi, '') + ', trades.server_time '
         } else if (cols.products.includes(fields)) {
-          query += 'products.' + fields.replace(/[^0-9a-z_]/gi, '') + ', trades.server_time '
+          query += ' products.' + fields.replace(/[^0-9a-z_]/gi, '') + ', trades.server_time '
         } else if (cols.trades.includes(fields)) {
-          query += 'trades.' + fields.replace(/[^0-9a-z_]/gi, '') + ', trades.server_time '
+          query += ' trades.' + fields.replace(/[^0-9a-z_]/gi, '') + ', trades.server_time '
         } else {
           query += ''
         }
       }
     } else {
-      query += 'trades.*'
+      query += ' trades.*'
     }
 
     query += ' FROM trades '

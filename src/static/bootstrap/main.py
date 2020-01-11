@@ -219,7 +219,7 @@ sdk = cryptodock.Sdk()
 #   }
 # ]
 # """
-# 
+#
 # k5 = sdk.local.get_tickers(
 #     exchanges=["kucoin", "coinbasepro"],
 #     pairs="BTC-USDT",
