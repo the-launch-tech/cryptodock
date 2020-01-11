@@ -136,7 +136,7 @@ export default class Backtester extends React.Component {
   }
 
   render() {
-    const { running, currentData, backtesters, visibleTests } = this.state
+    const { running, currentData, backtesters, visibleTests, history, lastTest } = this.state
     return (
       <div>
         <h4 className="font-display text-red-2 cursor-default text-center">Backtester</h4>
@@ -265,9 +265,23 @@ export default class Backtester extends React.Component {
           </div>
           <div className="w-full border border-solid border-white-400 rounded p-2">
             {this.state.visibleTests === 'LAST_TEST' ? (
-              <div className="font-body">Last Test Details</div>
+              <div className="font-body">
+                {history && history.length ? (
+                  <div></div>
+                ) : (
+                  <p className="font-head text-tiny text-center">No History On This Strategy</p>
+                )}
+              </div>
             ) : (
-              <div className="font-body">Historical Results</div>
+              <div className="font-body">
+                {lastTest && Object.keys(lastTest).length ? (
+                  <div></div>
+                ) : (
+                  <p className="font-head text-tiny text-center">
+                    No Backtests Have Been Run This Session
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </div>

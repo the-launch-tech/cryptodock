@@ -28,6 +28,19 @@ class Backtester extends Model {
       )
     })
   }
+
+  static save({ name, label, description, remote_host, remote_path, remote_entry }) {
+    return new Promise((resolve, reject) => {
+      global.Conn.asyncQuery(
+        'INSERT INTO backtesters (name,label,description,remote_host,remote_path,remote_entry) values (?,?,?,?,?,?)',
+        [name, label, description, remote_host, remote_path, remote_entry],
+        (err, data) => {
+          if (err) reject(err)
+          resolve(data)
+        }
+      )
+    })
+  }
 }
 
 export default Backtester

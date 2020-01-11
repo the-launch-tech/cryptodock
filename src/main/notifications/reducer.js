@@ -112,4 +112,16 @@ export default {
     log,
     click: item => item.close(),
   },
+  NEW_BACKTESTER_SAVED: {
+    title: 'Success Saving New Backtester',
+    body: 'The new backtester was successfully saved!',
+    log,
+    click: item => item.close(),
+  },
+  FAILED_SAVING_NEW_BACKTESTER: {
+    title: 'Unable To Save Backtester',
+    body: 'There was an error while saving the new backtester!',
+    log,
+    click: item => item.close(),
+  },
 }

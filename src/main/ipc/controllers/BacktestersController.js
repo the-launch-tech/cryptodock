@@ -5,6 +5,8 @@ import {
   ERROR_GETTING_BACKTEST_HISTORY,
   ERROR_GETTING_BACKTESTERS,
   SUCCESS_STARTING_BACKTEST,
+  NEW_BACKTESTER_SAVED,
+  FAILED_SAVING_NEW_BACKTESTER,
 } from '../../notifications/actions'
 
 const { log, error } = console
@@ -35,5 +37,16 @@ export default {
   },
   RESULTS: (event, arg, win, key) => {
     event.reply(channel(key, 'RESULTS'), data)
+  },
+  SAVE_BACKTESTER: (event, arg, win, key) => {
+    Backtester.save(arg.data)
+      .then(data => {
+        event.reply(channel(key, 'SAVE_BACKTESTER'), arg.data)
+        NotificationManager.show(NEW_BACKTESTER_SAVED)
+      })
+      .catch(err => {
+        NotificationManager.show(FAILED_SAVING_NEW_BACKTESTER)
+        error(err)
+      })
   },
 }
