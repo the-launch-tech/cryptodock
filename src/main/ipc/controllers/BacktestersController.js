@@ -29,12 +29,21 @@ export default {
         error(err)
       })
   },
+  // Queue BacktestManager
+  // Send to cryptodock-backtester server Manager
+  // Listen for results
   RUN_TEST: (event, arg, win, key) => {
-    const successStarting = true
-    event.reply(channel(key, 'RUN_TEST'), successStarting)
-    NotificationManager.show(SUCCESS_STARTING_BACKTEST)
-    NotificationManager.show(ERROR_STARTING_BACKTEST)
+    global.BacktestManager.runNewTest(arg.data)
+      .then(success => {
+        event.reply(channel(key, 'RUN_TEST'), success)
+        NotificationManager.show(SUCCESS_STARTING_BACKTEST)
+      })
+      .catch(err => {
+        NotificationManager.show(ERROR_STARTING_BACKTEST)
+        error(err)
+      })
   },
+  // We may handle this in the window, not the main process
   RESULTS: (event, arg, win, key) => {
     event.reply(channel(key, 'RESULTS'), data)
   },
