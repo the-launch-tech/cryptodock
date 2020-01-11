@@ -4,7 +4,7 @@
 // Poll the server if the app re-opens to see if there was a completed test
 class BacktestManager {
   constructor() {
-    this.activeTest = {}
+    this.queue = {}
   }
 
   initialize() {}

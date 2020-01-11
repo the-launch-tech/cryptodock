@@ -9,7 +9,7 @@ import IpcManager from './ipc/IpcManager'
 import WindowManager from './windows/WindowManager'
 import NotificationManager from './notifications/NotificationManager'
 import StrategyManager from '../common/utilities/StrategyManager'
-import BacktestManager from './backtests/BacktestManager'
+import BacktestManager from '../common/utilities/BacktestManager'
 import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
 
 const { log, error } = console
@@ -39,7 +39,7 @@ global.RemoteConn.connection.connect()
 global.IPC = new IpcManager()
 global.Windows = new WindowManager()
 global.Strategies = new StrategyManager()
-global.BacktestManager = new BacktestManager()
+global.Backtesters = new BacktestManager()
 
 const mainKey = 'mainWindow'
 

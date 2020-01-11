@@ -33,7 +33,7 @@ export default {
   // Send to cryptodock-backtester server Manager
   // Listen for results
   RUN_TEST: (event, arg, win, key) => {
-    global.BacktestManager.runNewTest(arg.data)
+    global.Backtesters.runNewTest(arg.data)
       .then(success => {
         event.reply(channel(key, 'RUN_TEST'), success)
         NotificationManager.show(SUCCESS_STARTING_BACKTEST)
