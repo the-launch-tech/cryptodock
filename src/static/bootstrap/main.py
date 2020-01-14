@@ -1,8 +1,8 @@
-import cryptodock
+from cryptodock_sdk import CryptoDockSdk
 import sys
 import datetime
 
-sdk = cryptodock.Sdk()
+sdk = CryptoDockSdk()
 
 # """
 # GET exchanges from local data store examples:
