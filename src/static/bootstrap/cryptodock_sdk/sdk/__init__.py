@@ -1,7 +1,5 @@
 __all__ = [
-    'CryptoDockSdk',
-    'version'
+    'CryptoDockSdk'
 ]
 
 from .cryptodock_sdk import CryptoDockSdk
-from . import version
