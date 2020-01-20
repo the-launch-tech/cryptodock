@@ -16,6 +16,32 @@ class Strategy extends Model {
     })
   }
 
+  static save({ name, label, description, full_path }) {
+    return new Promise((resolve, reject) => {
+      global.Conn.asyncQuery(
+        'INSERT INTO strategies (name, label, description, full_path) values (?,?,?,?)',
+        [name, label, description, full_path],
+        (err, data) => {
+          if (err) reject(err)
+          resolve(data.insertId)
+        }
+      )
+    })
+  }
+
+  static fileUpdated({ id, updated }) {
+    return new Promise((resolve, reject) => {
+      global.Conn.asyncQuery(
+        'UPDATE strategies SET updated=? WHERE id=?',
+        [updated, id],
+        (err, data) => {
+          if (err) reject(err)
+          resolve(data)
+        }
+      )
+    })
+  }
+
   static async getOneByValue(key, value) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(

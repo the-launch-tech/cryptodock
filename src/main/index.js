@@ -10,6 +10,7 @@ import WindowManager from './windows/WindowManager'
 import NotificationManager from './notifications/NotificationManager'
 import LiveTradingManager from '../common/utilities/strategyManager/LiveTradingManager'
 import BacktestManager from '../common/utilities/strategyManager/BacktestManager'
+import StrategyWatcher from '../common/utilities/StrategyWatcher'
 import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
 
 const { log, error } = console
@@ -40,6 +41,7 @@ global.IPC = new IpcManager()
 global.Windows = new WindowManager()
 global.LiveTradingManager = new LiveTradingManager()
 global.BacktestManager = new BacktestManager()
+global.StrategyWatcher = new StrategyWatcher()
 
 const mainKey = 'mainWindow'
 

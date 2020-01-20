@@ -88,11 +88,11 @@ export default class LiveTradingManager {
 
   onStartTrading({ id }) {
     LiveSession.save(id, this.state[id].args)
-      .then(livesession_id => {
-        this.state[id].livesession = {
-          id: livesession_id,
+      .then(live_session_id => {
+        this.state[id].live_session = {
+          id: live_session_id,
         }
-        LiveEvent.save(id, this.state[id].livesession.id, 'Trading Started')
+        LiveEvent.save(id, this.state[id].live_session.id, 'Trading Started')
           .then(() => this.state[id].ticker.start())
           .catch(error)
       })
@@ -101,7 +101,7 @@ export default class LiveTradingManager {
 
   onHeartbeat({ id, action }) {
     if (data.order) {
-      LiveOrder.save(id, this.state[id].livesession.id, data.order)
+      LiveOrder.save(id, this.state[id].live_session.id, data.order)
         .then(() => log('Order Saved'))
         .catch(error)
     }
@@ -109,7 +109,7 @@ export default class LiveTradingManager {
 
   onFinishedTrading({ id, results }) {
     LiveSession.update(id, results)
-      .then(res => LiveEvent.save(id, this.state[id].livesession.id, 'Trading Finished'))
+      .then(res => LiveEvent.save(id, this.state[id].live_session.id, 'Trading Finished'))
       .then(() => {
         this.state[id].socket.send('TRADING_RESOLVED')
         this.getAndPrepare(id, 'latent')
@@ -120,7 +120,7 @@ export default class LiveTradingManager {
   }
 
   onLogMessage({ id, message }) {
-    LiveEvent.save(id, this.state[id].livesession.id, message)
+    LiveEvent.save(id, this.state[id].live_session.id, message)
       .then(() => log('Log Message Saved'))
       .catch(error)
   }

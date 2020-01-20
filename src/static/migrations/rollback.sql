@@ -6,5 +6,4 @@ DROP TABLE IF EXISTS live_sessions;
 DROP TABLE IF EXISTS test_events;
 DROP TABLE IF EXISTS test_orders;
 DROP TABLE IF EXISTS test_sessions;
-DROP TABLE IF EXISTS backtests;
 DROP TABLE IF EXISTS strategies;

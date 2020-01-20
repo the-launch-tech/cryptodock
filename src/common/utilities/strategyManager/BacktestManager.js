@@ -93,11 +93,11 @@ export default class BacktestManager {
 
   onStartTrading({ id }) {
     TestSession.save(id, this.state[id].args)
-      .then(backtest_id => {
-        this.state[id].testsession = {
-          id: backtest_id,
+      .then(test_session_id => {
+        this.state[id].test_session = {
+          id: test_session_id,
         }
-        TestEvent.save(id, this.state[id].testsession.id, 'Backtest Started')
+        TestEvent.save(id, this.state[id].test_session.id, 'Backtest Started')
           .then(() => this.state[id].ticker.start())
           .catch(error)
       })
@@ -106,15 +106,15 @@ export default class BacktestManager {
 
   onHeartbeat({ id, data }) {
     if (data.order) {
-      TestOrder.save(id, this.state[id].testsession.id, data.order)
+      TestOrder.save(id, this.state[id].test_session.id, data.order)
         .then(() => log('Test Order Saved'))
         .catch(error)
     }
   }
 
   onFinishedTrading({ id, results }) {
-    TestSession.update(this.state[id].testsession.id, results)
-      .then(() => TestEvent.save(id, this.state[id].testsession.id, 'Backtest Finished'))
+    TestSession.update(this.state[id].test_session.id, results)
+      .then(() => TestEvent.save(id, this.state[id].test_session.id, 'Backtest Finished'))
       .then(() => {
         this.state[id].socket.send('TRADING_RESOLVED')
         this.getAndPrepare(id, 'latent')
@@ -125,7 +125,7 @@ export default class BacktestManager {
   }
 
   onLogMessage({ id, message }) {
-    TestEvent.save(id, this.state[id].testsession.id, message)
+    TestEvent.save(id, this.state[id].test_session.id, message)
       .then(() => log('Log Message Saved'))
       .catch(error)
   }
