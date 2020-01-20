@@ -39,6 +39,18 @@ class Strategy extends Model {
       )
     })
   }
+
+  static updateBacktestState(id, backtestStatus) {
+    return new Promise((resolve, reject) => {
+      global.Conn.asyncQuery(
+        'UPDATE strategies SET backtest_status="' + backtestStatus + '" WHERE id=' + id,
+        (err, data) => {
+          if (err) reject(err)
+          resolve(status)
+        }
+      )
+    })
+  }
 }
 
 export default Strategy

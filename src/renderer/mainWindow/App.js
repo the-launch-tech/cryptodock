@@ -7,7 +7,6 @@ import Database from './components/Database/Database'
 import Table from './components/Database/Table'
 import Strategies from './components/Strategies/Strategies'
 import Documentation from './components/Documentation/Documentation'
-import Backtesters from './components/Backtesters/Backtesters'
 
 const routes = [
   { link: '/', label: 'Overview', Component: Overview, exact: true },
@@ -15,7 +14,6 @@ const routes = [
   { link: '/database/:db/:table', label: null, Component: Table },
   { link: '/strategies', label: 'Strategies', Component: Strategies, exact: true },
   { link: '/documentation', label: 'Documentation', Component: Documentation, exact: true },
-  { link: '/backtesters', label: 'Backtesters', Component: Backtesters, exact: true },
 ]
 
 class App extends React.Component {

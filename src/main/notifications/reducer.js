@@ -94,12 +94,6 @@ export default {
     log,
     click: item => item.close(),
   },
-  ERROR_GETTING_BACKTESTERS: {
-    title: 'Unable To Get Backtesters',
-    body: 'There was an error getting the backtesters!',
-    log,
-    click: item => item.close(),
-  },
   SUCCESS_STARTING_BACKTEST: {
     title: 'Success Starting Backtester',
     body: 'The backtester was started successfully!',
@@ -109,18 +103,6 @@ export default {
   ERROR_STARTING_BACKTEST: {
     title: 'Unable Start Backtester',
     body: 'There was an error starting the backtester!',
-    log,
-    click: item => item.close(),
-  },
-  NEW_BACKTESTER_SAVED: {
-    title: 'Success Saving New Backtester',
-    body: 'The new backtester was successfully saved!',
-    log,
-    click: item => item.close(),
-  },
-  FAILED_SAVING_NEW_BACKTESTER: {
-    title: 'Unable To Save Backtester',
-    body: 'There was an error while saving the new backtester!',
     log,
     click: item => item.close(),
   },

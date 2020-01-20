@@ -15,7 +15,7 @@ export default function(type, id) {
       args: {
         opacity: 0.985,
         title: 'CryptoDock',
-        width: 800,
+        width: 1000,
         height: 600,
         resizable: false,
         webPreferences: { nodeIntegration: true },
@@ -25,7 +25,7 @@ export default function(type, id) {
     strategyWindow: {
       window: null,
       active: false,
-      devTools: false,
+      devTools: true,
       show: true,
       template: path.join(__dirname, 'index.html'),
       address: `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?${querystring.stringify({
@@ -35,8 +35,8 @@ export default function(type, id) {
       args: {
         opacity: 0.985,
         title: 'Strategy Viewer',
-        width: 600,
-        height: 400,
+        width: 750,
+        height: 500,
         resizable: false,
         webPreferences: { nodeIntegration: true },
         titleBarStyle: 'hidden',

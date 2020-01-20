@@ -12,32 +12,38 @@ export default ({
       <h5 className="font-head text-center font-thin">New Strategy Details</h5>
       <div className="display flex flex-wrap justify-between items-start">
         <div className="w-1/2 block pl-2 pr-2 mt-2 mb-2">
-          <label className="font-head text-tiny">Slug/Name</label>
+          <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+            Slug/Name
+          </label>
           <input
             type="text"
             name="name"
             value={newStrategy.name}
             onChange={handleTextChange}
-            className="w-1/2 appearance-none block w-full bg-white-650 text-gray-5 border border-red-2-400 rounded py-2 px-2 leading-tight focus:text-gray-5 focus:outline-none focus:bg-white-850 font-head transition-bg transition-200"
+            className="w-full appearance-none block bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
           />
         </div>
         <div className="w-1/2 block pl-2 pr-2 mt-2 mb-2">
-          <label className="font-head text-tiny">Label</label>
+          <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+            Label
+          </label>
           <input
             type="text"
             name="label"
             value={newStrategy.label}
             onChange={handleTextChange}
-            className="w-1/2 appearance-none block w-full bg-white-650 text-gray-3 border border-red-2-400 rounded py-2 px-2 leading-tight focus:outline-none focus:bg-white-850 font-head transition-bg transition-200"
+            className="w-full appearance-none block bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
           />
         </div>
         <div className="w-full block pl-2 pr-2 mt-2 mb-2">
-          <label className="font-head text-tiny">Description</label>
+          <label className="block uppercase tracking-wide text-white text-tiny font-head font-bold mb-2">
+            Description
+          </label>
           <textarea
             name="description"
             value={newStrategy.description}
             onChange={handleTextChange}
-            className="w-1/2 appearance-none block w-full bg-white-650 text-gray-3 border border-red-2-400 rounded py-1 px-2 leading-tight focus:outline-none focus:bg-white-850 font-head transition-bg transition-200"
+            className="w-full appearance-none block bg-tran text-white-850 border border-gray-1-400 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
           ></textarea>
         </div>
         <div className="w-full flex justify-start items-center pl-2 pr-2 mt-2 mb-2">

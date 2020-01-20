@@ -2,7 +2,6 @@ import DatabaseController from '../controllers/DatabaseController'
 import MigrationsController from '../controllers/MigrationsController'
 import StrategiesController from '../controllers/StrategiesController'
 import SettingsController from '../controllers/SettingsController'
-import BacktestersController from '../controllers/BacktestersController'
 import ipcRouterDelegator from '../ipcRouterDelegator'
 
 export default key => {
@@ -81,21 +80,6 @@ export default key => {
           {
             DIR_LINK: SettingsController.DIR_LINK,
             SET_DIR_LINK: SettingsController.SET_DIR_LINK,
-          },
-          win,
-          key
-        )
-      },
-    },
-    backtester: {
-      channel: `${key}.backtester`,
-      listener: (event, arg, win) => {
-        ipcRouterDelegator(
-          event,
-          arg,
-          {
-            GET_BACKTESTERS: BacktestersController.GET_BACKTESTERS,
-            SAVE_BACKTESTER: BacktestersController.SAVE_BACKTESTER,
           },
           win,
           key

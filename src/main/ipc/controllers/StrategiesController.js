@@ -50,10 +50,11 @@ export default {
   },
   TOGGLE_ACTIVATION: (event, arg, win, key) => {
     Strategy.updateState(arg.data.id, arg.data.status)
-      .then(status => global.Strategies.manage(arg.data.id, status))
       .then(status => {
-        event.reply(channel(key, 'TOGGLE_ACTIVATION'), { id: arg.data.id, status })
-        NotificationManager.show(status === 'active' ? STRATEGY_ACTIVE : STRATEGY_LATENT)
+        global.LiveTradingManager.manage(arg.data.id, status, () => {
+          event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})
+          NotificationManager.show(status === 'active' ? STRATEGY_ACTIVE : STRATEGY_LATENT)
+        })
       })
       .catch(error)
   },

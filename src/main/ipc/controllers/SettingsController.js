@@ -19,9 +19,9 @@ export default {
           DialogManager.showOpen(arg, win, 'getStrategyDirectory')
             .then(res => {
               if (res && !res.canceled && Array.isArray(res)) {
-                global.Strategies.pauseAll()
+                global.LiveTradingManager.pauseAll()
                   .then(() => Setting.replace('strategy_dir_link', res[0]))
-                  .then(() => global.Strategies.initialize())
+                  .then(() => global.LiveTradingManager.initialize())
                   .then(() => {
                     event.reply(channel(key, 'SET_DIR_LINK'), res[0])
                     NotificationManager.show(STRATEGY_DIR_LINK_SET)

@@ -8,8 +8,8 @@ import _key from '../common/helpers/_key'
 import IpcManager from './ipc/IpcManager'
 import WindowManager from './windows/WindowManager'
 import NotificationManager from './notifications/NotificationManager'
-import StrategyManager from '../common/utilities/StrategyManager'
-import BacktestManager from '../common/utilities/BacktestManager'
+import LiveTradingManager from '../common/utilities/strategyManager/LiveTradingManager'
+import BacktestManager from '../common/utilities/strategyManager/BacktestManager'
 import { ALL_WINDOWS_CLOSED, APP_READY } from './notifications/actions'
 
 const { log, error } = console
@@ -38,8 +38,8 @@ global.Conn.connection.connect()
 global.RemoteConn.connection.connect()
 global.IPC = new IpcManager()
 global.Windows = new WindowManager()
-global.Strategies = new StrategyManager()
-global.Backtesters = new BacktestManager()
+global.LiveTradingManager = new LiveTradingManager()
+global.BacktestManager = new BacktestManager()
 
 const mainKey = 'mainWindow'
 

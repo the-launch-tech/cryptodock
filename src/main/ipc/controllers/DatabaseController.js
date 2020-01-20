@@ -11,13 +11,11 @@ export default {
       .catch(error)
   },
   TABLES: (event, arg, win, key) => {
-    log('LOCAL TABLEs', arg, key)
     Model.getTables()
       .then(data => event.reply(channel(key, 'TABLES'), data))
       .catch(error)
   },
   TABLE_DETAILS: (event, arg, win, key) => {
-    log('LOCAL TABLE DETAILS', arg, key)
     Model.getTableDetails(arg.data.tableName)
       .then(data => event.reply(channel(key, 'TABLE_DETAILS'), data))
       .catch(error)
@@ -33,13 +31,11 @@ export default {
       .catch(error)
   },
   REMOTE_TABLES: (event, arg, win, key) => {
-    log('REMOTE TABLEs', arg, key)
     Model.getRemoteTables()
       .then(data => event.reply(remote(key, 'REMOTE_TABLES'), data))
       .catch(error)
   },
   REMOTE_TABLE_DETAILS: (event, arg, win, key) => {
-    log('REMOTE TABLE DETAILS', arg, key)
     Model.getRemoteTableDetails(arg.data.tableName)
       .then(data => event.reply(remote(key, 'REMOTE_TABLE_DETAILS'), data))
       .catch(error)

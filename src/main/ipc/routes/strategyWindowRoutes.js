@@ -44,7 +44,6 @@ export default key => {
             HISTORY: BacktestersController.HISTORY,
             RESULTS: BacktestersController.RESULTS,
             RUN_TEST: BacktestersController.RUN_TEST,
-            GET_BACKTESTERS: BacktestersController.GET_BACKTESTERS,
           },
           win,
           key
