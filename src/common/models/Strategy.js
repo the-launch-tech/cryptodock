@@ -7,84 +7,28 @@ class Strategy extends Model {
     super()
   }
 
-  static getAll() {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery('SELECT * FROM strategies', (err, data) => {
-        if (err) reject(err)
-        resolve(data)
-      })
-    })
+  static async getAll() {
+    return await super.getAll('strategies')
   }
 
-  static save({ name, label, description, full_path }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'INSERT INTO strategies (name, label, description, full_path) values (?,?,?,?)',
-        [name, label, description, full_path],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data.insertId)
-        }
-      )
-    })
+  static async getOneByFieldValue(args) {
+    return await super.getOneByFieldValue('strategies', args)
   }
 
-  static fileUpdated({ id, updated }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'UPDATE strategies SET updated=? WHERE id=?',
-        [updated, id],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data)
-        }
-      )
-    })
+  static async updateOneFieldValue(args) {
+    return await super.updateOneFieldValue('strategies', args)
   }
 
-  static async getOneByValue(key, value) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'SELECT * FROM strategies WHERE ' + key + '=' + value + ' LIMIT 1',
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data[0])
-        }
-      )
-    })
+  static async delete(args) {
+    return await super.delete('strategies', args)
   }
 
-  static updateState(id, status) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'UPDATE strategies SET status="' + status + '" WHERE id=' + id,
-        (err, data) => {
-          if (err) reject(err)
-          resolve(status)
-        }
-      )
-    })
+  static async save(args) {
+    return await super.save('strategies', args)
   }
 
-  static updateBacktestState(id, backtestStatus) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'UPDATE strategies SET backtest_status="' + backtestStatus + '" WHERE id=' + id,
-        (err, data) => {
-          if (err) reject(err)
-          resolve(status)
-        }
-      )
-    })
-  }
-
-  static delete(id) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery('DELETE FROM strategies WHERE id=?', [id], (err, data) => {
-        if (err) reject(err)
-        resolve(data)
-      })
-    })
+  static async update(args) {
+    return await super.update('strategies', args)
   }
 }
 

@@ -7,10 +7,11 @@ class Setting extends Model {
     super()
   }
 
-  static getFieldByPair(field, key, value) {
+  static getFieldByPair({ field, key, value }) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'SELECT ' + field + ' FROM settings WHERE ' + key + '="' + value + '"',
+        'SELECT ' + field + ' FROM settings WHERE ' + key + '=?',
+        [value],
         (err, data) => {
           if (err) reject(err)
           resolve(data && data[0] ? data[0][field] : null)
@@ -19,10 +20,11 @@ class Setting extends Model {
     })
   }
 
-  static replace(key, value) {
+  static replace({ key, value }) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'REPLACE INTO settings SET key_="' + key + '", _value="' + value + '"',
+        'REPLACE INTO settings SET key_=?, _value=?',
+        [key, value],
         (err, data) => {
           if (err) reject(err)
           resolve(data)

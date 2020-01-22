@@ -7,64 +7,30 @@ class TestSession extends Model {
     super()
   }
 
-  static getHistory(strategyId) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'SELECT * FROM test_sessions WHERE strategy_id=?',
-        [strategyId],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data)
-        }
-      )
-    })
+  static async getAll() {
+    return await super.getAll('test_sessions')
   }
 
-  static save({ strategy_id }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'INSERT INTO test_sessions (strategy_id) values (?)',
-        [strategy_id],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data.insertId)
-        }
-      )
-    })
+  static async getByFieldValue(args) {
+    return await super.getByFieldValue('test_sessions', args)
   }
 
-  static update({
-    label,
-    custom,
-    start_time,
-    end_time,
-    granularity,
-    start_funds,
-    end_funds,
-    description,
-    completed,
-    strategy_id,
-  }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'UPDATE test_sessions SET label=?, custom=?, start_time=?, end_time=?, granularity=?, start_funds=?, end_funds=?, description=?, completed=? WHERE strategy_id=?',
-        [
-          label,
-          custom,
-          start_time,
-          end_time,
-          granularity,
-          start_funds,
-          end_funds,
-          description,
-          completed,
-          strategy_id,
-        ],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data)
-        }
-      )
+  static async save(args) {
+    return await super.save('test_sessions', args)
+  }
+
+  static async update({ meta, test_session_id }) {
+    return await super.update('test_sessions', {
+      label: meta.label,
+      custom: meta.custom,
+      start_time: meta.start_time,
+      end_time: meta.end_time,
+      granularity: meta.granularity,
+      start_funds: meta.start_funds,
+      end_funds: meta.end_funds,
+      description: meta.description,
+      completed: meta.completed,
+      id: test_session_id,
     })
   }
 }

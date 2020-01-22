@@ -7,17 +7,12 @@ class LiveEvent extends Model {
     super()
   }
 
-  static save({ message, strategy_id, live_session_id }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'INSERT INTO live_events (message,strategy_id,live_session_id) values (?,?,?)',
-        [message, strategy_id, live_session_id],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data.insertId)
-        }
-      )
-    })
+  static async getByFieldValue(args) {
+    return await super.getByFieldValue('live_events', args)
+  }
+
+  static async save(args) {
+    return await super.save('live_events', args)
   }
 }
 

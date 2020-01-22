@@ -7,24 +7,19 @@ class LiveOrder extends Model {
     super()
   }
 
-  static save({ meta, strategy_id, live_session_id }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'INSERT INTO live_orders (pair, exchange, quantity, direction, order_type, strategy_id, live_session_id) values (?,?,?,?,?,?,?)',
-        [
-          meta.pair,
-          meta.exchange,
-          meta.quantity,
-          meta.direction,
-          meta.order_type,
-          strategy_id,
-          live_session_id,
-        ],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data.insertId)
-        }
-      )
+  static async getByFieldValue(args) {
+    return await super.getByFieldValue('live_orders', args)
+  }
+
+  static async save({ meta, strategy_id, live_session_id }) {
+    return await super.save('live_orders', {
+      pair: meta.pair,
+      exchange: meta.exchange,
+      quantity: meta.quantity,
+      direction: meta.direction,
+      order_type: meta.order_type,
+      strategy_id,
+      live_session_id,
     })
   }
 }

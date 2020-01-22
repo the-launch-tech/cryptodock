@@ -7,17 +7,12 @@ class TestEvent extends Model {
     super()
   }
 
-  static save({ message, strategy_id, test_session_id }) {
-    return new Promise((resolve, reject) => {
-      global.Conn.asyncQuery(
-        'INSERT INTO test_events (message,strategy_id,test_session_id) values (?,?,?)',
-        [message, strategy_id, test_session_id],
-        (err, data) => {
-          if (err) reject(err)
-          resolve(data.insertId)
-        }
-      )
-    })
+  static async getByFieldValue(args) {
+    return await super.getByFieldValue('test_events', args)
+  }
+
+  static async save(args) {
+    return await super.save('test_events', args)
   }
 }
 

@@ -8,7 +8,7 @@ const channel = (key, id) => `res--${key}.setting-${id}`
 
 export default {
   DIR_LINK: (event, arg, win, key) => {
-    Setting.getFieldByPair('_value', 'key_', 'strategy_dir_link')
+    Setting.getFieldByPair({ field: '_value', key: 'key_', value: 'strategy_dir_link' })
       .then(data => event.reply(channel(key, 'DIR_LINK'), data))
       .catch(error)
   },
@@ -20,7 +20,7 @@ export default {
             .then(res => {
               if (res && !res.canceled && Array.isArray(res)) {
                 global.LiveTradingManager.pauseAll()
-                  .then(() => Setting.replace('strategy_dir_link', res[0]))
+                  .then(() => Setting.replace({ key: 'strategy_dir_link', value: res[0] }))
                   .then(() => global.LiveTradingManager.initialize())
                   .then(() => {
                     event.reply(channel(key, 'SET_DIR_LINK'), res[0])

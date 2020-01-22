@@ -12,7 +12,7 @@ const channel = (key, id) => `res--${key}.backtester-${id}`
 
 export default {
   HISTORY: (event, arg, win, key) => {
-    TestSession.getHistory(arg.data.strategyId)
+    TestSession.getByFieldValue({ key: 'id', value: arg.data.strategyId })
       .then(data => event.reply(channel(key, 'HISTORY'), data))
       .catch(err => {
         NotificationManager.show(ERROR_GETTING_BACKTEST_HISTORY)
@@ -20,7 +20,11 @@ export default {
       })
   },
   TOGGLE_ACTIVATION: (event, arg, win, key) => {
-    Strategy.updateBacktestState(arg.data.id, arg.data.backtester_status)
+    Strategy.updateOneFieldValue({
+      id: arg.data.id,
+      key: 'backtester_status',
+      value: arg.data.backtester_status,
+    })
       .then(backtester_status => {
         global.BacktestManager.manage(arg.data.id, backtester_status, arg.data.data, () => {
           event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})

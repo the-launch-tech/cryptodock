@@ -34,10 +34,8 @@ export default {
     }
   },
   DETAILS: (event, arg, win, key) => {
-    Strategy.getOneByValue('id', arg.data.id)
-      .then(data => {
-        event.reply(channel(key, 'DETAILS'), data)
-      })
+    Strategy.getOneByFieldValue({ key: 'id', value: arg.data.id })
+      .then(data => event.reply(channel(key, 'DETAILS'), data))
       .catch(error)
   },
   NEW: (event, arg, win, key) => {
@@ -51,7 +49,11 @@ export default {
     })
   },
   TOGGLE_ACTIVATION: (event, arg, win, key) => {
-    Strategy.updateState(arg.data.id, arg.data.status)
+    Strategy.updateOneFieldValue({
+      id: arg.data.id,
+      key: 'status',
+      value: arg.data.status,
+    })
       .then(status => {
         global.LiveTradingManager.manage(arg.data.id, status, () => {
           event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})
@@ -65,10 +67,10 @@ export default {
     DialogManager.showMessage(arg, win, 'strategyDelete')
       .then(confirmRes => {
         if (confirmRes === 0) {
-          Strategy.getOneByValue('id', arg.data.id)
+          Strategy.getOneByFieldValue({ key: 'id', value: arg.data.id })
             .then(strategy => {
               if (strategy.status === 'latent' && strategy.backtest_status === 'latent') {
-                Strategy.delete(arg.data.id)
+                Strategy.delete({ id: arg.data.id })
                   .then(() => global.LiveTradingManager.deleteStrategy(arg.data.id))
                   .then(() => global.BacktestManager.deleteStrategy(arg.data.id))
                   .then(() => global.StrategyWatcher.removeOldStrategy(arg.data.id))

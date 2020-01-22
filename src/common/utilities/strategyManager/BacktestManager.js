@@ -92,12 +92,16 @@ export default class BacktestManager {
   }
 
   onStartTrading({ id }) {
-    TestSession.save(id, this.state[id].args)
+    TestSession.save({ strategy_id: id })
       .then(test_session_id => {
         this.state[id].test_session = {
           id: test_session_id,
         }
-        TestEvent.save(id, this.state[id].test_session.id, 'Backtest Started')
+        TestEvent.save({
+          strategy_id: id,
+          test_session_id: this.state[id].test_session.id,
+          message: 'Backtest Started',
+        })
           .then(() => this.state[id].ticker.start())
           .catch(error)
       })
@@ -105,20 +109,36 @@ export default class BacktestManager {
   }
 
   onHeartbeat({ id, message }) {
-    if (message[0] === 'NO_SIGNAL' || message[0] === 'NON_EXECUTABLE') {
-      TestEvent.save(id, this.state[id].test_session.id, message[0])
-        .then(() => log(message[0]))
-        .catch(error)
-    } else if (message[0] === 'ORDER_FAIL' || message[0] === 'ORDER_SUCCESS') {
-      TestOrder.save(id, this.state[id].test_session.id, message[0], message[1])
-        .then(() => log('Test Order Saved'))
-        .catch(error)
-    }
+    TestEvent.save({
+      strategy_id: id,
+      test_session_id: this.state[id].test_session.id,
+      message: message[0],
+    })
+      .then(() => {
+        if (message[0] === 'ORDER_SUCCESS') {
+          TestOrder.save({
+            strategy_id: id,
+            test_session_id: this.state[id].test_session.id,
+            meta: message[1],
+          }).catch(error)
+        }
+      })
+      .catch(error)
   }
 
   onFinishedTrading({ id, meta }) {
-    TestSession.update(this.state[id].test_session.id, meta)
-      .then(() => TestEvent.save(id, this.state[id].test_session.id, 'Backtest Finished'))
+    TestSession.update({
+      strategy_id: id,
+      test_session_id: this.state[id].test_session.id,
+      meta,
+    })
+      .then(res =>
+        TestEvent.save({
+          strategy_id: id,
+          test_session_id: this.state[id].test_session.id,
+          message: 'Backtest Finished',
+        })
+      )
       .then(() => {
         this.state[id].socket.send('TRADING_RESOLVED')
         this.getAndPrepare(id, 'latent')
@@ -129,7 +149,11 @@ export default class BacktestManager {
   }
 
   onLogMessage({ id, message }) {
-    TestEvent.save(id, this.state[id].test_session.id, message)
+    TestEvent.save({
+      strategy_id: id,
+      test_session_id: this.state[id].test_session.id,
+      message,
+    })
       .then(() => log('Log Message Saved'))
       .catch(error)
   }
@@ -142,7 +166,7 @@ export default class BacktestManager {
       }
       return this.state[id]
     } else {
-      const strategy = await Strategy.getOneByValue('id', id)
+      const strategy = await Strategy.getOneByFieldValue({ key: 'id', value: id })
       try {
         if (!this.state[id]) {
           this.state[id] = {}

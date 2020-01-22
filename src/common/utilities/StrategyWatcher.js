@@ -30,7 +30,7 @@ export default class StrategyWatcher {
   addNewStrategy(id) {
     if (this.strategies[id]) return
 
-    Strategy.getOneByValue('id', id)
+    Strategy.getOneByFieldValue({ key: 'id', value: id })
       .then(this.setStrategy)
       .then(this.watchStrategy)
       .catch(error)
@@ -66,7 +66,7 @@ export default class StrategyWatcher {
       .format('YYYY-MM-DD HH:mm:ss.SSS')
 
     Logger.save({ message: `${file} ${action} for ${strategy.label} at ${updated}` })
-      .then(() => Strategy.fileUpdated({ id: strategy.id, updated }))
+      .then(() => Strategy.update({ id: strategy.id, updated }))
       .then(() => {
         if (action === 'deleted') {
           watcher.unwatch(file)

@@ -158,7 +158,7 @@ export default class LiveTradingManager {
       this.state[id].strategy.status = status
       return this.state[id]
     } else {
-      const strategy = await Strategy.getOneByValue('id', id)
+      const strategy = await Strategy.getOneByFieldValue({ key: 'id', value: id })
       try {
         return this.setStrategyState(strategy)
       } catch (e) {
