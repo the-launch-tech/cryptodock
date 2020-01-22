@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import makeDir from '../helpers/makeDir'
 import writeFile from '../helpers/writeFile'
 import copyFile from '../helpers/copyFile'
@@ -27,13 +28,22 @@ export default function(params, callback) {
         '}',
       ]
 
-      makeDir(full_path, () => {
-        copyDir(staticPy, newPy)
-          .then(() => writeFile(newJSON, jsonArray.join('\n')))
-          .then(() => global.StrategyWatcher.addNewStrategy(insertId))
-          .then(() => callback(null, { id: insertId, name, label, description }))
-          .catch(() => callback(true, null))
-      })
+      try {
+        if (!fs.existsSync(full_path)) {
+          makeDir(full_path, () => {
+            copyDir(staticPy, newPy)
+              .then(() => writeFile(newJSON, jsonArray.join('\n')))
+              .then(() => global.StrategyWatcher.addNewStrategy(insertId))
+              .then(() => callback(null, { id: insertId, name, label, description }))
+              .catch(() => callback(true, null))
+          })
+        } else {
+          global.StrategyWatcher.addNewStrategy(insertId)
+          callback(null, { id: insertId, name, label, description })
+        }
+      } catch (e) {
+        error(e)
+      }
     })
     .catch(error)
 }

@@ -1,4 +1,5 @@
 import NotificationManager from '../../notifications/NotificationManager'
+import DialogManager from '../../dialogs/DialogManager'
 import StrategyBootstrapper from '../../../common/utilities/StrategyBootstrapper'
 import Strategy from '../../../common/models/Strategy'
 import activateWindow from '../../../common/helpers/activateWindow'
@@ -9,6 +10,7 @@ import {
   NEW_STRATEGY_BOOTSTRAPPED,
   STRATEGY_ACTIVE,
   STRATEGY_LATENT,
+  STRATEGY_DELETED,
 } from '../../notifications/actions'
 
 const { log, error } = console
@@ -53,8 +55,32 @@ export default {
       .then(status => {
         global.LiveTradingManager.manage(arg.data.id, status, () => {
           event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})
+          event.reply('res--mainWindow.strategy-TOGGLE_ACTIVATION', {})
           NotificationManager.show(status === 'active' ? STRATEGY_ACTIVE : STRATEGY_LATENT)
         })
+      })
+      .catch(error)
+  },
+  DELETE: (event, arg, win, key) => {
+    DialogManager.showMessage(arg, win, 'strategyDelete')
+      .then(confirmRes => {
+        if (confirmRes === 0) {
+          Strategy.getOneByValue('id', arg.data.id)
+            .then(strategy => {
+              if (strategy.status === 'latent' && strategy.backtest_status === 'latent') {
+                Strategy.delete(arg.data.id)
+                  .then(() => global.LiveTradingManager.deleteStrategy(arg.data.id))
+                  .then(() => global.BacktestManager.deleteStrategy(arg.data.id))
+                  .then(() => global.StrategyWatcher.removeOldStrategy(arg.data.id))
+                  .then(() => {
+                    event.reply(channel(key, 'DELETE'), {})
+                    NotificationManager.show(STRATEGY_DELETED)
+                  })
+                  .catch(error)
+              }
+            })
+            .catch(error)
+        }
       })
       .catch(error)
   },

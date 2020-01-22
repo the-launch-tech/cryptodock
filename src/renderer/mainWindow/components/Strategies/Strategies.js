@@ -25,6 +25,8 @@ class Strategies extends React.Component {
     this.cancelSubmit = this.cancelSubmit.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
     this.onToggleActive = this.onToggleActive.bind(this)
+    this.onDeleteStrategy = this.onDeleteStrategy.bind(this)
+    this.deleteStrategy = this.deleteStrategy.bind(this)
 
     this.state = {
       strategyDirectory: null,
@@ -55,6 +57,7 @@ class Strategies extends React.Component {
     ipcRenderer.once('res--mainWindow.strategy-LIST', this.onStrategyList)
     ipcRenderer.once('res--mainWindow.strategy-NEW', this.onNewStrategy)
     ipcRenderer.on('res--mainWindow.strategy-TOGGLE_ACTIVATION', this.onToggleActive)
+    ipcRenderer.on('res--mainWindow.strategy-DELETE', this.onDeleteStrategy)
   }
 
   removeListeners() {
@@ -63,6 +66,7 @@ class Strategies extends React.Component {
     ipcRenderer.removeListener('res--mainWindow.strategy-LIST', this.onStrategyList)
     ipcRenderer.removeListener('res--mainWindow.strategy-NEW', this.onNewStrategy)
     ipcRenderer.removeListener('res--mainWindow.strategy-TOGGLE_ACTIVATION', this.onToggleActive)
+    ipcRenderer.removeListener('res--mainWindow.strategy-DELETE', this.onDeleteStrategy)
   }
 
   handleSetLinkStrategy(e) {
@@ -173,6 +177,19 @@ class Strategies extends React.Component {
     return duplicate
   }
 
+  deleteStrategy(id) {
+    ipcRenderer.send('mainWindow.strategy', { id: 'DELETE', data: { id } })
+  }
+
+  onDeleteStrategy(event, id) {
+    let loadedStrategies = Object.assign([], this.state.loadedStrategies)
+    index = loadedStrategies.map(e => e.id).indexOf(id)
+    if (index > -1) {
+      loadedStrategies.splice(index, 1)
+    }
+    this.setState({ loadedStrategies })
+  }
+
   render() {
     const { addingNew, strategyDirectory, newStrategy, newStrategyValid } = this.state
 
@@ -196,7 +213,11 @@ class Strategies extends React.Component {
             cancelSubmit={this.cancelSubmit}
           />
         )}
-        <LoadedStrategies {...this.state} openStrategy={this.openStrategy} />
+        <LoadedStrategies
+          {...this.state}
+          openStrategy={this.openStrategy}
+          deleteStrategy={this.deleteStrategy}
+        />
       </div>
     )
   }

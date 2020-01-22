@@ -65,6 +65,7 @@ export default key => {
             LIST: StrategiesController.LIST,
             WINDOW: StrategiesController.WINDOW,
             NEW: StrategiesController.NEW,
+            DELETE: StrategiesController.DELETE,
           },
           win,
           key

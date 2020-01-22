@@ -88,6 +88,12 @@ export default {
     log,
     click: item => item.close(),
   },
+  STRATEGY_DELETED: {
+    title: 'Strategy Deleted',
+    body: 'You have deleted the strategy! The files are not automatically deleted.',
+    log,
+    click: item => item.close(),
+  },
   ERROR_GETTING_BACKTEST_HISTORY: {
     title: 'Unable To Get History',
     body: 'There was an error getting the history of your backtests!',

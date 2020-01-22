@@ -29,4 +29,14 @@ export default {
       securityScopedBookmarks: false,
     }
   },
+  strategyDelete: arg => {
+    return {
+      type: 'question',
+      title: 'Delete Strategy',
+      message: 'Are your sure you want to delete this strategy?',
+      detail: 'The files will not be deleted automatically.',
+      defaultId: 1,
+      buttons: ['Yes', 'No'],
+    }
+  },
 }

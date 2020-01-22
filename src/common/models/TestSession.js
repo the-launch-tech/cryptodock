@@ -62,7 +62,7 @@ class TestSession extends Model {
         ],
         (err, data) => {
           if (err) reject(err)
-          resolve(data.insertId)
+          resolve(data)
         }
       )
     })

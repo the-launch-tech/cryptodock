@@ -20,14 +20,22 @@ class LiveSession extends Model {
     })
   }
 
-  static update({ start_time, end_time, granularity, start_funds, end_funds, strategy_id }) {
+  static update({ meta, live_session_id, strategy_id }) {
     return new Promise((resolve, reject) => {
       global.Conn.asyncQuery(
-        'UPDATE live_sessions SET start_time=?, end_time=?, granularity=?, start_funds=?, end_funds=? WHERE strategy_id=?',
-        [start_time, end_time, granularity, start_funds, end_funds, strategy_id],
+        'UPDATE live_sessions SET start_time=?, end_time=?, granularity=?, start_funds=?, end_funds=? WHERE strategy_id=? AND id=?',
+        [
+          meta.start_time,
+          meta.end_time,
+          meta.granularity,
+          meta.start_funds,
+          meta.end_funds,
+          strategy_id,
+          live_session_id,
+        ],
         (err, data) => {
           if (err) reject(err)
-          resolve(data.insertId)
+          resolve(data)
         }
       )
     })

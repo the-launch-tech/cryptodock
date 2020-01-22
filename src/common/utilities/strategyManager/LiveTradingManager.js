@@ -87,29 +87,53 @@ export default class LiveTradingManager {
   }
 
   onStartTrading({ id }) {
-    LiveSession.save(id, this.state[id].args)
+    LiveSession.save({ strategy_id: id })
       .then(live_session_id => {
         this.state[id].live_session = {
           id: live_session_id,
         }
-        LiveEvent.save(id, this.state[id].live_session.id, 'Trading Started')
+        LiveEvent.save({
+          strategy_id: id,
+          live_session_id: this.state[id].live_session.id,
+          message: 'Trading Started',
+        })
           .then(() => this.state[id].ticker.start())
           .catch(error)
       })
       .catch(error)
   }
 
-  onHeartbeat({ id, action }) {
-    if (data.order) {
-      LiveOrder.save(id, this.state[id].live_session.id, data.order)
-        .then(() => log('Order Saved'))
-        .catch(error)
-    }
+  onHeartbeat({ id, message }) {
+    LiveEvent.save({
+      strategy_id: id,
+      live_session_id: this.state[id].live_session.id,
+      message: message[0],
+    })
+      .then(() => {
+        if (message[0] === 'ORDER_SUCCESS') {
+          LiveOrder.save({
+            strategy_id: id,
+            live_session_id: this.state[id].live_session.id,
+            meta: message[1],
+          }).catch(error)
+        }
+      })
+      .catch(error)
   }
 
-  onFinishedTrading({ id, results }) {
-    LiveSession.update(id, results)
-      .then(res => LiveEvent.save(id, this.state[id].live_session.id, 'Trading Finished'))
+  onFinishedTrading({ id, meta }) {
+    LiveSession.update({
+      strategy_id: id,
+      live_session_id: this.state[id].live_session.id,
+      meta,
+    })
+      .then(res =>
+        LiveEvent.save({
+          strategy_id: id,
+          live_session_id: this.state[id].live_session.id,
+          message: 'Trading Finished',
+        })
+      )
       .then(() => {
         this.state[id].socket.send('TRADING_RESOLVED')
         this.getAndPrepare(id, 'latent')
@@ -120,7 +144,11 @@ export default class LiveTradingManager {
   }
 
   onLogMessage({ id, message }) {
-    LiveEvent.save(id, this.state[id].live_session.id, message)
+    LiveEvent.save({
+      strategy_id: id,
+      live_session_id: this.state[id].live_session.id,
+      message,
+    })
       .then(() => log('Log Message Saved'))
       .catch(error)
   }
@@ -178,5 +206,9 @@ export default class LiveTradingManager {
     } catch (e) {
       error(e)
     }
+  }
+
+  deleteStrategy(id) {
+    delete this.state[id]
   }
 }

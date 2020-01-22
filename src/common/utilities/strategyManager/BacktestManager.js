@@ -104,16 +104,20 @@ export default class BacktestManager {
       .catch(error)
   }
 
-  onHeartbeat({ id, data }) {
-    if (data.order) {
-      TestOrder.save(id, this.state[id].test_session.id, data.order)
+  onHeartbeat({ id, message }) {
+    if (message[0] === 'NO_SIGNAL' || message[0] === 'NON_EXECUTABLE') {
+      TestEvent.save(id, this.state[id].test_session.id, message[0])
+        .then(() => log(message[0]))
+        .catch(error)
+    } else if (message[0] === 'ORDER_FAIL' || message[0] === 'ORDER_SUCCESS') {
+      TestOrder.save(id, this.state[id].test_session.id, message[0], message[1])
         .then(() => log('Test Order Saved'))
         .catch(error)
     }
   }
 
-  onFinishedTrading({ id, results }) {
-    TestSession.update(this.state[id].test_session.id, results)
+  onFinishedTrading({ id, meta }) {
+    TestSession.update(this.state[id].test_session.id, meta)
       .then(() => TestEvent.save(id, this.state[id].test_session.id, 'Backtest Finished'))
       .then(() => {
         this.state[id].socket.send('TRADING_RESOLVED')
@@ -128,12 +132,6 @@ export default class BacktestManager {
     TestEvent.save(id, this.state[id].test_session.id, message)
       .then(() => log('Log Message Saved'))
       .catch(error)
-  }
-
-  sendActivePoll(id) {
-    if (this.state[id] && this.state[id].socket) {
-      this.state[id].socket.send('POLL_TRADING')
-    }
   }
 
   async getAndPrepare(id, status, args) {
@@ -199,5 +197,9 @@ export default class BacktestManager {
     } catch (e) {
       error(e)
     }
+  }
+
+  deleteStrategy(id) {
+    delete this.state[id]
   }
 }

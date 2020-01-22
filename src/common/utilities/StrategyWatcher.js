@@ -21,7 +21,6 @@ export default class StrategyWatcher {
   }
 
   getStrategies() {
-    log('getStrategies')
     Strategy.getAll()
       .then(strategies => strategies.map(this.setStrategy))
       .then(this.setWatchers)
@@ -29,7 +28,6 @@ export default class StrategyWatcher {
   }
 
   addNewStrategy(id) {
-    log('addNewStrategy')
     if (this.strategies[id]) return
 
     Strategy.getOneByValue('id', id)
@@ -40,8 +38,8 @@ export default class StrategyWatcher {
 
   removeOldStrategy(id) {
     if (!this.strategies[id]) return
-
     this.strategies[id].watcher.clear()
+    delete this.strategies[id]
   }
 
   setStrategy(strategy) {
@@ -49,24 +47,20 @@ export default class StrategyWatcher {
       strategy,
       watcher: Hound.watch(strategy.full_path),
     }
-    log('setStrategy', this.strategies[strategy.id])
     return this.strategies[strategy.id]
   }
 
   setWatchers() {
-    log('setWatchers')
     Object.keys(this.strategies).map(key => this.watchStrategy(this.strategies[key]))
   }
 
   watchStrategy(obj) {
-    log('watchStrategy', obj)
     obj.watcher.on('create', file => this.updateTime(obj, 'created', file))
     obj.watcher.on('change', file => this.updateTime(obj, 'changed', file))
     obj.watcher.on('delete', file => this.updateTime(obj, 'deleted', file))
   }
 
   updateTime({ watcher, strategy }, action, file) {
-    log('updateTime', watcher, strategy, action, file)
     const updated = moment()
       .local()
       .format('YYYY-MM-DD HH:mm:ss.SSS')

@@ -77,6 +77,15 @@ class Strategy extends Model {
       )
     })
   }
+
+  static delete(id) {
+    return new Promise((resolve, reject) => {
+      global.Conn.asyncQuery('DELETE FROM strategies WHERE id=?', [id], (err, data) => {
+        if (err) reject(err)
+        resolve(data)
+      })
+    })
+  }
 }
 
 export default Strategy

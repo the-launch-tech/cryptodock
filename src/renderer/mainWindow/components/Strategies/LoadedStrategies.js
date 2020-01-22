@@ -1,7 +1,7 @@
 import React from 'react'
 import Snippet from './Snippet'
 
-export default ({ loadedStrategies, openStrategy }) => {
+export default ({ loadedStrategies, openStrategy, deleteStrategy }) => {
   return (
     <div className="h-full w-full mt-5 p-5 rounded-lg">
       <h5 className="font-head text-white font-thin text-center cursor-default">
@@ -11,7 +11,12 @@ export default ({ loadedStrategies, openStrategy }) => {
         {loadedStrategies && Array.isArray(loadedStrategies) ? (
           <ul>
             {loadedStrategies.map((strategy, i) => (
-              <Snippet key={i} strategy={strategy} openStrategy={openStrategy} />
+              <Snippet
+                key={i}
+                strategy={strategy}
+                openStrategy={openStrategy}
+                deleteStrategy={deleteStrategy}
+              />
             ))}
           </ul>
         ) : (
