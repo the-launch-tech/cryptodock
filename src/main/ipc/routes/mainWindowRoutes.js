@@ -2,6 +2,7 @@ import DatabaseController from '../controllers/DatabaseController'
 import MigrationsController from '../controllers/MigrationsController'
 import StrategiesController from '../controllers/StrategiesController'
 import SettingsController from '../controllers/SettingsController'
+import ActivitiesController from '../controllers/ActivitiesController'
 import ipcRouterDelegator from '../ipcRouterDelegator'
 
 export default key => {
@@ -66,6 +67,21 @@ export default key => {
             WINDOW: StrategiesController.WINDOW,
             NEW: StrategiesController.NEW,
             DELETE: StrategiesController.DELETE,
+            GET_ACTIVE: StrategiesController.GET_ACTIVE,
+          },
+          win,
+          key
+        )
+      },
+    },
+    activity: {
+      channel: `${key}.activity`,
+      listener: (event, arg, win) => {
+        ipcRouterDelegator(
+          event,
+          arg,
+          {
+            RECENT: ActivitiesController.RECENT,
           },
           win,
           key

@@ -181,7 +181,7 @@ class Model {
         'INSERT INTO ' +
           sanitize(table) +
           ' (' +
-          bindings.join(',') +
+          Object.keys(args).join(',') +
           ') values (' +
           shadow.join(',') +
           ')',

@@ -22,6 +22,11 @@ export default {
       .then(data => event.reply(channel(key, 'LIST'), data))
       .catch(error)
   },
+  GET_ACTIVE: (event, arg, win, key) => {
+    Strategy.getByFieldValue({ key: 'status', value: 'active' })
+      .then(data => event.reply(channel(key, 'GET_ACTIVE'), data))
+      .catch(error)
+  },
   WINDOW: (event, arg, win, key) => {
     const newKey = _key(arg.data.type, arg.data.id)
 
@@ -54,11 +59,11 @@ export default {
       key: 'status',
       value: arg.data.status,
     })
-      .then(status => {
-        global.LiveTradingManager.manage(arg.data.id, status, () => {
+      .then(() => {
+        global.LiveTradingManager.manage(arg.data.id, arg.data.status, () => {
           event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})
           event.reply('res--mainWindow.strategy-TOGGLE_ACTIVATION', {})
-          NotificationManager.show(status === 'active' ? STRATEGY_ACTIVE : STRATEGY_LATENT)
+          NotificationManager.show(arg.data.status === 'active' ? STRATEGY_ACTIVE : STRATEGY_LATENT)
         })
       })
       .catch(error)

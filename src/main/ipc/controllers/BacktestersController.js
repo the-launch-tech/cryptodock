@@ -25,13 +25,18 @@ export default {
       key: 'backtester_status',
       value: arg.data.backtester_status,
     })
-      .then(backtester_status => {
-        global.BacktestManager.manage(arg.data.id, backtester_status, arg.data.data, () => {
-          event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})
-          NotificationManager.show(
-            backtester_status === 'active' ? BACKTEST_ACTIVE : BACKTEST_LATENT
-          )
-        })
+      .then(() => {
+        global.BacktestManager.manage(
+          arg.data.id,
+          arg.data.backtester_status,
+          arg.data.data,
+          () => {
+            event.reply(channel(key, 'TOGGLE_ACTIVATION'), {})
+            NotificationManager.show(
+              arg.data.backtester_status === 'active' ? BACKTEST_ACTIVE : BACKTEST_LATENT
+            )
+          }
+        )
       })
       .catch(error)
   },

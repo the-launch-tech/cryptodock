@@ -1,4 +1,5 @@
 import Model from './Model'
+import moment from 'moment'
 
 const { log, error } = console
 
@@ -23,8 +24,8 @@ class TestSession extends Model {
     return await super.update('test_sessions', {
       label: meta.label,
       custom: meta.custom,
-      start_time: meta.start_time,
-      end_time: meta.end_time,
+      start_time: meta.start_time ? moment(meta.start_time).format('YYYY-MM-DD HH:mm:ss') : null,
+      end_time: meta.end_time ? moment(meta.end_time).format('YYYY-MM-DD HH:mm:ss') : null,
       granularity: meta.granularity,
       start_funds: meta.start_funds,
       end_funds: meta.end_funds,

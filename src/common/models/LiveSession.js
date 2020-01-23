@@ -1,4 +1,5 @@
 import Model from './Model'
+import moment from 'moment'
 
 const { log, error } = console
 
@@ -21,8 +22,8 @@ class LiveSession extends Model {
 
   static async update({ meta, live_session_id }) {
     return await super.update('live_sessions', {
-      start_time: meta.start_time,
-      end_time: meta.end_time,
+      start_time: meta.start_time ? moment(meta.start_time).format('YYYY-MM-DD HH:mm:ss') : null,
+      end_time: meta.end_time ? moment(meta.end_time).format('YYYY-MM-DD HH:mm:ss') : null,
       granularity: meta.granularity,
       start_funds: meta.start_funds,
       end_funds: meta.end_funds,

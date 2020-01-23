@@ -1,4 +1,7 @@
 export default function(str) {
-  str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, '')
-  return str.trim()
+  // console.log('str', str)
+  return str
+  // if (!str) return str
+  // if (parseInt(str) || parseFloat(str)) return str
+  // return str.trim()
 }
