@@ -51,6 +51,13 @@ export default class Overview extends React.Component {
     this.setState({ activeStrategies })
   }
 
+  openStrategy(e, id) {
+    ipcRenderer.send('mainWindow.strategy', {
+      id: 'WINDOW',
+      data: { id, type: 'strategyWindow' },
+    })
+  }
+
   render() {
     const { activeStrategies, recentActivity } = this.state
 
@@ -59,7 +66,10 @@ export default class Overview extends React.Component {
         <h2 className="font-display text-red-2 cursor-default">CryptoDock</h2>
         {activeStrategies && activeStrategies.length ? (
           <div className="mt-5 block p-5">
-            <ActiveStrategies activeStrategies={activeStrategies} />
+            <ActiveStrategies
+              activeStrategies={activeStrategies}
+              openStrategy={this.openStrategy}
+            />
           </div>
         ) : (
           <div className="mt-10 w-1/2 border-1 border-solid border-white-400 p-5 rounded-lg">

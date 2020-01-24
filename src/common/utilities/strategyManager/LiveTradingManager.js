@@ -95,7 +95,7 @@ export default class LiveTradingManager {
         LiveEvent.save({
           strategy_id: id,
           live_session_id: this.state[id].live_session.id,
-          message: 'Trading Started',
+          message: 'SESSION_STARTED',
         })
           .then(() => this.state[id].ticker.start())
           .catch(error)
@@ -131,7 +131,7 @@ export default class LiveTradingManager {
         LiveEvent.save({
           strategy_id: id,
           live_session_id: this.state[id].live_session.id,
-          message: 'Trading Finished',
+          message: 'SESSION_FINISHED',
         })
       )
       .then(() => {
@@ -148,9 +148,7 @@ export default class LiveTradingManager {
       strategy_id: id,
       live_session_id: this.state[id].live_session.id,
       message,
-    })
-      .then(() => log('Log Message Saved'))
-      .catch(error)
+    }).catch(error)
   }
 
   async getAndPrepare(id, status) {

@@ -100,7 +100,7 @@ export default class BacktestManager {
         TestEvent.save({
           strategy_id: id,
           test_session_id: this.state[id].test_session.id,
-          message: 'Backtest Started',
+          message: 'BACKTEST_STARTED',
         })
           .then(() => this.state[id].ticker.start())
           .catch(error)
@@ -136,7 +136,7 @@ export default class BacktestManager {
         TestEvent.save({
           strategy_id: id,
           test_session_id: this.state[id].test_session.id,
-          message: 'Backtest Finished',
+          message: 'BACKTEST_FINISHED',
         })
       )
       .then(() => {
@@ -153,9 +153,7 @@ export default class BacktestManager {
       strategy_id: id,
       test_session_id: this.state[id].test_session.id,
       message,
-    })
-      .then(() => log('Log Message Saved'))
-      .catch(error)
+    }).catch(error)
   }
 
   async getAndPrepare(id, status, args) {
