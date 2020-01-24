@@ -5,4 +5,5 @@ export const bindings = [
   'onGetStrategyById',
   'onToggleActivation',
   'updateField',
+  'onGetRecent',
 ]

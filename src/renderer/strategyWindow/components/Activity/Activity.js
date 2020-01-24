@@ -12,7 +12,7 @@ export default class Activity extends React.Component {
 
     bindings.map(i => (this[i] = this[i].bind(this)))
 
-    this.state = { id: null, type: null, strategy: null }
+    this.state = { id: null, type: null, strategy: null, recent: null }
   }
 
   componentDidMount() {
@@ -32,16 +32,25 @@ export default class Activity extends React.Component {
       id: 'DETAILS',
       data: { id: this.state.id },
     })
+    ipcRenderer.send(`strategyWindow-${this.props.id}.activity`, {
+      id: 'RECENT',
+      data: { id: this.state.id, after: 86400 * 10 },
+    })
   }
 
   setListeners() {
     ipcRenderer.on(`res--${this.ipcAddress}-DETAILS`, this.onGetStrategyById)
     ipcRenderer.on(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, this.onToggleActivation)
+    ipcRenderer.on(`res--strategyWindow-${this.props.id}.activity-RECENT`, this.onGetRecent)
   }
 
   removeListeners() {
     ipcRenderer.removeListener(`res--${this.ipcAddress}-DETAILS`, this.onGetStrategyById)
     ipcRenderer.removeListener(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, this.onToggleActivation)
+    ipcRenderer.removeListener(
+      `res--strategyWindow-${this.props.id}.activity-RECENT`,
+      this.onGetRecent
+    )
   }
 
   toggleActivation(e) {
@@ -65,9 +74,11 @@ export default class Activity extends React.Component {
   }
 
   onGetStrategyById(event, strategy) {
-    this.setState({ strategy }, () => {
-      log('onGetStrategyById', this.state.strategy)
-    })
+    this.setState({ strategy })
+  }
+
+  onGetRecent(event, recent) {
+    this.setState({ recent })
   }
 
   updateField(name, value, callback = null) {
@@ -85,11 +96,11 @@ export default class Activity extends React.Component {
   }
 
   render() {
-    const { strategy } = this.state
+    const { strategy, recent } = this.state
     return (
       <div>
         {strategy && <Meta strategy={strategy} toggleActivation={this.toggleActivation} />}
-        <RecentActivity strategy={strategy} />
+        <RecentActivity strategy={strategy} recent={recent} />
       </div>
     )
   }

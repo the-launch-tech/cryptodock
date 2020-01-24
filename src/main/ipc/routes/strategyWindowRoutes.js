@@ -1,6 +1,7 @@
 import StrategiesController from '../controllers/StrategiesController'
 import SettingsController from '../controllers/SettingsController'
 import BacktestersController from '../controllers/BacktestersController'
+import ActivitiesController from '../controllers/ActivitiesController'
 import ipcRouterDelegator from '../ipcRouterDelegator'
 
 export default key => {
@@ -44,6 +45,20 @@ export default key => {
             HISTORY: BacktestersController.HISTORY,
             RESULTS: BacktestersController.RESULTS,
             RUN_TEST: BacktestersController.RUN_TEST,
+          },
+          win,
+          key
+        )
+      },
+    },
+    activity: {
+      channel: `${key}.activity`,
+      listener: (event, arg, win) => {
+        ipcRouterDelegator(
+          event,
+          arg,
+          {
+            RECENT: ActivitiesController.RECENT,
           },
           win,
           key
