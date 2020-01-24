@@ -114,11 +114,12 @@ export default class BacktestManager {
       test_session_id: this.state[id].test_session.id,
       message: message[0],
     })
-      .then(() => {
+      .then(test_event_id => {
         if (message[0] === 'ORDER_SUCCESS') {
           TestOrder.save({
             strategy_id: id,
             test_session_id: this.state[id].test_session.id,
+            test_event_id,
             meta: message[1],
           }).catch(error)
         }

@@ -10,4 +10,9 @@ export default {
       .then(data => event.reply(channel(key, 'RECENT'), data))
       .catch(error)
   },
+  RECENT_BY_ID: (event, arg, win, key) => {
+    Strategy.getRecentById({ id: arg.data.id, after: arg.data.after })
+      .then(data => event.reply(channel(key, 'RECENT_BY_ID'), data))
+      .catch(error)
+  },
 }

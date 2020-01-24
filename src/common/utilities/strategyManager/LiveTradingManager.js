@@ -109,11 +109,12 @@ export default class LiveTradingManager {
       live_session_id: this.state[id].live_session.id,
       message: message[0],
     })
-      .then(() => {
+      .then(live_event_id => {
         if (message[0] === 'ORDER_SUCCESS') {
           LiveOrder.save({
             strategy_id: id,
             live_session_id: this.state[id].live_session.id,
+            live_event_id,
             meta: message[1],
           }).catch(error)
         }

@@ -11,7 +11,7 @@ class LiveOrder extends Model {
     return await super.getByFieldValue('live_orders', args)
   }
 
-  static async save({ meta, strategy_id, live_session_id }) {
+  static async save({ meta, strategy_id, live_session_id, live_event_id }) {
     return await super.save('live_orders', {
       pair: meta.pair,
       exchange: meta.exchange,
@@ -20,6 +20,7 @@ class LiveOrder extends Model {
       order_type: meta.order_type,
       strategy_id,
       live_session_id,
+      live_event_id,
     })
   }
 }

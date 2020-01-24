@@ -33,7 +33,7 @@ export default class Activity extends React.Component {
       data: { id: this.state.id },
     })
     ipcRenderer.send(`strategyWindow-${this.props.id}.activity`, {
-      id: 'RECENT',
+      id: 'RECENT_BY_ID',
       data: { id: this.state.id, after: 86400 * 10 },
     })
   }
@@ -41,14 +41,14 @@ export default class Activity extends React.Component {
   setListeners() {
     ipcRenderer.on(`res--${this.ipcAddress}-DETAILS`, this.onGetStrategyById)
     ipcRenderer.on(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, this.onToggleActivation)
-    ipcRenderer.on(`res--strategyWindow-${this.props.id}.activity-RECENT`, this.onGetRecent)
+    ipcRenderer.on(`res--strategyWindow-${this.props.id}.activity-RECENT_BY_ID`, this.onGetRecent)
   }
 
   removeListeners() {
     ipcRenderer.removeListener(`res--${this.ipcAddress}-DETAILS`, this.onGetStrategyById)
     ipcRenderer.removeListener(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, this.onToggleActivation)
     ipcRenderer.removeListener(
-      `res--strategyWindow-${this.props.id}.activity-RECENT`,
+      `res--strategyWindow-${this.props.id}.activity-RECENT_BY_ID`,
       this.onGetRecent
     )
   }

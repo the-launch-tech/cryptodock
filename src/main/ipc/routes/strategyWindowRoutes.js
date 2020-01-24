@@ -58,7 +58,7 @@ export default key => {
           event,
           arg,
           {
-            RECENT: ActivitiesController.RECENT,
+            RECENT_BY_ID: ActivitiesController.RECENT_BY_ID,
           },
           win,
           key

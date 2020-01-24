@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS settings;
 DROP TABLE IF EXISTS logs;
-DROP TABLE IF EXISTS live_events;
 DROP TABLE IF EXISTS live_orders;
+DROP TABLE IF EXISTS live_events;
 DROP TABLE IF EXISTS live_sessions;
-DROP TABLE IF EXISTS test_events;
 DROP TABLE IF EXISTS test_orders;
+DROP TABLE IF EXISTS test_events;
 DROP TABLE IF EXISTS test_sessions;
 DROP TABLE IF EXISTS strategies;

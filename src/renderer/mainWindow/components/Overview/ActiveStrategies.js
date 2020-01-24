@@ -11,14 +11,12 @@ export default ({ activeStrategies, openStrategy }) => {
               <div
                 className={`${
                   strategy.status === 'active' ? 'text-green-2' : 'text-yellow-2'
-                } ml-3 rounded-full mr-3 cursor-pointer`}
+                } ml-3 rounded-full mr-3`}
               >
                 {strategy.status === 'active' ? 'Active Session' : 'Inactive'}
               </div>
               {strategy.backtest_status && (
-                <div className="text-green-2 ml-3 rounded-full mr-3 cursor-pointer">
-                  Backtesting
-                </div>
+                <div className="text-green-2 ml-3 rounded-full mr-3">Backtesting</div>
               )}
             </div>
             <h6
