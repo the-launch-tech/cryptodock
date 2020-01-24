@@ -94,13 +94,13 @@ export default class Table extends React.Component {
 
     return (
       <div className="relative">
-        <Link className="absolute top-0 left-0 pl-2 pt-2" to="/database">
+        <Link
+          className="absolute top-0 left-0 pl-2 font-head text-red-2 transition-all transition-200 hover:text-yellow-2 active:text-red-2"
+          to="/database"
+        >
           Back
         </Link>
-        <div
-          className="p-3 border-1 border-solid border-white-200 rounded mt-10"
-          style={{ minHeight: '35vh' }}
-        >
+        <div className="pt-5" style={{ minHeight: '35vh' }}>
           <h5 className="text-center font-thin mb-3 font-head">
             Table Schema For{' '}
             {tableDetails ? (
@@ -112,41 +112,48 @@ export default class Table extends React.Component {
             )}
           </h5>
           {tableDetails && (
-            <table className="w-full h-full border border-solid border-white-400 bg-white-100">
+            <table className="w-full h-full">
               <thead>
-                <tr className="bg-white-100 p-2 border-b-2 border-solid border-blue-2 mb-5">
-                  <th className="text-tiny w-1/6">Field</th>
-                  <th className="text-tiny w-1/6">Type</th>
-                  <th className="text-tiny w-1/6">Null</th>
-                  <th className="text-tiny w-1/6">Key</th>
-                  <th className="text-tiny w-1/6">Default</th>
-                  <th className="text-tiny w-1/6">Extra</th>
+                <tr className="border border-b-0 border-solid border-white-400">
+                  <th className="text-tiny w-1/6 font-head font-bold text-gray-0 text-center border-r border-solid border-white-400">
+                    Field
+                  </th>
+                  <th className="text-tiny w-1/6 font-head font-bold text-gray-0 text-center border-r border-solid border-white-400">
+                    Type
+                  </th>
+                  <th className="text-tiny w-1/6 font-head font-bold text-gray-0 text-center border-r border-solid border-white-400">
+                    Null
+                  </th>
+                  <th className="text-tiny w-1/6 font-head font-bold text-gray-0 text-center border-r border-solid border-white-400">
+                    Key
+                  </th>
+                  <th className="text-tiny w-1/6 font-head font-bold text-gray-0 text-center border-r border-solid border-white-400">
+                    Default
+                  </th>
+                  <th className="text-tiny w-1/6 font-head font-bold text-gray-0 text-center border-r border-solid border-white-400">
+                    Extra
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="border border-solid border-white-400">
                 {tableDetails.map((col, i) => (
-                  <tr
-                    key={i}
-                    className={`border-b border-solid border-white-400 ${
-                      i % 2 === 0 ? 'bg-tran' : 'bg-white-100'
-                    }`}
-                  >
-                    <td className="w-1/6">
+                  <tr key={i} className="border-b border-solid border-white-200">
+                    <td className="w-1/6 pl-3 py-1 font-head text-tiny text-gray-0 border-r border-solid border-white-200">
                       <pre className="text-tiny">{col.Field}</pre>
                     </td>
-                    <td className="w-1/6">
+                    <td className="w-1/6 pl-3 py-1 font-head text-tiny text-gray-0 border-r border-solid border-white-200">
                       <pre className="text-tiny">{col.Type}</pre>
                     </td>
-                    <td className="w-1/6">
+                    <td className="w-1/6 pl-3 py-1 font-head text-tiny text-gray-0 border-r border-solid border-white-200">
                       <pre className="text-tiny">{col.Null}</pre>
                     </td>
-                    <td className="w-1/6">
+                    <td className="w-1/6 pl-3 py-1 font-head text-tiny text-gray-0 border-r border-solid border-white-200">
                       <pre className="text-tiny">{col.Key}</pre>
                     </td>
-                    <td className="w-1/6">
+                    <td className="w-1/6 pl-3 py-1 font-head text-tiny text-gray-0 border-r border-solid border-white-200">
                       <pre className="text-tiny">{col.Default}</pre>
                     </td>
-                    <td className="w-1/6">
+                    <td className="w-1/6 pl-3 py-1 font-head text-tiny text-gray-0 border-r border-solid border-white-200">
                       <pre className="text-tiny">{col.Extra}</pre>
                     </td>
                   </tr>
