@@ -85,9 +85,7 @@ export default class Backtester extends React.Component {
   }
 
   onGetStrategyById(event, strategy) {
-    this.setState({ strategy }, () => {
-      log('onGetStrategyById', this.state.strategy)
-    })
+    this.setState({ strategy })
   }
 
   updateField(name, value, callback = null) {

@@ -11,8 +11,17 @@ class TestOrder extends Model {
     return await super.getByFieldValue('test_orders', args)
   }
 
-  static async save(args) {
-    return await super.save('test_orders', args)
+  static async save({ meta, strategy_id, test_session_id, test_event_id }) {
+    return await super.save('test_orders', {
+      pair: meta.pair,
+      exchange: meta.exchange,
+      quantity: meta.quantity,
+      direction: meta.direction,
+      order_type: meta.order_type,
+      strategy_id,
+      test_session_id,
+      test_event_id,
+    })
   }
 }
 

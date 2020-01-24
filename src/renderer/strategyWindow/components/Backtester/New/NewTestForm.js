@@ -45,7 +45,7 @@ export default ({ handleTextChange, handleChoiceChange, toggleActivation, invali
               </label>
               <input
                 className="w-full appearance-none block bg-tran text-white-850 border border-gray-1-400 transition-all transition-100 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
-                type="number"
+                type={type}
                 name={name}
                 defaultValue={defaultValue}
                 placeholder={placeholder}
