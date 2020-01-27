@@ -66,17 +66,17 @@ export default class Backtester extends React.Component {
 
   toggleActivation(e) {
     this.updateField(
-      'backtester_status',
-      this.state.strategy.backtester_status === 'active' ? 'latent' : 'active',
+      'backtest_status',
+      this.state.strategy.backtest_status === 'active' ? 'latent' : 'active',
       () => {
         const data = this.state.currentData
         data.id = this.props.id
-        data.backtester_status = this.state.strategy.backtester_status
+        data.backtest_status = this.state.strategy.backtest_status
         ipcRenderer.send(`${this.ipcAddress}`, {
           id: 'TOGGLE_ACTIVATION',
           data: {
             id: this.props.id,
-            backtester_status: this.state.strategy.backtester_status,
+            backtest_status: this.state.strategy.backtest_status,
             data,
           },
         })

@@ -64,7 +64,7 @@ export default class BacktestManager {
   }
 
   bootStrategyById(id) {
-    if (this.state[id].strategy && this.state[id].strategy.backtester_status === 'active') {
+    if (this.state[id].strategy && this.state[id].strategy.backtest_status === 'active') {
       bootShell(this.state[id], [
         path.join(this.state[id].strategy.full_path, '/strategy/app.py'),
         process.env.REMOTE_DB_HOST,
@@ -159,7 +159,7 @@ export default class BacktestManager {
 
   async getAndPrepare(id, status, args) {
     if (this.state[id] && this.state[id].strategy) {
-      this.state[id].strategy.backtester_status = status
+      this.state[id].strategy.backtest_status = status
       if (args) {
         this.state[id].args = args
       }

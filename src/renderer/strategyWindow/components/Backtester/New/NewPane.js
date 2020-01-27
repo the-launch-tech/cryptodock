@@ -18,7 +18,7 @@ export default ({
           Initialize and run a backtest on the selected strategy.
         </p>
       </div>
-      {!strategy || strategy.backtester_status !== 'active' ? (
+      {!strategy || strategy.backtest_status !== 'active' ? (
         <NewTestForm
           handleTextChange={handleTextChange}
           handleChoiceChange={handleChoiceChange}

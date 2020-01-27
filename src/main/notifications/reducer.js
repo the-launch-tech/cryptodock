@@ -112,4 +112,16 @@ export default {
     log,
     click: item => item.close(),
   },
+  BACKTEST_ACTIVE: {
+    title: 'Backtest Activated',
+    body: 'You have successfully started a backtest!',
+    log,
+    click: item => item.close(),
+  },
+  BACKTEST_LATENT: {
+    title: 'Backtest Set To Latent',
+    body: 'You have set the backtest to latent!',
+    log,
+    click: item => item.close(),
+  },
 }
