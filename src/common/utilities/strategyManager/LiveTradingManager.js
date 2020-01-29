@@ -108,15 +108,21 @@ export default class LiveTradingManager {
       strategy_id: id,
       live_session_id: this.state[id].live_session.id,
       message: message[0],
+      meta: message[1],
     })
       .then(live_event_id => {
-        if (message[0] === 'ORDER_SUCCESS') {
-          LiveOrder.save({
-            strategy_id: id,
-            live_session_id: this.state[id].live_session.id,
-            live_event_id,
-            meta: message[1],
-          }).catch(error)
+        const args = {
+          strategy_id: id,
+          live_session_id: this.state[id].live_session.id,
+          live_event_id,
+          meta: message[2],
+        }
+        if (message[0] === 'SIGNAL_QUEUED') {
+          LiveSignal.save(args).catch(error)
+        } else if (message[0] === 'ORDER_PLACED') {
+          LiveOrder.save(args).catch(error)
+        } else if (message[0] === 'ORDER_FILLED') {
+          LiveFill.save(args).catch(error)
         }
       })
       .catch(error)

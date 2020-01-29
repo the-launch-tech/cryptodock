@@ -113,15 +113,21 @@ export default class BacktestManager {
       strategy_id: id,
       test_session_id: this.state[id].test_session.id,
       message: message[0],
+      meta: message[1],
     })
       .then(test_event_id => {
-        if (message[0] === 'ORDER_SUCCESS') {
-          TestOrder.save({
-            strategy_id: id,
-            test_session_id: this.state[id].test_session.id,
-            test_event_id,
-            meta: message[1],
-          }).catch(error)
+        const args = {
+          strategy_id: id,
+          test_session_id: this.state[id].test_session.id,
+          test_event_id,
+          meta: message[2],
+        }
+        if (message[0] === 'SIGNAL_QUEUED') {
+          TestSignal.save(args).catch(error)
+        } else if (message[0] === 'ORDER_PLACED') {
+          TestOrder.save(args).catch(error)
+        } else if (message[0] === 'ORDER_FILLED') {
+          TestFill.save(args).catch(error)
         }
       })
       .catch(error)

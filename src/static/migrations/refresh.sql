@@ -68,6 +68,42 @@ CREATE TABLE IF NOT EXISTS test_events
     FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE
   );
 
+CREATE TABLE IF NOT EXISTS live_signals
+  (
+    id INT NOT NULL AUTO_INCREMENT,
+    pair VARCHAR(30),
+    exchange VARCHAR(40),
+    quantity DECIMAL(24, 12),
+    direction VARCHAR(30),
+    order_type VARCHAR(30),
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    strategy_id INT NOT NULL,
+    live_session_id INT NOT NULL,
+    live_event_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
+    FOREIGN KEY (live_session_id) REFERENCES live_sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (live_event_id) REFERENCES live_events (id) ON DELETE CASCADE
+  );
+
+CREATE TABLE IF NOT EXISTS test_signals
+  (
+    id INT NOT NULL AUTO_INCREMENT,
+    pair VARCHAR(30),
+    exchange VARCHAR(40),
+    quantity DECIMAL(24, 12),
+    direction VARCHAR(30),
+    order_type VARCHAR(30),
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    strategy_id INT NOT NULL,
+    test_session_id INT NOT NULL,
+    test_event_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
+    FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (test_event_id) REFERENCES test_events (id) ON DELETE CASCADE
+  );
+
 CREATE TABLE IF NOT EXISTS live_orders
   (
     id INT NOT NULL AUTO_INCREMENT,
@@ -87,6 +123,42 @@ CREATE TABLE IF NOT EXISTS live_orders
   );
 
 CREATE TABLE IF NOT EXISTS test_orders
+  (
+    id INT NOT NULL AUTO_INCREMENT,
+    pair VARCHAR(30),
+    exchange VARCHAR(40),
+    quantity DECIMAL(24, 12),
+    direction VARCHAR(30),
+    order_type VARCHAR(30),
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    strategy_id INT NOT NULL,
+    test_session_id INT NOT NULL,
+    test_event_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
+    FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (test_event_id) REFERENCES test_events (id) ON DELETE CASCADE
+  );
+
+CREATE TABLE IF NOT EXISTS live_fills
+  (
+    id INT NOT NULL AUTO_INCREMENT,
+    pair VARCHAR(30),
+    exchange VARCHAR(40),
+    quantity DECIMAL(24, 12),
+    direction VARCHAR(30),
+    order_type VARCHAR(30),
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    strategy_id INT NOT NULL,
+    live_session_id INT NOT NULL,
+    live_event_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
+    FOREIGN KEY (live_session_id) REFERENCES live_sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (live_event_id) REFERENCES live_events (id) ON DELETE CASCADE
+  );
+
+CREATE TABLE IF NOT EXISTS test_fills
   (
     id INT NOT NULL AUTO_INCREMENT,
     pair VARCHAR(30),
