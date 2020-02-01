@@ -82,6 +82,7 @@ export default key => {
           arg,
           {
             RECENT: ActivitiesController.RECENT,
+            GET_PORTFOLIO: ActivitiesController.GET_PORTFOLIO,
           },
           win,
           key

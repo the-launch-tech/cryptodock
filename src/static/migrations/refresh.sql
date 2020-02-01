@@ -12,176 +12,125 @@ CREATE TABLE IF NOT EXISTS strategies
     PRIMARY KEY (id)
   );
 
-CREATE TABLE IF NOT EXISTS live_sessions
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    granularity INT(10),
-    start_funds DECIMAL(20, 10),
-    end_funds DECIMAL(20, 10),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    strategy_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS test_sessions
+CREATE TABLE IF NOT EXISTS sessions
   (
     id INT NOT NULL AUTO_INCREMENT,
     label VARCHAR(100),
-    custom BOOLEAN NOT NULL DEFAULT FALSE,
+    description VARCHAR(5000),
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     granularity INT(10),
-    start_funds DECIMAL(20, 10),
-    end_funds DECIMAL(20, 10),
-    description VARCHAR(5000),
-    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    backtest BOOLEAN NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     strategy_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS live_events
+CREATE TABLE IF NOT EXISTS events
   (
     id INT NOT NULL AUTO_INCREMENT,
-    message VARCHAR(5000),
+    message VARCHAR(50) NOT NULL,
+    cycles INT NOT NULL,
+    current_duration DECIMAL(24, 12) NOT NULL,
+    start_funds DECIMAL(24, 12) NOT NULL,
+    current_funds DECIMAL(24, 12) NOT NULL,
+    change_percentage DECIMAL(24, 12) NOT NULL,
+    change_usd DECIMAL(24, 12) NOT NULL,
+    avg_time_between_orders DECIMAL(24, 12) NOT NULL,
+    avg_order_size DECIMAL(24, 12) NOT NULL,
+    avg_fill_size DECIMAL(24, 12) NOT NULL,
+    signal_count INT NOT NULL,
+    order_count INT NOT NULL,
+    cancel_count INT NOT NULL,
+    fill_count INT NOT NULL,
+    buy_percentage DECIMAL(10, 5) NOT NULL,
+    sell_percentage DECIMAL(10, 5) NOT NULL,
+    market_type_percentage DECIMAL(10, 5) NOT NULL,
+    limit_type_percentage DECIMAL(10, 5) NOT NULL,
+    avg_fee DECIMAL(24, 12) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     strategy_id INT NOT NULL,
-    live_session_id INT NOT NULL,
+    session_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_session_id) REFERENCES live_sessions (id) ON DELETE CASCADE
+    FOREIGN KEY (session_id) REFERENCES sessions (id) ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS test_events
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    message VARCHAR(5000),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    strategy_id INT NOT NULL,
-    test_session_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS live_signals
+CREATE TABLE IF NOT EXISTS signals
   (
     id INT NOT NULL AUTO_INCREMENT,
     pair VARCHAR(30),
     exchange VARCHAR(40),
-    quantity DECIMAL(24, 12),
+    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     direction VARCHAR(30),
-    order_type VARCHAR(30),
+    weight DECIMAL(24, 12),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     strategy_id INT NOT NULL,
-    live_session_id INT NOT NULL,
-    live_event_id INT NOT NULL,
+    session_id INT NOT NULL,
+    event_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_session_id) REFERENCES live_sessions (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_event_id) REFERENCES live_events (id) ON DELETE CASCADE
+    FOREIGN KEY (session_id) REFERENCES sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS test_signals
+CREATE TABLE IF NOT EXISTS orders
   (
     id INT NOT NULL AUTO_INCREMENT,
-    pair VARCHAR(30),
-    exchange VARCHAR(40),
-    quantity DECIMAL(24, 12),
-    direction VARCHAR(30),
-    order_type VARCHAR(30),
+    pair VARCHAR(20) NOT NULL,
+    base VARCHAR(10) NOT NULL,
+    quote VARCHAR(10) NOT NULL,
+    exchange VARCHAR(40) NOT NULL,
+    quote_exchange VARCHAR(40),
+    base_size DECIMAL(24, 12) NOT NULL,
+    side VARCHAR(30),
+    type VARCHAR(30),
+    stp VARCHAR(20),
+    stop VARCHAR(20),
+    stop_price DECIMAL(24, 12),
+    quote_size DECIMAL(24, 12),
+    post_only__limit BOOLEAN,
+    time_in_force__limit VARCHAR(30),
+    cancel_after__limit VARCHAR(30),
+    is_pending BOOLEAN NOT NULL DEFAULT true,
+    is_cancelled BOOLEAN NOT NULL DEFAULT false,
+    is_filled BOOLEAN NOT NULL DEFAULT false,
+    client_oid VARCHAR(100),
+    exchange_oid VARCHAR(100) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     strategy_id INT NOT NULL,
-    test_session_id INT NOT NULL,
-    test_event_id INT NOT NULL,
+    session_id INT NOT NULL,
+    event_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_event_id) REFERENCES test_events (id) ON DELETE CASCADE
+    FOREIGN KEY (session_id) REFERENCES sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS live_orders
+CREATE TABLE IF NOT EXISTS fills
   (
     id INT NOT NULL AUTO_INCREMENT,
-    pair VARCHAR(30),
-    exchange VARCHAR(40),
-    quantity DECIMAL(24, 12),
-    direction VARCHAR(30),
-    order_type VARCHAR(30),
+    pair VARCHAR(30) NOT NULL,
+    exchange VARCHAR(40) NOT NULL,
+    price DECIMAL(24, 12) NOT NULL,
+    size DECIMAL(24, 12) NOT NULL,
+    liquidity VARCHAR(10) NOT NULL,
+    fee DECIMAL(24, 12) NOT NULL,
+    settled BOOLEAN NOT NULL DEFAULT true,
+    side VARCHAR(30) NOT NULL,
+    filled_at VARCHAR(30) NOT NULL,
+    exchange_oid VARCHAR(100) NOT NULL,
+    exchange_tid VARCHAR(100) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     strategy_id INT NOT NULL,
-    live_session_id INT NOT NULL,
-    live_event_id INT NOT NULL,
+    session_id INT NOT NULL,
+    event_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_session_id) REFERENCES live_sessions (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_event_id) REFERENCES live_events (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS test_orders
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    pair VARCHAR(30),
-    exchange VARCHAR(40),
-    quantity DECIMAL(24, 12),
-    direction VARCHAR(30),
-    order_type VARCHAR(30),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    strategy_id INT NOT NULL,
-    test_session_id INT NOT NULL,
-    test_event_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_event_id) REFERENCES test_events (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS live_fills
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    pair VARCHAR(30),
-    exchange VARCHAR(40),
-    quantity DECIMAL(24, 12),
-    direction VARCHAR(30),
-    order_type VARCHAR(30),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    strategy_id INT NOT NULL,
-    live_session_id INT NOT NULL,
-    live_event_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_session_id) REFERENCES live_sessions (id) ON DELETE CASCADE,
-    FOREIGN KEY (live_event_id) REFERENCES live_events (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS test_fills
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    pair VARCHAR(30),
-    exchange VARCHAR(40),
-    quantity DECIMAL(24, 12),
-    direction VARCHAR(30),
-    order_type VARCHAR(30),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    strategy_id INT NOT NULL,
-    test_session_id INT NOT NULL,
-    test_event_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (strategy_id) REFERENCES strategies (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_session_id) REFERENCES test_sessions (id) ON DELETE CASCADE,
-    FOREIGN KEY (test_event_id) REFERENCES test_events (id) ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS logs
-  (
-    id INT NOT NULL AUTO_INCREMENT,
-    message VARCHAR(5000),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    FOREIGN KEY (session_id) REFERENCES sessions (id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS settings
@@ -189,6 +138,14 @@ CREATE TABLE IF NOT EXISTS settings
     id INT NOT NULL AUTO_INCREMENT,
     key_ VARCHAR(50) NOT NULL UNIQUE,
     _value VARCHAR(5000) NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+  );
+
+CREATE TABLE IF NOT EXISTS logs
+  (
+    id INT NOT NULL AUTO_INCREMENT,
+    message VARCHAR(5000),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
   );

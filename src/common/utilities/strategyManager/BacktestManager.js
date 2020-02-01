@@ -1,9 +1,9 @@
 import WebSocket from 'ws'
 import path from 'path'
 import Strategy from '../../models/Strategy'
-import TestSession from '../../models/TestSession'
-import TestEvent from '../../models/TestEvent'
-import TestOrder from '../../models/TestOrder'
+import Session from '../../models/Session'
+import Event from '../../models/Event'
+import Order from '../../models/Order'
 import { bindings, isEnabled } from './utils'
 import { bootShell, deBootShell } from './process'
 import websocketConnection from './websocketConnection'
@@ -23,8 +23,6 @@ export default class BacktestManager {
         bindings.map(i => (this[i] = this[i].bind(this)))
 
         this.initialize()
-      } else {
-        log('PORT IN USE', process.env.BACKTEST_SOCKET_PORT)
       }
     })
   }
@@ -49,7 +47,6 @@ export default class BacktestManager {
           START_TRADING: this.onStartTrading,
           FINISHED_TRADING: this.onFinishedTrading,
           PING: this.onHeartbeat,
-          LOG_MESSAGE: this.onLogMessage,
         },
       })
     )
@@ -66,7 +63,7 @@ export default class BacktestManager {
   bootStrategyById(id) {
     if (this.state[id].strategy && this.state[id].strategy.backtest_status === 'active') {
       bootShell(this.state[id], [
-        path.join(this.state[id].strategy.full_path, '/strategy/app.py'),
+        path.join(this.state[id].strategy.full_path, '/strategy/entry.py'),
         process.env.REMOTE_DB_HOST,
         process.env.REMOTE_PORT,
         process.env.REMOTE_VERSION,
@@ -91,16 +88,17 @@ export default class BacktestManager {
     }
   }
 
-  onStartTrading({ id }) {
-    TestSession.save({ strategy_id: id })
-      .then(test_session_id => {
-        this.state[id].test_session = {
-          id: test_session_id,
+  onStartTrading({ id, message }) {
+    Session.save({ strategy_id: id, backtest: true })
+      .then(session_id => {
+        this.state[id].session = {
+          id: session_id,
         }
-        TestEvent.save({
+        Event.save({
           strategy_id: id,
-          test_session_id: this.state[id].test_session.id,
-          message: 'BACKTEST_STARTED',
+          session_id: this.state[id].session.id,
+          message: message[0],
+          meta: message[1],
         })
           .then(() => this.state[id].ticker.start())
           .catch(error)
@@ -109,41 +107,41 @@ export default class BacktestManager {
   }
 
   onHeartbeat({ id, message }) {
-    TestEvent.save({
+    Event.save({
       strategy_id: id,
-      test_session_id: this.state[id].test_session.id,
+      session_id: this.state[id].session.id,
       message: message[0],
       meta: message[1],
     })
-      .then(test_event_id => {
+      .then(event_id => {
         const args = {
           strategy_id: id,
-          test_session_id: this.state[id].test_session.id,
-          test_event_id,
+          session_id: this.state[id].session.id,
+          event_id,
           meta: message[2],
         }
         if (message[0] === 'SIGNAL_QUEUED') {
-          TestSignal.save(args).catch(error)
+          Signal.save(args).catch(error)
         } else if (message[0] === 'ORDER_PLACED') {
-          TestOrder.save(args).catch(error)
+          Order.save(args).catch(error)
         } else if (message[0] === 'ORDER_FILLED') {
-          TestFill.save(args).catch(error)
+          Fill.save(args).catch(error)
         }
       })
       .catch(error)
   }
 
-  onFinishedTrading({ id, meta }) {
-    TestSession.update({
+  onFinishedTrading({ id, message }) {
+    Event.save({
       strategy_id: id,
-      test_session_id: this.state[id].test_session.id,
-      meta,
+      session_id: this.state[id].session.id,
+      message: message[0],
+      meta: message[1],
     })
       .then(res =>
-        TestEvent.save({
-          strategy_id: id,
-          test_session_id: this.state[id].test_session.id,
-          message: 'BACKTEST_FINISHED',
+        Session.update({
+          session_id: this.state[id].session.id,
+          meta: message[2],
         })
       )
       .then(() => {
@@ -153,14 +151,6 @@ export default class BacktestManager {
           .catch(error)
       })
       .catch(error)
-  }
-
-  onLogMessage({ id, message }) {
-    TestEvent.save({
-      strategy_id: id,
-      test_session_id: this.state[id].test_session.id,
-      message,
-    }).catch(error)
   }
 
   async getAndPrepare(id, status, args) {

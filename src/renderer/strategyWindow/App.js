@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import { Link, Switch, Route } from 'react-router-dom'
 import Backtester from './components/Backtester/Backtester'
 import Activity from './components/Activity/Activity'
+import Suite from './components/Suite/Suite'
 import Header from './components/Header'
 
 const { error, log } = console
@@ -10,6 +11,7 @@ const { error, log } = console
 const routes = [
   { link: '/', label: 'Activity', Component: Activity, exact: true },
   { link: '/backtesting', label: 'Backtester', Component: Backtester, exact: true },
+  { link: '/suite', label: 'Suite', Component: Suite, exact: true },
 ]
 
 class App extends React.Component {

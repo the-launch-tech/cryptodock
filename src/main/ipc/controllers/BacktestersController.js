@@ -1,5 +1,5 @@
 import NotificationManager from '../../notifications/NotificationManager'
-import TestSession from '../../../common/models/TestSession'
+import Session from '../../../common/models/Session'
 import Strategy from '../../../common/models/Strategy'
 import _key from '../../../common/helpers/_key'
 import {
@@ -14,7 +14,7 @@ const channel = (key, id) => `res--${key}.backtester-${id}`
 
 export default {
   HISTORY: (event, arg, win, key) => {
-    TestSession.getByFieldValue({ key: 'id', value: arg.data.strategyId })
+    Session.getByFieldValue({ key: 'id', value: arg.data.strategyId })
       .then(data => event.reply(channel(key, 'HISTORY'), data))
       .catch(err => {
         NotificationManager.show(ERROR_GETTING_BACKTEST_HISTORY)

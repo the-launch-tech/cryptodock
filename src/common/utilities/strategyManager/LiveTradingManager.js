@@ -1,9 +1,9 @@
 import WebSocket from 'ws'
 import path from 'path'
 import Strategy from '../../models/Strategy'
-import LiveSession from '../../models/LiveSession'
-import LiveEvent from '../../models/LiveEvent'
-import LiveOrder from '../../models/LiveOrder'
+import Session from '../../models/Session'
+import Event from '../../models/Event'
+import Order from '../../models/Order'
 import { bindings, isEnabled } from './utils'
 import { bootShell, deBootShell } from './process'
 import websocketConnection from './websocketConnection'
@@ -23,8 +23,6 @@ export default class LiveTradingManager {
         bindings.map(i => (this[i] = this[i].bind(this)))
 
         this.initialize()
-      } else {
-        log('PORT IN USE', process.env.BACKTEST_SOCKET_PORT)
       }
     })
   }
@@ -50,7 +48,6 @@ export default class LiveTradingManager {
           START_TRADING: this.onStartTrading,
           FINISHED_TRADING: this.onFinishedTrading,
           PING: this.onHeartbeat,
-          LOG_MESSAGE: this.onLogMessage,
         },
       })
     )
@@ -67,7 +64,7 @@ export default class LiveTradingManager {
   bootStrategyById(id) {
     if (this.state[id].strategy && this.state[id].strategy.status === 'active') {
       bootShell(this.state[id], [
-        path.join(this.state[id].strategy.full_path, '/strategy/app.py'),
+        path.join(this.state[id].strategy.full_path, '/strategy/entry.py'),
         process.env.REMOTE_DB_HOST,
         process.env.REMOTE_PORT,
         process.env.REMOTE_VERSION,
@@ -86,16 +83,17 @@ export default class LiveTradingManager {
     }
   }
 
-  onStartTrading({ id }) {
-    LiveSession.save({ strategy_id: id })
-      .then(live_session_id => {
-        this.state[id].live_session = {
-          id: live_session_id,
+  onStartTrading({ id, message }) {
+    Session.save({ strategy_id: id, backtest: false })
+      .then(session_id => {
+        this.state[id].session = {
+          id: session_id,
         }
-        LiveEvent.save({
+        Event.save({
           strategy_id: id,
-          live_session_id: this.state[id].live_session.id,
-          message: 'SESSION_STARTED',
+          session_id: this.state[id].session.id,
+          message: message[0],
+          meta: message[1],
         })
           .then(() => this.state[id].ticker.start())
           .catch(error)
@@ -104,41 +102,42 @@ export default class LiveTradingManager {
   }
 
   onHeartbeat({ id, message }) {
-    LiveEvent.save({
+    Event.save({
       strategy_id: id,
-      live_session_id: this.state[id].live_session.id,
+      session_id: this.state[id].session.id,
       message: message[0],
       meta: message[1],
     })
-      .then(live_event_id => {
+      .then(event_id => {
         const args = {
           strategy_id: id,
-          live_session_id: this.state[id].live_session.id,
-          live_event_id,
+          session_id: this.state[id].session.id,
+          event_id,
           meta: message[2],
         }
         if (message[0] === 'SIGNAL_QUEUED') {
-          LiveSignal.save(args).catch(error)
+          Signal.save(args).catch(error)
         } else if (message[0] === 'ORDER_PLACED') {
-          LiveOrder.save(args).catch(error)
+          Order.save(args).catch(error)
         } else if (message[0] === 'ORDER_FILLED') {
-          LiveFill.save(args).catch(error)
+          Fill.save(args).catch(error)
         }
       })
       .catch(error)
   }
 
-  onFinishedTrading({ id, meta }) {
-    LiveSession.update({
+  onFinishedTrading({ id, message }) {
+    Event.save({
       strategy_id: id,
-      live_session_id: this.state[id].live_session.id,
-      meta,
+      session_id: this.state[id].session.id,
+      message: message[0],
+      meta: message[1],
     })
-      .then(res =>
-        LiveEvent.save({
+      .then(() =>
+        Session.update({
           strategy_id: id,
-          live_session_id: this.state[id].live_session.id,
-          message: 'SESSION_FINISHED',
+          session_id: this.state[id].session.id,
+          meta: message[2],
         })
       )
       .then(() => {
@@ -148,14 +147,6 @@ export default class LiveTradingManager {
           .catch(error)
       })
       .catch(error)
-  }
-
-  onLogMessage({ id, message }) {
-    LiveEvent.save({
-      strategy_id: id,
-      live_session_id: this.state[id].live_session.id,
-      message,
-    }).catch(error)
   }
 
   async getAndPrepare(id, status) {

@@ -10,7 +10,6 @@ export const bindings = [
   'onStartTrading',
   'onHeartbeat',
   'onFinishedTrading',
-  'onLogMessage',
 ]
 
 export const isEnabled = type => {

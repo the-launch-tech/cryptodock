@@ -1,6 +1,7 @@
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import ActiveStrategies from './ActiveStrategies'
+import Portfolio from './Portfolio'
 import RecentActivity from './RecentActivity'
 
 export default class Overview extends React.Component {
@@ -12,10 +13,12 @@ export default class Overview extends React.Component {
     this.removeListeners = this.removeListeners.bind(this)
     this.onRecentActivity = this.onRecentActivity.bind(this)
     this.onActiveStrategies = this.onActiveStrategies.bind(this)
+    this.onGetPortfolio = this.onGetPortfolio.bind(this)
 
     this.state = {
       activeStrategies: null,
       recentActivity: null,
+      accounts: null,
     }
   }
 
@@ -31,16 +34,19 @@ export default class Overview extends React.Component {
   sendForDefaults() {
     ipcRenderer.send('mainWindow.activity', { id: 'RECENT', data: { after: 86400 * 3 } })
     ipcRenderer.send('mainWindow.strategy', { id: 'GET_ACTIVE' })
+    ipcRenderer.send('mainWindow.activity', { id: 'GET_PORTFOLIO' })
   }
 
   setListeners() {
     ipcRenderer.once('res--mainWindow.activity-RECENT', this.onRecentActivity)
     ipcRenderer.once('res--mainWindow.strategy-GET_ACTIVE', this.onActiveStrategies)
+    ipcRenderer.once('res--mainWindow.activity-GET_PORTFOLIO', this.onGetPortfolio)
   }
 
   removeListeners() {
     ipcRenderer.removeListener('res--mainWindow.activity-RECENT', this.onRecentActivity)
     ipcRenderer.removeListener('res--mainWindow.strategy-GET_ACTIVE', this.onActiveStrategies)
+    ipcRenderer.removeListener('res--mainWindow.activity-GET_PORTFOLIO', this.onGetPortfolio)
   }
 
   onRecentActivity(event, recentActivity) {
@@ -51,6 +57,10 @@ export default class Overview extends React.Component {
     this.setState({ activeStrategies })
   }
 
+  onGetPortfolio(event, accounts) {
+    this.setState({ accounts })
+  }
+
   openStrategy(e, id) {
     ipcRenderer.send('mainWindow.strategy', {
       id: 'WINDOW',
@@ -59,30 +69,35 @@ export default class Overview extends React.Component {
   }
 
   render() {
-    const { activeStrategies, recentActivity } = this.state
+    const { activeStrategies, recentActivity, accounts } = this.state
 
     return (
       <div className="w-full h-full flex flex-col justify-start items-center">
         <h2 className="font-display text-red-2 cursor-default">CryptoDock</h2>
+        {accounts && Object.keys(accounts) && <Portfolio accounts={accounts} />}
         {activeStrategies && activeStrategies.length ? (
-          <div className="mt-5 block p-5">
+          <div className="my-2 block p-5">
             <ActiveStrategies
               activeStrategies={activeStrategies}
               openStrategy={this.openStrategy}
             />
           </div>
         ) : (
-          <div className="mt-10 w-1/2 border-1 border-solid border-white-400 p-5 rounded-lg">
-            <p className="font-head text-lg text-center cursor-default">No Active Strategies</p>
+          <div className="my-2 w-1/2">
+            <p className="font-head text-sm font-normal text-center cursor-default">
+              No Active Strategies
+            </p>
           </div>
         )}
         {recentActivity && recentActivity.length ? (
-          <div className="mt-5 block p-5">
+          <div className="mt-2 mb-10 block p-5">
             <RecentActivity recentActivity={recentActivity} />
           </div>
         ) : (
-          <div className="mt-10 w-1/2 border-1 border-solid border-white-400 p-5 rounded-lg">
-            <p className="font-head text-lg text-center cursor-default">No Recent Activity</p>
+          <div className="mt-2 mb-10 w-1/2">
+            <p className="font-head text-sm font-normal text-center cursor-default">
+              No Recent Activity
+            </p>
           </div>
         )}
       </div>

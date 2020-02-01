@@ -2,6 +2,7 @@ import StrategiesController from '../controllers/StrategiesController'
 import SettingsController from '../controllers/SettingsController'
 import BacktestersController from '../controllers/BacktestersController'
 import ActivitiesController from '../controllers/ActivitiesController'
+import SuitesController from '../controllers/SuitesController'
 import ipcRouterDelegator from '../ipcRouterDelegator'
 
 export default key => {
@@ -60,6 +61,20 @@ export default key => {
           arg,
           {
             RECENT_BY_ID: ActivitiesController.RECENT_BY_ID,
+          },
+          win,
+          key
+        )
+      },
+    },
+    suite: {
+      channel: `${key}.suite`,
+      listener: (event, arg, win) => {
+        ipcRouterDelegator(
+          event,
+          arg,
+          {
+            RUN_SUITE: SuitesController.RUN_SUITE,
           },
           win,
           key
