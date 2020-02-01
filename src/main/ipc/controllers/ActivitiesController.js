@@ -13,7 +13,7 @@ export default {
       .catch(error)
   },
   RECENT_BY_ID: (event, arg, win, key) => {
-    Strategy.getRecentById({ id: arg.data.id, after: arg.data.after })
+    Strategy.getRecent({ id: arg.data.id, after: arg.data.after })
       .then(data => event.reply(channel(key, 'RECENT_BY_ID'), data))
       .catch(error)
   },
@@ -69,12 +69,12 @@ export default {
         },
       },
     }
-    const CoinbasePro = coinbaseproClient.initialize()
-    const Kucoin = kucoinClient.initialize()
+    // const CoinbasePro = coinbaseproClient.initialize()
+    // const Kucoin = kucoinClient.initialize()
     // CoinbasePro.getAccounts().then(coinbaseproAccounts => {
-    // Kucoin.listAccounts().then({ type: 'trade' }, kucoinAccounts => {
-    //   log(coinbaseproAccounts, kucoinAccounts)
-    // })
+    //   Kucoin.listAccounts().then({ type: 'trade' }, kucoinAccounts => {
+    //     log(coinbaseproAccounts, kucoinAccounts)
+    //   })
     // })
     event.reply(channel(key, 'GET_PORTFOLIO'), portfolio)
   },

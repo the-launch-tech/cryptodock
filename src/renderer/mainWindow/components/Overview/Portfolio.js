@@ -91,7 +91,7 @@ export default class Portfolio extends React.Component {
   render() {
     const { accounts } = this.props
     return (
-      <div className="w-full my-5">
+      <div className="w-full">
         <h5 className="font-head text-gray-0 font-thin text-center">Your Portfolio</h5>
         <div className="w-full">
           <div className="text-left my-5 mx-auto border border-solid border-white-200 rounded p-2 w-1/2">

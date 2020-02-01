@@ -19,9 +19,7 @@ export default class Backtester extends React.Component {
       type: null,
       strategy: null,
       history: [],
-      session: {},
       currentData: defaultCurrentData,
-      visibleTests: 'HISTORICAL_TESTS',
       visibleView: 'NEW_TEST',
     }
   }
@@ -44,24 +42,22 @@ export default class Backtester extends React.Component {
       id: 'DETAILS',
       data: { id: this.props.id },
     })
-    ipcRenderer.send(`${this.ipcAddress}`, { id: 'HISTORY', data: { strategyId: this.props.id } })
+    ipcRenderer.send(`${this.ipcAddress}`, {
+      id: 'RECENT_BY_ID',
+      data: { id: this.props.id, backtest: true, after: 30 },
+    })
   }
 
   setListeners() {
     ipcRenderer.on(`res--${this.ipcAddress_strategy}-DETAILS`, this.onGetStrategyById)
-    ipcRenderer.once(`res--${this.ipcAddress}-HISTORY`, this.onGetBacktestHistory)
-    ipcRenderer.on(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, () => {})
-    ipcRenderer.on(`res--${this.ipcAddress}-BACKTEST_RESULTS`, this.onGetBacktestResults)
+    ipcRenderer.once(`res--${this.ipcAddress}-RECENT_BY_ID`, this.onGetBacktestHistory)
+    ipcRenderer.on(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, this.onToggleActivation)
   }
 
   removeListeners() {
     ipcRenderer.removeListener(`res--${this.ipcAddress_strategy}-DETAILS`, this.onGetStrategyById)
-    ipcRenderer.removeListener(`res--${this.ipcAddress}-HISTORY`, this.onGetBacktestHistory)
-    ipcRenderer.removeListener(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, () => {})
-    ipcRenderer.removeListener(
-      `res--${this.ipcAddress}-BACKTEST_RESULTS`,
-      this.onGetBacktestResults
-    )
+    ipcRenderer.removeListener(`res--${this.ipcAddress}-RECENT_BY_ID`, this.onGetBacktestHistory)
+    ipcRenderer.removeListener(`res--${this.ipcAddress}-TOGGLE_ACTIVATION`, this.onToggleActivation)
   }
 
   toggleActivation(e) {
@@ -69,7 +65,7 @@ export default class Backtester extends React.Component {
       'backtest_status',
       this.state.strategy.backtest_status === 'active' ? 'latent' : 'active',
       () => {
-        const data = this.state.currentData
+        const data = Object.assign({}, this.state.currentData)
         data.id = this.props.id
         data.backtest_status = this.state.strategy.backtest_status
         ipcRenderer.send(`${this.ipcAddress}`, {
@@ -82,6 +78,10 @@ export default class Backtester extends React.Component {
         })
       }
     )
+  }
+
+  onToggleActivation(event, args) {
+    this.setState({ currentData: defaultCurrentData })
   }
 
   onGetStrategyById(event, strategy) {
@@ -104,15 +104,6 @@ export default class Backtester extends React.Component {
 
   onGetBacktestHistory(event, history) {
     this.setState({ history })
-  }
-
-  onGetBacktestResults(event, results) {
-    this.setState(prev => ({
-      history: [results, ...prev.history],
-      session: [results, ...prev.session],
-      active: false,
-      currentData: defaultCurrentData,
-    }))
   }
 
   handleTextChange(e) {
@@ -140,7 +131,7 @@ export default class Backtester extends React.Component {
   }
 
   render() {
-    const { currentData, visibleTests, visibleView, history, session, strategy } = this.state
+    const { currentData, visibleView, history, strategy } = this.state
     return (
       <div>
         <h4 className="font-display text-red-2 cursor-default text-center">Backtester</h4>
@@ -159,12 +150,7 @@ export default class Backtester extends React.Component {
               currentData={currentData}
             />
           ) : (
-            <HistoricalPane
-              visibleTests={visibleTests}
-              toggleList={visibleTests => this.setState({ visibleTests })}
-              history={history}
-              session={session}
-            />
+            <HistoricalPane history={history} />
           )}
         </div>
       </div>

@@ -13,14 +13,6 @@ const { log, error } = console
 const channel = (key, id) => `res--${key}.backtester-${id}`
 
 export default {
-  HISTORY: (event, arg, win, key) => {
-    Session.getByFieldValue({ key: 'id', value: arg.data.strategyId })
-      .then(data => event.reply(channel(key, 'HISTORY'), data))
-      .catch(err => {
-        NotificationManager.show(ERROR_GETTING_BACKTEST_HISTORY)
-        error(err)
-      })
-  },
   TOGGLE_ACTIVATION: (event, arg, win, key) => {
     Strategy.updateOneFieldValue({
       id: arg.data.id,

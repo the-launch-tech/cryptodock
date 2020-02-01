@@ -6,10 +6,10 @@ export const bindings = [
   'onGetStrategyById',
   'updateField',
   'onGetBacktestHistory',
-  'onGetBacktestResults',
   'handleTextChange',
   'handleChoiceChange',
   'invalidInput',
+  'onToggleActivation',
 ]
 
 export const defaultCurrentData = {

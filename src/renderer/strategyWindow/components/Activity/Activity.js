@@ -12,7 +12,7 @@ export default class Activity extends React.Component {
 
     bindings.map(i => (this[i] = this[i].bind(this)))
 
-    this.state = { id: null, type: null, strategy: null, recent: null }
+    this.state = { id: null, type: null, strategy: null, recent: null, sessionLabel: null }
   }
 
   componentDidMount() {
@@ -63,6 +63,7 @@ export default class Activity extends React.Component {
           data: {
             id: this.props.id,
             status: this.state.strategy.status,
+            label: this.state.sessionLabel,
           },
         })
       }
@@ -70,7 +71,7 @@ export default class Activity extends React.Component {
   }
 
   onToggleActivation(event, arg) {
-    log('Activation Toggled: ', arg)
+    this.setState({ sessionLabel: null })
   }
 
   onGetStrategyById(event, strategy) {
@@ -95,11 +96,22 @@ export default class Activity extends React.Component {
     })
   }
 
+  handleTextChange(e) {
+    this.setState({ sessionLabel: e.target.value })
+  }
+
   render() {
-    const { strategy, recent } = this.state
+    const { strategy, recent, sessionLabel } = this.state
     return (
       <div>
-        {strategy && <Meta strategy={strategy} toggleActivation={this.toggleActivation} />}
+        {strategy && (
+          <Meta
+            strategy={strategy}
+            toggleActivation={this.toggleActivation}
+            handleTextChange={this.handleTextChange}
+            sessionLabel={sessionLabel}
+          />
+        )}
         <RecentActivity strategy={strategy} recent={recent} />
       </div>
     )

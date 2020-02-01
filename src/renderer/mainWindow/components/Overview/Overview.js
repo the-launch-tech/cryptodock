@@ -74,9 +74,19 @@ export default class Overview extends React.Component {
     return (
       <div className="w-full h-full flex flex-col justify-start items-center">
         <h2 className="font-display text-red-2 cursor-default">CryptoDock</h2>
-        {accounts && Object.keys(accounts) && <Portfolio accounts={accounts} />}
+        {accounts && Object.keys(accounts) ? (
+          <div className="my-2 block p-2">
+            <Portfolio accounts={accounts} />
+          </div>
+        ) : (
+          <div className="my-2 w-1/2">
+            <p className="font-head text-sm font-normal text-center cursor-default">
+              Unable To Get Portfolio Details
+            </p>
+          </div>
+        )}
         {activeStrategies && activeStrategies.length ? (
-          <div className="my-2 block p-5">
+          <div className="my-2 block p-2">
             <ActiveStrategies
               activeStrategies={activeStrategies}
               openStrategy={this.openStrategy}
@@ -90,7 +100,7 @@ export default class Overview extends React.Component {
           </div>
         )}
         {recentActivity && recentActivity.length ? (
-          <div className="mt-2 mb-10 block p-5">
+          <div className="mt-2 mb-10 block p-2">
             <RecentActivity recentActivity={recentActivity} />
           </div>
         ) : (

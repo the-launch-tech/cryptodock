@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { shell } from 'electron'
 
-export default ({ strategy, toggleActivation }) => {
+export default ({ strategy, toggleActivation, sessionLabel, handleTextChange }) => {
   return (
     <div className="flex flex-wrap justify-start items-start">
       <div className="flex justify-center items-center w-full">
@@ -47,17 +47,29 @@ export default ({ strategy, toggleActivation }) => {
           </pre>
         </div>
       </div>
-      <button
-        type="button"
-        className={`py-1 px-3 bg-tran border-1 border-solid border-red-2 text-white rounded transition transition-100 font-head text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default ${
-          strategy.status === 'active'
-            ? 'border-red-2 hover:bg-red-3 active:bg-red-8'
-            : 'border-green-2 hover:bg-green-3 active:bg-green-8'
-        }`}
-        onClick={toggleActivation}
-      >
-        {strategy.status === 'active' ? 'Stop Trading' : 'Start Trading'}
-      </button>
+      <div className="w-full flex flex-start items-center">
+        <input
+          className="w-1/2 h-full mr-2 appearance-none bg-tran text-white-850 border border-gray-1-400 transition-all transition-100 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-gray-3-200 focus:border-gray-2-400 noselect"
+          type="text"
+          name="session_label"
+          id="session_label"
+          onChange={handleTextChange}
+          defaultValue="Test Session"
+          placeholder="Add a session label..."
+        />
+        <button
+          type="button"
+          className={`h-full py-2 px-3 bg-tran border border-solid border-red-2 text-white rounded transition transition-100 font-head text-tiny outline-none hover:bg-red-3 active:bg-red-8 disabled:bg-gray-1-100 disabled:border-red-1-200 disabled:cursor-default ${
+            strategy.status === 'active'
+              ? 'border-red-2 hover:bg-red-3 active:bg-red-8'
+              : 'border-green-2 hover:bg-green-3 active:bg-green-8'
+          }`}
+          disabled={!sessionLabel}
+          onClick={toggleActivation}
+        >
+          {strategy.status === 'active' ? 'Stop Trading' : 'Start Trading'}
+        </button>
+      </div>
     </div>
   )
 }

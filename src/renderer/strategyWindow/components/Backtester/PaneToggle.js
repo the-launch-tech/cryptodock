@@ -23,7 +23,7 @@ export default ({ visibleView, toggleView }) => {
         type="button"
         onClick={e => toggleView('DATA_ANALYSIS')}
       >
-        Data And Analytics
+        Activity
       </button>
     </div>
   )

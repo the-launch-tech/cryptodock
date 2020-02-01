@@ -6,4 +6,5 @@ export const bindings = [
   'onToggleActivation',
   'updateField',
   'onGetRecent',
+  'handleTextChange',
 ]
