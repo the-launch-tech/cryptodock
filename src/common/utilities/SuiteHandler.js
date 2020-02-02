@@ -4,13 +4,16 @@ import { spawn } from 'child_process'
 
 const { log, error } = console
 
-export default function(strategy, args, callback) {
+export default function(strategy, command, callback) {
   const uint8arrayToString = data => String.fromCharCode.apply(null, data)
 
   const childProcess = spawn(process.env.PYTHONPATH, [
     path.join(strategy.full_path, '/suite/entry.py'),
+    process.env.REMOTE_DB_HOST,
+    process.env.REMOTE_PORT,
+    process.env.REMOTE_VERSION,
     strategy,
-    args,
+    command,
   ])
 
   childProcess.stdout.on('data', results => log(chalk.blue(uint8arrayToString(results))))
